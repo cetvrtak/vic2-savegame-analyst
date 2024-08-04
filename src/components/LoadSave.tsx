@@ -1,8 +1,11 @@
 ﻿import React, { useRef, useState } from 'react';
-import { parseFileStream, ParsedObject } from './parser';
+import { parseFileStream } from './parser';
+import { Action } from './actions';
 
-const LoadSave: React.FC = () => {
-  const [fileContent, setFileContent] = useState<ParsedObject | null>(null);
+type LoadSaveProps = { dispatch: React.Dispatch<Action> };
+
+const LoadSave: React.FC<LoadSaveProps> = ({ dispatch }) => {
+  const [fileSelected, setFileSelected] = useState<Boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -14,17 +17,18 @@ const LoadSave: React.FC = () => {
   const handleFile = async (file: File) => {
     const stream = file.stream();
     const parsedData = await parseFileStream(stream);
-    setFileContent(parsedData);
+    dispatch({ type: 'SET_WORLD', payload: parsedData });
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       handleFile(file);
+      setFileSelected(true);
     }
   };
 
-  return (
+  return !fileSelected ? (
     <div>
       <div className="file-input-wrapper">
         <button className="custom-file-button" onClick={handleClick}>
@@ -37,14 +41,9 @@ const LoadSave: React.FC = () => {
           onChange={handleFileChange}
         />
       </div>
-
-      {fileContent && (
-        <div className="row">
-          <span>{fileContent.player}</span>
-          <span>{fileContent.RUS.import}</span>
-        </div>
-      )}
     </div>
+  ) : (
+    <h2>Loading ...</h2>
   );
 };
 
