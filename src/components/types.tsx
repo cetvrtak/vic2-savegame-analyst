@@ -1,5 +1,5 @@
 ﻿export type AppState = {
-  world: Object | null;
+  world: any | null;
 };
 
 export const initialState: AppState = {

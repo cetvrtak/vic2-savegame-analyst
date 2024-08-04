@@ -12,7 +12,7 @@ const App: React.FC = () => {
   ) : (
     <main>
       <div className="row">
-        <span>{state.world['player']}</span>
+        <span>{state.world.player}</span>
       </div>
     </main>
   );
