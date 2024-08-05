@@ -3,6 +3,7 @@ import './App.css';
 import { useReducer } from 'react';
 import { reducer } from './reducer';
 import { initialState } from './types';
+import Main from './Main';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -10,11 +11,7 @@ const App: React.FC = () => {
   return !state.world ? (
     <LoadSave dispatch={dispatch} />
   ) : (
-    <main>
-      <div className="row">
-        <span>{state.world.player}</span>
-      </div>
-    </main>
+    <Main world={state.world} />
   );
 };
 
