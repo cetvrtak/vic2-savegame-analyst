@@ -8,6 +8,8 @@ export const reducer = (state: AppState, action: Action): AppState => {
         ...state,
         world: action.payload,
       };
+    case 'SET_ACTIVE_TAB':
+      return { ...state, activeTab: action.payload };
     default:
       return state;
   }

@@ -1,10 +1,18 @@
-﻿const Main: React.FC<any> = ({ world }) => {
+import TabSelector from './TabSelector';
+import { AppState } from './types';
+import { Action } from './actions';
+
+type MainProps = { appState: AppState; dispatch: React.Dispatch<Action> };
+
+const Main: React.FC<MainProps> = ({ appState, dispatch }) => {
+
   return (
-    <main>
+    <main className="row">
       <span>
-        Player tag ~ <strong>{world.player}</strong>
+        Player tag ~ <strong>{appState.world.player}</strong>
       </span>
-      <div className="row"></div>
+
+      <TabSelector dispatch={dispatch} />
     </main>
   );
 };

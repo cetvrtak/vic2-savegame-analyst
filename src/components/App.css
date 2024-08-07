@@ -47,6 +47,24 @@ html {
   display: none;
 }
 
+.tab-selector {
+  list-style-type: none;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 64px;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .row span {
   font-size: 3rem;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: scroll;
 }
