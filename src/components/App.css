@@ -13,17 +13,21 @@ html {
   text-align: center;
 }
 
-.file-input-wrapper {
+.btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
   background: #eee;
   border-radius: 59px;
-  box-shadow: inset 1px 1px 20px 1px rgba(0, 75, 151, 0.4);
+  padding: 10px 40px;
+  box-shadow: inset 1px 1px 4px 1px rgba(0, 75, 151, 0.4);
 }
 
-.custom-file-button {
+.file-input-wrapper {
+  height: calc(100vh - 2 * 2rem); /* 2rem padding on #root */
+}
+
+.btn {
   background: #0e1c53c7;
   color: #fff;
   padding: 10px 20px;
@@ -35,8 +39,8 @@ html {
   box-shadow: 4px 4px 16px #0e1c53c7;
 }
 
-.custom-file-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background-color: #0e1c53;
 }
 
 .file-input {

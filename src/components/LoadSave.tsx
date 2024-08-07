@@ -30,8 +30,8 @@ const LoadSave: React.FC<LoadSaveProps> = ({ dispatch }) => {
 
   return !fileSelected ? (
     <div>
-      <div className="file-input-wrapper">
-        <button className="custom-file-button" onClick={handleClick}>
+      <div className="btn-wrapper file-input-wrapper">
+        <button className="btn" onClick={handleClick}>
           Load save
         </button>
         <input
