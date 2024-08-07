@@ -74,3 +74,16 @@ html {
   width: 100%;
   overflow-x: scroll;
 }
+table {
+  border-collapse: collapse;
+  font-size: 2rem;
+}
+tr {
+  background: #eee;
+  color: #333;
+  border-radius: 59px;
+}
+th,
+td {
+  padding: 10px 20px;
+}
