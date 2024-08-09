@@ -4,8 +4,11 @@ export type ParsedObject = {
 };
 
 const preProcessText = (text: string): string => {
+  // Remove line comments that start with "#" and run to the end of the line
+  const withoutComments = text.replace(/#.*$/gm, '');
+
   // Ensure that each "{" and "}" is on its own line
-  return text.replace(/{/g, '\n{\n').replace(/}/g, '\n}\n');
+  return withoutComments.replace(/{/g, '\n{\n').replace(/}/g, '\n}\n');
 };
 
 const parseObject = (text: string): ParsedObject => {
