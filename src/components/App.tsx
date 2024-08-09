@@ -4,14 +4,21 @@ import { useReducer } from 'react';
 import { reducer } from './reducer';
 import { initialState } from './types';
 import Main from './Main';
+import JsonExporter from '../tools/JsonExporter';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  return !state.world ? (
-    <LoadSave dispatch={dispatch} />
-  ) : (
-    <Main appState={state} dispatch={dispatch} />
+  return (
+    <>
+      <JsonExporter />
+
+      {!state.world ? (
+        <LoadSave dispatch={dispatch} />
+      ) : (
+        <Main appState={state} dispatch={dispatch} />
+      )}
+    </>
   );
 };
 
