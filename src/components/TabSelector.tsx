@@ -18,6 +18,11 @@ const TabSelector: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
           Population
         </button>
       </li>
+      <li className="tab" key="popsNeeds">
+        <button className="btn tab-btn" value="popsNeeds">
+          Pops Needs
+        </button>
+      </li>
       <li className="tab" key="production">
         <button className="btn tab-btn" value="production">
           Production

@@ -2,6 +2,7 @@ import TabSelector from './TabSelector';
 import { AppState } from './types';
 import { Action } from './actions';
 import Population from './Population';
+import PopsNeeds from './PopsNeeds';
 
 type MainProps = { appState: AppState; dispatch: React.Dispatch<Action> };
 
@@ -32,6 +33,15 @@ const Main: React.FC<MainProps> = ({ appState, dispatch }) => {
       {appState.activeTab === 'population' && (
         <Population
           provinces={getProvinces(appState.world, appState.world.player)}
+        />
+      )}
+      {appState.activeTab === 'popsNeeds' && (
+        <PopsNeeds
+          provinces={getProvinces(appState.world, appState.world.player)}
+          plurality={appState.world[appState.world.player].plurality}
+          inventions={
+            appState.world[appState.world.player].active_inventions.key
+          }
         />
       )}
     </main>
