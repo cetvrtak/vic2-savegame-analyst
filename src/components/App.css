@@ -19,6 +19,15 @@ html {
   text-align: center;
 }
 
+h2 {
+  font-size: 3.2rem;
+}
+
+.title-black {
+  color: #333;
+  font-size: 2rem;
+}
+
 .btn-wrapper {
   display: flex;
   align-items: center;
@@ -96,8 +105,4 @@ td {
   align-items: center;
   justify-content: center;
   gap: 10px;
-}
-.json-exporter-title {
-  color: #333;
-  font-size: 2rem;
 }

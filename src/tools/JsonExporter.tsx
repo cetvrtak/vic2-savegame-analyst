@@ -8,14 +8,23 @@ const JsonExporter: React.FC = () => {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
+    const files = event.target.files;
+    if (files && files.length > 0) {
       try {
-        const parsedResult = await parseFileStream(file.stream());
-        setJsonResult(JSON.stringify(parsedResult, null, 2));
+        let results: Record<string, any> = {};
+        for (const file of Array.from(files)) {
+          const fileNameWithoutExt = file.name.split('.')[0];
+          const parsedResult = await parseFileStream(file.stream());
+          setFileName(fileNameWithoutExt);
+          if (files.length === 1) {
+            results = parsedResult;
+          } else {
+            results[fileNameWithoutExt] = parsedResult;
+          }
+        }
+        setJsonResult(JSON.stringify(results, null, 2));
       } catch (error) {
-        console.error('Error parsing file:', error);
+        console.error('Error parsing file(s):', error);
       }
     }
   };
@@ -26,7 +35,7 @@ const JsonExporter: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = fileName?.split('.')[0] + '.json';
+      link.download = fileName + '.json';
       link.click();
       URL.revokeObjectURL(url);
     }
@@ -38,12 +47,13 @@ const JsonExporter: React.FC = () => {
 
   return (
     <div className="json-exporter btn-wrapper">
-      <h2 className="json-exporter-title">JSON Exporter</h2>
+      <h2 className="title-black">JSON Exporter</h2>
       <input
         className="btn"
         type="file"
         accept=".txt, .lua"
         onChange={handleFileChange}
+        multiple
       />
       {jsonResult && (
         <div>
