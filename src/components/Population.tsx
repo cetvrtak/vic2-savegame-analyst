@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useState } from 'react';
-
 type Pops = {
   [key: string]: number;
 };
@@ -54,7 +53,6 @@ const Population: React.FC<PopulationProps> = ({ provinces }) => {
             const popSize = Array.isArray(pop)
               ? pop.reduce((prev, cur) => (prev += +cur.size), 0)
               : +pop.size;
-            // console.log(key, popSize);
             newPopulation[key] += popSize;
           }
         }
@@ -71,6 +69,8 @@ const Population: React.FC<PopulationProps> = ({ provinces }) => {
       <table>
         <thead>
           <tr>
+            <th></th>
+            <th>Total</th>
             {Object.keys(population).map((key) => (
               <th key={key}>{key}</th>
             ))}
@@ -78,6 +78,13 @@ const Population: React.FC<PopulationProps> = ({ provinces }) => {
         </thead>
         <tbody>
           <tr className="row">
+            <th>Population</th>
+            <td>
+              {Object.entries(population).reduce(
+                (acc, val) => (acc += val[1]),
+                0
+              )}
+            </td>
             {Object.entries(population).map(([key, value]) => (
               <td key={key}>{value}</td>
             ))}
