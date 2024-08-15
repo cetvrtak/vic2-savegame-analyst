@@ -3,6 +3,7 @@ import { AppState } from './types';
 import { Action } from './actions';
 import Population from './Population';
 import PopsNeeds from './PopsNeeds';
+import Production from './Production';
 
 type MainProps = { appState: AppState; dispatch: React.Dispatch<Action> };
 
@@ -43,6 +44,9 @@ const Main: React.FC<MainProps> = ({ appState, dispatch }) => {
             appState.world[appState.world.player].active_inventions.key
           }
         />
+      )}
+      {appState.activeTab === 'production' && (
+        <Production world={appState.world} />
       )}
     </main>
   );
