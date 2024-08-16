@@ -6,7 +6,7 @@
 
 html {
   min-height: 100vh;
-  background: linear-gradient(45deg, #0e1c53, #0e1c53d9);
+  background: linear-gradient(45deg, #0b0e1a, #1935a5d9);
   color: #eee;
   font-family: 'Roboto', sans-serif;
   font-size: 62.5%;
@@ -35,7 +35,7 @@ h2 {
   background: #eee;
   border-radius: 59px;
   padding: 10px 40px;
-  box-shadow: inset 1px 1px 4px 1px rgba(0, 75, 151, 0.4);
+  box-shadow: inset 1px 1px 2px 1px rgba(0, 75, 151, 0.4);
 }
 
 .file-input-wrapper {
@@ -51,7 +51,7 @@ h2 {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
-  box-shadow: 4px 4px 16px #0e1c53c7;
+  box-shadow: 2px 2px 2px #0e1c53c7;
 }
 
 .btn:hover {
