@@ -1,22 +1,42 @@
 ﻿import { useEffect, useState } from 'react';
 
-type World = {
-  [key: string]: {
-    rgo?: {
-      goods_type: string;
-      employment: {
-        employees: {
-          key: { count: string } | { count: string }[];
-        };
+type Province = {
+  farmers: { size: string } | { size: string }[];
+  labourers: { size: string } | { size: string }[];
+  rgo?: {
+    goods_type: string;
+    employment: {
+      employees: {
+        count: string;
+        key: { count: string } | { count: string }[];
       };
     };
-    owner: string;
-    name: string;
   };
+  owner: string;
+  name: string;
+};
+
+type World = {
+  [key: string]: Province;
 };
 
 type ProductionProps = {
   world: World;
+};
+
+const GetProvinceSize = (province: Province): number => {
+  const baseWorkplaces = 40000;
+  const farmers = province.hasOwnProperty('farmers')
+    ? province.farmers
+    : province.labourers;
+  const numFarmers = Array.isArray(farmers)
+    ? farmers?.reduce((acc, cur) => (acc += +cur.size), 0)
+    : +farmers.size;
+  const terrainModifier = 0;
+
+  return Math.floor(
+    1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + terrainModifier))
+  );
 };
 
 const Production: React.FC<ProductionProps> = ({ world }) => {
@@ -45,26 +65,11 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           const province = world[key];
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
+          let production = 0;
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          //       Province Size
-          // Example:
-
-          // Base workerplaces: 40000
-          const baseWorkplaces = 40000;
-          // Farmers in province : 90000
-          const employees = province.rgo!.employment.employees.key;
-          const employeesSize = Array.isArray(employees)
-            ? employees.reduce((acc, cur) => (acc += +cur.count), 0)
-            : +employees.count;
-
-          // Terrain modifier: -10%
-          console.log(province);
-          // 40000 * (100% - 10%) = 36000
-          // 90000 / 36000 = 2.5
-          // Rounding up gives 3.
-          // Multiplying by 1.5 gives 4.5.
-          // Rounding down gives 4. This will then be the province size.
+          const provinceSize = GetProvinceSize(province);
+          console.log(province.name, provinceSize);
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
@@ -72,7 +77,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
 
-          productionData[owner][goodsType!] += employeesSize;
+          productionData[owner][goodsType!] += production;
         }
       }
 
