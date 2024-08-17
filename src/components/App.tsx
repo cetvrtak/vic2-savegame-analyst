@@ -5,6 +5,7 @@ import { reducer } from './reducer';
 import { initialState } from './types';
 import Main from './Main';
 import JsonExporter from '../tools/JsonExporter';
+import TerrainMapper from '../tools/TerrainMapper';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -12,6 +13,7 @@ const App: React.FC = () => {
   return (
     <>
       <JsonExporter />
+      <TerrainMapper />
 
       {!state.world ? (
         <LoadSave dispatch={dispatch} />
