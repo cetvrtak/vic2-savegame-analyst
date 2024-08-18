@@ -88,6 +88,32 @@ const TerrainMapper: React.FC = () => {
   ) => {
     const mapping: Record<number, string> = {};
 
+    // Step 1: Create a map of province ID to array of pixel points
+    const provincePixelsMap: Record<number, number[]> = {};
+
+    for (let y = 0; y < provincesBmp.height; y++) {
+      for (let x = 0; x < provincesBmp.width; x++) {
+        const idx = (y * provincesBmp.width + x) * 4;
+        const r = provincesBmp.data[idx];
+        const g = provincesBmp.data[idx + 1];
+        const b = provincesBmp.data[idx + 2];
+
+        // Find the province that matches the pixel color
+        const province = provinceDefinitions.find(
+          (prov) =>
+            prov.color[0] === r && prov.color[1] === g && prov.color[2] === b
+        );
+
+        if (province) {
+          if (!provincePixelsMap[province.id]) {
+            provincePixelsMap[province.id] = [];
+          }
+          provincePixelsMap[province.id].push(idx);
+        }
+      }
+    }
+
+    // Step 2: Use the provincePixelsMap to determine dominant terrain for each province
     for (const province of provinceDefinitions) {
       // Get terrain from history file
       const terrainType = provinceHistory[province.id]?.terrain;
@@ -96,50 +122,42 @@ const TerrainMapper: React.FC = () => {
         continue;
       }
 
-      const [provinceR, provinceG, provinceB] = province.color;
-
-      // A map to store the frequency of each terrain color in the province
       const terrainColorFrequency: Record<string, number> = {};
+      const pixelIndices = provincePixelsMap[province.id];
 
-      for (let y = 0; y < provincesBmp.height; y++) {
-        for (let x = 0; x < provincesBmp.width; x++) {
-          const idx = (y * provincesBmp.width + x) * 4;
-          const r = provincesBmp.data[idx];
-          const g = provincesBmp.data[idx + 1];
-          const b = provincesBmp.data[idx + 2];
+      if (pixelIndices) {
+        for (const idx of pixelIndices) {
+          const terrainR = terrainBmp.data[idx];
+          const terrainG = terrainBmp.data[idx + 1];
+          const terrainB = terrainBmp.data[idx + 2];
+          const terrainColor = `${terrainR},${terrainG},${terrainB}`;
 
-          // Check if the current pixel belongs to the province
-          if (r === provinceR && g === provinceG && b === provinceB) {
-            const terrainR = terrainBmp.data[idx];
-            const terrainG = terrainBmp.data[idx + 1];
-            const terrainB = terrainBmp.data[idx + 2];
-            const terrainColor = `${terrainR},${terrainG},${terrainB}`;
-
-            // Update the frequency map
-            if (terrainColorFrequency[terrainColor]) {
-              terrainColorFrequency[terrainColor]++;
-            } else {
-              terrainColorFrequency[terrainColor] = 1;
-            }
+          // Update the frequency map
+          if (terrainColorFrequency[terrainColor]) {
+            terrainColorFrequency[terrainColor]++;
+          } else {
+            terrainColorFrequency[terrainColor] = 1;
           }
         }
-      }
 
-      // Find the most frequent terrain color in the province
-      let dominantTerrainColor = '';
-      let maxFrequency = 0;
-      for (const [color, frequency] of Object.entries(terrainColorFrequency)) {
-        if (frequency > maxFrequency) {
-          maxFrequency = frequency;
-          dominantTerrainColor = color;
+        // Find the most frequent terrain color in the province
+        let dominantTerrainColor = '';
+        let maxFrequency = 0;
+        for (const [color, frequency] of Object.entries(
+          terrainColorFrequency
+        )) {
+          if (frequency > maxFrequency) {
+            maxFrequency = frequency;
+            dominantTerrainColor = color;
+          }
         }
-      }
 
-      if (dominantTerrainColor) {
-        const terrainTexture = GetTexture(dominantTerrainColor);
-        const terrainType = GetTerrainType(terrainTexture);
-        if (terrainType) {
-          mapping[province.id] = terrainType;
+        if (dominantTerrainColor) {
+          const terrainTexture = GetTexture(dominantTerrainColor);
+          const terrainType = GetTerrainType(terrainTexture);
+          if (terrainType) {
+            mapping[province.id] = terrainType;
+          }
         }
       }
     }
