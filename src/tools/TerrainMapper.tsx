@@ -81,14 +81,10 @@ const TerrainMapper: React.FC = () => {
     return '';
   };
 
-  const createProvinceTerrainMapping = async (
+  const createProvincePixelsMap = (
     provinceDefinitions: ProvinceDefinition[],
-    provincesBmp: ImageData,
-    terrainBmp: ImageData
-  ) => {
-    const mapping: Record<number, string> = {};
-
-    // Step 1: Create a map of province ID to array of pixel points
+    provincesBmp: ImageData
+  ): Record<number, number[]> => {
     const provincePixelsMap: Record<number, number[]> = {};
 
     for (let y = 0; y < provincesBmp.height; y++) {
@@ -112,6 +108,22 @@ const TerrainMapper: React.FC = () => {
         }
       }
     }
+
+    return provincePixelsMap;
+  };
+
+  const createProvinceTerrainMapping = async (
+    provinceDefinitions: ProvinceDefinition[],
+    provincesBmp: ImageData,
+    terrainBmp: ImageData
+  ) => {
+    const mapping: Record<number, string> = {};
+
+    // Step 1: Create a map of province ID to array of pixel points
+    const provincePixelsMap: Record<number, number[]> = createProvincePixelsMap(
+      provinceDefinitions,
+      provincesBmp
+    );
 
     // Step 2: Use the provincePixelsMap to determine dominant terrain for each province
     for (const province of provinceDefinitions) {
