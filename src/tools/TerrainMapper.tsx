@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react';
 import ColorMap from '../assets/map/terrainColormap.json';
 import ProvinceHistory from '../assets/history/provinces.json';
+import Terrain from '../assets/map/terrain.json';
 
 const colorMap: Record<string, string> = ColorMap;
 
@@ -10,6 +11,8 @@ interface ProvinceData {
 }
 type ProvinceRecord = Record<string, ProvinceData>;
 const provinceHistory: ProvinceRecord = ProvinceHistory;
+
+const terrain: Record<string, any> = Terrain;
 
 interface ProvinceDefinition {
   id: number;
@@ -61,6 +64,21 @@ const TerrainMapper: React.FC = () => {
 
       reader.readAsDataURL(file);
     });
+  };
+
+  const GetTexture = (color: string): string => {
+    for (const [key, value] of Object.entries(colorMap)) {
+      if (value === color) return key;
+    }
+    return '';
+  };
+
+  const GetTerrainType = (texture: string): string => {
+    for (const [_, textureDefinition] of Object.entries(terrain)) {
+      if (textureDefinition.color?.key.includes(texture))
+        return textureDefinition.type;
+    }
+    return '';
   };
 
   const createProvinceTerrainMapping = async (
@@ -118,7 +136,8 @@ const TerrainMapper: React.FC = () => {
       }
 
       if (dominantTerrainColor) {
-        const terrainType = colorMap[dominantTerrainColor];
+        const terrainTexture = GetTexture(dominantTerrainColor);
+        const terrainType = GetTerrainType(terrainTexture);
         if (terrainType) {
           mapping[province.id] = terrainType;
         }
