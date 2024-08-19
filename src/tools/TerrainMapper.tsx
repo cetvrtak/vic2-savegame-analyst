@@ -134,7 +134,7 @@ const TerrainMapper: React.FC = () => {
         continue;
       }
 
-      const terrainColorFrequency: Record<string, number> = {};
+      const terrainTypeFrequency: Record<string, number> = {};
       const pixelIndices = provincePixelsMap[province.id];
 
       if (pixelIndices) {
@@ -144,32 +144,25 @@ const TerrainMapper: React.FC = () => {
           const terrainB = terrainBmp.data[idx + 2];
           const terrainColor = `${terrainR},${terrainG},${terrainB}`;
 
-          // Update the frequency map
-          if (terrainColorFrequency[terrainColor]) {
-            terrainColorFrequency[terrainColor]++;
-          } else {
-            terrainColorFrequency[terrainColor] = 1;
-          }
-        }
-
-        // Find the most frequent terrain color in the province
-        let dominantTerrainColor = '';
-        let maxFrequency = 0;
-        for (const [color, frequency] of Object.entries(
-          terrainColorFrequency
-        )) {
-          if (frequency > maxFrequency) {
-            maxFrequency = frequency;
-            dominantTerrainColor = color;
-          }
-        }
-
-        if (dominantTerrainColor) {
-          const terrainTexture = GetTexture(dominantTerrainColor);
+          const terrainTexture = GetTexture(terrainColor);
           const terrainType = GetTerrainType(terrainTexture);
-          if (terrainType) {
-            mapping[province.id] = terrainType;
+
+          // Update the frequency map
+          if (terrainTypeFrequency[terrainType]) {
+            terrainTypeFrequency[terrainType]++;
+          } else {
+            terrainTypeFrequency[terrainType] = 1;
           }
+        }
+
+        // Find the most frequent terrain type in the province
+        const dominantTerrainType = Object.entries(terrainTypeFrequency).reduce(
+          (max, cur) => (cur[1] > max[1] ? cur : max),
+          ['', 0]
+        )[0];
+
+        if (dominantTerrainType) {
+          mapping[province.id] = dominantTerrainType;
         }
       }
     }
