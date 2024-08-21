@@ -81,6 +81,19 @@ const TerrainMapper: React.FC = () => {
     return '';
   };
 
+  const GetTerrainFromPixelIndex = (
+    idx: number,
+    terrainBmp: ImageData
+  ): string => {
+    const terrainR = terrainBmp.data[idx];
+    const terrainG = terrainBmp.data[idx + 1];
+    const terrainB = terrainBmp.data[idx + 2];
+    const terrainColor = `${terrainR},${terrainG},${terrainB}`;
+    const terrainTexture = GetTexture(terrainColor);
+
+    return GetTerrainType(terrainTexture);
+  };
+
   const createProvincePixelsMap = (
     provinceDefinitions: ProvinceDefinition[],
     provincesBmp: ImageData
@@ -139,13 +152,7 @@ const TerrainMapper: React.FC = () => {
 
       if (pixelIndices) {
         for (const idx of pixelIndices) {
-          const terrainR = terrainBmp.data[idx];
-          const terrainG = terrainBmp.data[idx + 1];
-          const terrainB = terrainBmp.data[idx + 2];
-          const terrainColor = `${terrainR},${terrainG},${terrainB}`;
-
-          const terrainTexture = GetTexture(terrainColor);
-          const terrainType = GetTerrainType(terrainTexture);
+          const terrainType = GetTerrainFromPixelIndex(idx, terrainBmp);
 
           // Update the frequency map
           if (terrainTypeFrequency[terrainType]) {
