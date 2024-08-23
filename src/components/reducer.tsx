@@ -10,6 +10,8 @@ export const reducer = (state: AppState, action: Action): AppState => {
       };
     case 'SET_ACTIVE_TAB':
       return { ...state, activeTab: action.payload };
+    case 'TOGGLE_TOOLS':
+      return { ...state, showTools: action.payload };
     default:
       return state;
   }

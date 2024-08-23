@@ -62,12 +62,38 @@ h2 {
   display: none;
 }
 
+/* HEADER */
+.tools-icon-container {
+  margin-left: auto;
+}
+.tools-icon {
+  width: 32px;
+}
+.tools-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #1c2e75;
+  padding: 24px;
+}
+.tools-close {
+  font-size: 32px;
+}
+
+.tab-selector-container {
+  margin-bottom: 64px;
+}
 .tab-selector {
   list-style-type: none;
+  display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 4px;
-  margin-bottom: 64px;
 }
 .tab {
   display: flex;

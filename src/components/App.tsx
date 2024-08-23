@@ -5,8 +5,7 @@ import { useReducer } from 'react';
 import { reducer } from './reducer';
 import { initialState } from './types';
 import Main from './Main';
-import JsonExporter from '../tools/JsonExporter';
-import TerrainMapper from '../tools/TerrainMapper';
+import Tools from './Tools';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -14,8 +13,7 @@ const App: React.FC = () => {
   return (
     <>
       <TabSelector dispatch={dispatch} />
-      <JsonExporter />
-      <TerrainMapper />
+      <Tools showTools={state.showTools} dispatch={dispatch} />
 
       {!state.world ? (
         <LoadSave dispatch={dispatch} />
