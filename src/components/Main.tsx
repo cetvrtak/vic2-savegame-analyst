@@ -1,11 +1,9 @@
-import TabSelector from './TabSelector';
 import { AppState } from './types';
-import { Action } from './actions';
 import Population from './Population';
 import PopsNeeds from './PopsNeeds';
 import Production from './Production';
 
-type MainProps = { appState: AppState; dispatch: React.Dispatch<Action> };
+type MainProps = { appState: AppState };
 
 type World = {
   [key: string]: any;
@@ -21,15 +19,12 @@ const getProvinces = (world: World, country: string): any[] => {
   return provinces;
 };
 
-const Main: React.FC<MainProps> = ({ appState, dispatch }) => {
-
+const Main: React.FC<MainProps> = ({ appState }) => {
   return (
     <main className="row">
       <span>
         Player tag ~ <strong>{appState.world.player}</strong>
       </span>
-
-      <TabSelector dispatch={dispatch} />
 
       {appState.activeTab === 'population' && (
         <Population

@@ -1,3 +1,4 @@
+import TabSelector from './TabSelector';
 import LoadSave from './LoadSave';
 import './App.css';
 import { useReducer } from 'react';
@@ -12,13 +13,14 @@ const App: React.FC = () => {
 
   return (
     <>
+      <TabSelector dispatch={dispatch} />
       <JsonExporter />
       <TerrainMapper />
 
       {!state.world ? (
         <LoadSave dispatch={dispatch} />
       ) : (
-        <Main appState={state} dispatch={dispatch} />
+        <Main appState={state} />
       )}
     </>
   );
