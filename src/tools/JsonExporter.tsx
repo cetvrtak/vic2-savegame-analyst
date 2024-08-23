@@ -41,10 +41,6 @@ const JsonExporter: React.FC = () => {
     }
   };
 
-  if (process.env.NODE_ENV !== 'development') {
-    return null; // Render nothing if not in development environment
-  }
-
   return (
     <div className="json-exporter btn-wrapper">
       <h2 className="title-black">JSON Exporter</h2>
