@@ -14,7 +14,7 @@ html {
 #root {
   min-height: 100vh;
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0 8rem;
   padding: 2rem;
   text-align: center;
 }
@@ -64,7 +64,9 @@ h2 {
 
 /* HEADER */
 .tools-icon-container {
+  display: none;
   margin-left: auto;
+  cursor: pointer;
 }
 .tools-icon {
   width: 32px;
@@ -75,14 +77,19 @@ h2 {
   align-items: flex-end;
   justify-content: flex-start;
   gap: 12px;
-  position: absolute;
+  position: fixed;
   top: 0;
-  right: 0;
+  right: 72px;
+  transform: translateX(100%);
+  transition: all 0.7s ease-out 0s;
+  height: 100%;
   background: #1c2e75;
   padding: 24px;
 }
 .tools-close {
+  display: none;
   font-size: 32px;
+  cursor: pointer;
 }
 
 .tab-selector-container {
@@ -131,4 +138,34 @@ td {
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+@media screen and (min-width: 376px) {
+  .tools-menu:hover {
+    right: 0;
+    transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 375px) {
+  #root {
+    margin: 0 auto;
+  }
+  .btn-wrapper {
+    width: 100%;
+  }
+
+  /* HEADER */
+  .tools-menu {
+    width: 100%;
+    right: 0;
+    transform: translateX(100%);
+  }
+  .tools-menu-open {
+    transform: translateX(0);
+  }
+  .tools-icon-container,
+  .tools-close {
+    display: flex;
+  }
 }
