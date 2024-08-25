@@ -5,7 +5,6 @@
 }
 
 html {
-  min-height: 100vh;
   background: linear-gradient(45deg, #0b0e1a, #1935a5d9);
   color: #eee;
   font-family: 'Roboto', sans-serif;
@@ -13,6 +12,7 @@ html {
 }
 
 #root {
+  min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,7 +39,7 @@ h2 {
 }
 
 .file-input-wrapper {
-  height: calc(100vh - 2 * 2rem); /* 2rem padding on #root */
+  padding: 100px 40px;
 }
 
 .btn {
