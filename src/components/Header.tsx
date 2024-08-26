@@ -2,6 +2,7 @@
 import { Action } from './actions';
 import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
+import ToolsMenuItem from './ToolsMenuItem';
 
 const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
   dispatch,
@@ -50,8 +51,12 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
         <div className="tools-close" onClick={handleToggleTools}>
           &times;
         </div>
-        <JsonExporter />
-        <TerrainMapper />
+        <ToolsMenuItem title="JSON Exporter" icon="json.svg">
+          <JsonExporter />
+        </ToolsMenuItem>
+        <ToolsMenuItem title="Terrain Mapper" icon="terrain.svg">
+          <TerrainMapper />
+        </ToolsMenuItem>
       </div>
     </header>
   );

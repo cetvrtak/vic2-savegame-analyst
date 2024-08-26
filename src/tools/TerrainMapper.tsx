@@ -221,8 +221,7 @@ const TerrainMapper: React.FC = () => {
   };
 
   return (
-    <div className="json-exporter btn-wrapper">
-      <h2 className="title-black">Terrain Mapper</h2>
+    <>
       <input
         className="btn"
         type="file"
@@ -235,7 +234,7 @@ const TerrainMapper: React.FC = () => {
           Download provinceTerrainMapping.json
         </button>
       )}
-    </div>
+    </>
   );
 };
 

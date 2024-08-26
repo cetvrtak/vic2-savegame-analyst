@@ -42,8 +42,7 @@ const JsonExporter: React.FC = () => {
   };
 
   return (
-    <div className="json-exporter btn-wrapper">
-      <h2 className="title-black">JSON Exporter</h2>
+    <>
       <input
         className="btn"
         type="file"
@@ -58,7 +57,7 @@ const JsonExporter: React.FC = () => {
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
