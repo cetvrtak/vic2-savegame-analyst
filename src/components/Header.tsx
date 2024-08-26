@@ -13,6 +13,14 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
     setShowToolsMenu((show) => !show);
   };
 
+  const handleMouseEnter = () => {
+    setShowToolsMenu(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowToolsMenu(false);
+  };
+
   return (
     <header>
       <div className="tab-selector-container btn-wrapper">
@@ -47,14 +55,26 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
         </div>
       </div>
 
-      <div className={`tools-menu ${showToolsMenu ? 'tools-menu-open' : ''}`}>
+      <div
+        className={`tools-menu ${showToolsMenu ? 'tools-menu-open' : ''}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <div className="tools-close" onClick={handleToggleTools}>
           &times;
         </div>
-        <ToolsMenuItem title="JSON Exporter" icon="json.svg">
+        <ToolsMenuItem
+          title="JSON Exporter"
+          icon="json.svg"
+          menuHovered={showToolsMenu}
+        >
           <JsonExporter />
         </ToolsMenuItem>
-        <ToolsMenuItem title="Terrain Mapper" icon="terrain.svg">
+        <ToolsMenuItem
+          title="Terrain Mapper"
+          icon="terrain.svg"
+          menuHovered={showToolsMenu}
+        >
           <TerrainMapper />
         </ToolsMenuItem>
       </div>

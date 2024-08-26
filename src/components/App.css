@@ -87,6 +87,10 @@ h2 {
   background: #1c2e75;
   padding: 24px;
 }
+.tools-menu-open {
+  transform: translateX(0);
+  right: 0;
+}
 .tools-close {
   display: none;
   font-size: 32px;
@@ -179,18 +183,6 @@ td {
   padding: 10px 20px;
 }
 
-@media screen and (min-width: 376px) {
-  .tools-menu:hover {
-    right: 0;
-    transform: translateX(0);
-  }
-  .tools-menu:not(:hover) .tool-box {
-    height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-}
-
 @media screen and (max-width: 375px) {
   #root {
     margin: 0 auto;
@@ -203,10 +195,6 @@ td {
   .tools-menu {
     width: 100%;
     right: 0;
-    transform: translateX(100%);
-  }
-  .tools-menu-open {
-    transform: translateX(0);
   }
   .tools-icon-container,
   .tools-close {

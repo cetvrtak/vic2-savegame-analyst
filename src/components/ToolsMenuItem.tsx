@@ -4,9 +4,15 @@ type ItemProps = {
   title: string;
   icon: string;
   children: ReactElement;
+  menuHovered: boolean;
 };
 
-const ToolsMenuItem: React.FC<ItemProps> = ({ title, icon, children }) => {
+const ToolsMenuItem: React.FC<ItemProps> = ({
+  title,
+  icon,
+  children,
+  menuHovered,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpand = () => {
@@ -30,7 +36,7 @@ const ToolsMenuItem: React.FC<ItemProps> = ({ title, icon, children }) => {
       </div>
       <div
         className={`tool-box btn-wrapper ${
-          expanded ? 'tool-box-expanded' : ''
+          menuHovered && expanded ? 'tool-box-expanded' : ''
         }`}
       >
         {children}
