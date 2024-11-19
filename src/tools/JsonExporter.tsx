@@ -14,7 +14,7 @@ const JsonExporter: React.FC = () => {
         let results: Record<string, any> = {};
         for (const file of Array.from(files)) {
           const fileNameWithoutExt = file.name.split('.')[0];
-          const parsedResult = await parseFileStream(file.stream());
+          const parsedResult = await parseFileStream(file.stream(), () => {});
           setFileName(fileNameWithoutExt);
           if (files.length === 1) {
             results = parsedResult;

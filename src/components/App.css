@@ -63,6 +63,35 @@ h2 {
   display: none;
 }
 
+/* Progress bar */
+progress {
+  width: 300px;
+  max-width: 100%;
+  height: 20px;
+  border: none;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  margin-top: 24px;
+}
+
+/* Chrome, Safari, and Edge */
+progress::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background: #1935a5d9;
+}
+
+/* Firefox */
+progress::-moz-progress-bar {
+  background: #1935a5d9;
+  border-radius: 10px;
+}
+
 /* HEADER */
 .tools-icon-container {
   display: none;

@@ -1,11 +1,12 @@
 ﻿import React, { useRef, useState } from 'react';
 import { parseFileStream } from './parser';
 import { Action } from './actions';
+import { AppState } from './types';
 
-type LoadSaveProps = { dispatch: React.Dispatch<Action> };
+type LoadSaveProps = { dispatch: React.Dispatch<Action>; state: AppState };
 
-const LoadSave: React.FC<LoadSaveProps> = ({ dispatch }) => {
-  const [fileSelected, setFileSelected] = useState<Boolean>(false);
+const LoadSave: React.FC<LoadSaveProps> = ({ dispatch, state }) => {
+  const [fileSelected, setFileSelected] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -16,7 +17,7 @@ const LoadSave: React.FC<LoadSaveProps> = ({ dispatch }) => {
 
   const handleFile = async (file: File) => {
     const stream = file.stream();
-    const parsedData = await parseFileStream(stream);
+    const parsedData = await parseFileStream(stream, dispatch, file.size);
     dispatch({ type: 'SET_WORLD', payload: parsedData });
   };
 
@@ -41,7 +42,10 @@ const LoadSave: React.FC<LoadSaveProps> = ({ dispatch }) => {
       />
     </div>
   ) : (
-    <h2>Loading ...</h2>
+    <div>
+      <h2>{state.loadStatus}</h2>
+      <progress value={state.loadProgress} max="100" />
+    </div>
   );
 };
 

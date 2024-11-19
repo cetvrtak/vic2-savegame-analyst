@@ -1,4 +1,6 @@
-﻿// Define types for the parsed data
+﻿import { Action } from './actions';
+
+// Define types for the parsed data
 export type ParsedObject = {
   [key: string]: any;
 };
@@ -11,7 +13,12 @@ const preProcessText = (text: string): string => {
   return withoutComments.replace(/{/g, '\n{\n').replace(/}/g, '\n}\n');
 };
 
-const parseObject = (text: string): ParsedObject => {
+const parseObject = async (
+  text: string,
+  dispatch: React.Dispatch<Action>
+): Promise<ParsedObject> => {
+  dispatch({ type: 'SET_LOAD_STATUS', payload: 'Parsing lines...' });
+
   const object: ParsedObject = {};
   const preProcessedText = preProcessText(text);
   const lines = preProcessedText.split('\n');
@@ -45,7 +52,7 @@ const parseObject = (text: string): ParsedObject => {
       // Handle key-value pairs
       const [key, value] = trimmedLine.split('=').map((part) => part.trim());
       if (value) {
-        objectStack[objectStack.length - 1][key] = value.replace(/"/g, ''); // Remove quotes
+        currentObject[key] = value.replace(/"/g, '');
       }
     } else {
       // Handle array-like values
@@ -58,26 +65,57 @@ const parseObject = (text: string): ParsedObject => {
     }
   };
 
-  for (const line of lines) {
-    if (line.trim() !== '') {
-      parseLine(line);
-    }
-  }
+  let lineIndex = 0;
 
-  return object;
+  const processLines = async () => {
+    const chunkSize = 100000;
+
+    while (lineIndex < lines.length) {
+      for (let i = 0; i < chunkSize && lineIndex < lines.length; i++) {
+        const line = lines[lineIndex];
+        if (line.trim() !== '') {
+          parseLine(line);
+        }
+
+        lineIndex++;
+      }
+
+      const progress = Math.floor((100 * lineIndex) / lines.length);
+      dispatch({ type: 'SET_LOAD_PROGRESS', payload: progress });
+
+      // Allow the UI to update
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    return object;
+  };
+
+  return processLines();
 };
 
 export const parseFileStream = async (
-  stream: ReadableStream<Uint8Array>
+  stream: ReadableStream<Uint8Array>,
+  dispatch: React.Dispatch<Action>,
+  fileSize: number = 0
 ): Promise<ParsedObject> => {
+  dispatch({ type: 'SET_LOAD_STATUS', payload: 'Loading stream...' });
+
   const reader = stream.getReader();
   const decoder = new TextDecoder('utf-8');
   let text = '';
+  let processedSize = 0;
 
   const processStream = async () => {
     const { done, value } = await reader.read();
+
+    processedSize += value?.length || 0;
+    const progress = Math.floor((processedSize / fileSize) * 100);
+    dispatch({ type: 'SET_LOAD_PROGRESS', payload: progress });
+
+    // Allow the UI to update
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     if (done) {
-      return parseObject(text);
+      return await parseObject(text, dispatch);
     }
     text += decoder.decode(value, { stream: true });
     return processStream();

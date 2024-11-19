@@ -12,6 +12,10 @@ export const reducer = (state: AppState, action: Action): AppState => {
       return { ...state, activeTab: action.payload };
     case 'TOGGLE_TOOLS':
       return { ...state, showTools: action.payload };
+    case 'SET_LOAD_STATUS':
+      return { ...state, loadStatus: action.payload };
+    case 'SET_LOAD_PROGRESS':
+      return { ...state, loadProgress: action.payload };
     default:
       return state;
   }

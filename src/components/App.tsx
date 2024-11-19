@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <Header dispatch={dispatch} />
 
       {!state.world ? (
-        <LoadSave dispatch={dispatch} />
+        <LoadSave dispatch={dispatch} state={state} />
       ) : (
         <Main appState={state} />
       )}
