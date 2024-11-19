@@ -78,19 +78,30 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           const province = world[key];
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
-          let production = 0;
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
           const provinceSize = GetProvinceSize(key, province);
-          console.log(province.name, provinceSize);
+
+          const terrainType = provinceTerrainMapping[key];
+          const terrainModifier = province.hasOwnProperty('farmers')
+          ? Number(terrain[terrainType]?.farm_rgo_size)
+          : Number(terrain[terrainType]?.mine_rgo_size);
+          
+          const baseProduction = provinceSize * (1 + terrainModifier);
+          console.log(province.name, {'size': provinceSize, 'terrain': terrainType, 'terrain modifier': terrainModifier});
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
+          const throughput = 1;
+
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
+          const outputEfficiency = 1;
 
-          productionData[owner][goodsType!] += production;
+          const production = baseProduction * throughput * outputEfficiency;
+
+          productionData[owner][goodsType!] += Math.round(production * 10) / 10;
         }
       }
 
