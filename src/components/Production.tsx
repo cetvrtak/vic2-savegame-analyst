@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from 'react';
 import ProvinceTerrainMapping from '../assets/map/provinceTerrainMapping.json';
 import Terrain from '../assets/map/terrain.json';
+import Modifiers from '../assets/common/modifiers.json';
 
 const provinceTerrainMapping: Record<string, string> = ProvinceTerrainMapping;
 
@@ -10,6 +11,8 @@ interface TerrainData {
 }
 type TerrainType = Record<string, TerrainData>;
 const terrain: TerrainType = Terrain.categories;
+
+const modifiers: Record<string, any> = Modifiers;
 
 type Province = {
   farmers: { size: string } | { size: string }[];
@@ -25,6 +28,7 @@ type Province = {
   };
   owner: string;
   name: string;
+  modifier: { modifier: string }[];
 };
 
 type World = {
@@ -86,9 +90,11 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           const terrainModifier = province.hasOwnProperty('farmers')
           ? Number(terrain[terrainType]?.farm_rgo_size)
           : Number(terrain[terrainType]?.mine_rgo_size);
+
+          const rgoSizeModifier = Array.isArray(province.modifier) ? province.modifier.reduce((acc, m) => acc += +modifiers[m.modifier].farm_rgo_size || 0 , 0) : 0;
           
           const baseProduction = provinceSize * (1 + terrainModifier);
-          console.log(province.name, {'size': provinceSize, 'terrain': terrainType, 'terrain modifier': terrainModifier});
+          console.log(province.name, {'size': provinceSize, 'terrain': terrainType, 'terrain modifier': terrainModifier, 'rgo size modifier': rgoSizeModifier});
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
           const throughput = 1;
