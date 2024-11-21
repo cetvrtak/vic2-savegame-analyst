@@ -63,6 +63,25 @@ h2 {
   display: none;
 }
 
+.mod-selector-wrapper {
+  flex-direction: column;
+  gap: 8px;
+}
+.mod-selector-title {
+  color: #0e1c53;
+}
+.mod-selector-btn {
+  width: 50%;
+  text-align: left;
+  transition: all 0.5s ease;
+}
+.mod-selector-btn:hover,
+.mod-selector-btn-selected {
+  transform: translateX(10%);
+  background-color: #dcbc05;
+  color: #0e1c53;
+}
+
 /* Progress bar */
 progress {
   width: 300px;
@@ -216,7 +235,8 @@ td {
   #root {
     margin: 0 auto;
   }
-  .btn-wrapper {
+  .btn-wrapper,
+  .mod-selector-btn {
     width: 100%;
   }
 
