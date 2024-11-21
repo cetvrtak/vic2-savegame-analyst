@@ -2,12 +2,16 @@
 import { parseFileStream } from './parser';
 import { Action } from './actions';
 import { AppState } from './types';
+import { useData } from './DataContext';
 
 type LoadSaveProps = { dispatch: React.Dispatch<Action>; state: AppState };
 
 const LoadSave: React.FC<LoadSaveProps> = ({ dispatch, state }) => {
   const [fileSelected, setFileSelected] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { mod } = useData();
+  if (!mod) return;
 
   const handleClick = () => {
     if (fileInputRef.current) {

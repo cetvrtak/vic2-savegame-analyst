@@ -5,6 +5,8 @@ import { reducer } from './reducer';
 import { initialState } from './types';
 import Main from './Main';
 import Header from './Header';
+import { DataProvider } from './DataContext';
+import ModSelector from './ModSelector';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -13,11 +15,14 @@ const App: React.FC = () => {
     <>
       <Header dispatch={dispatch} />
 
-      {!state.world ? (
-        <LoadSave dispatch={dispatch} state={state} />
-      ) : (
-        <Main appState={state} />
-      )}
+      <DataProvider>
+        <ModSelector />
+        {!state.world ? (
+          <LoadSave dispatch={dispatch} state={state} />
+        ) : (
+          <Main appState={state} />
+        )}
+      </DataProvider>
     </>
   );
 };
