@@ -56,6 +56,20 @@ const GetProvinceSize = (
   );
 };
 
+const GetContinentModifier = (
+  key: string,
+  continents: Record<string, any>,
+  rgoSizeKey: string
+): number => {
+  return Object.values(continents).reduce(
+    (modifier: number, cur: Record<string, any>) =>
+      (modifier = cur.provinces.key.includes(key)
+        ? Number(cur[rgoSizeKey] || 0)
+        : modifier),
+    0
+  );
+};
+
 const Production: React.FC<ProductionProps> = ({ world }) => {
   const countries = ['RUS', 'ARA', 'GRE'];
   const tradeGoods = ['tobacco', 'cotton', 'fruit'];
@@ -66,7 +80,11 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
   const { data, loadJsonFiles } = useData();
 
   useEffect(() => {
-    loadJsonFiles(['map/terrain.json', 'common/modifiers.json']);
+    loadJsonFiles([
+      'map/terrain.json',
+      'map/continent.json',
+      'common/modifiers.json',
+    ]);
   }, []);
 
   useEffect(() => {
@@ -76,6 +94,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       const productionData: { [key: string]: { [key: string]: number } } = {};
       const terrain: TerrainType = data.terrain.categories;
       const modifiers: Record<string, any> = data.modifiers;
+      const continents: Record<string, any> = data.continent;
 
       for (const country of countries) {
         productionData[country] = {};
@@ -102,19 +121,29 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
             : 'mine_rgo_size';
           const terrainModifier = Number(terrain[terrainType][rgoSizeKey]);
 
-          const rgoSizeModifier = Array.isArray(province.modifier)
+          const provinceRgoSizeModifier = Array.isArray(province.modifier)
             ? province.modifier.reduce(
                 (acc, m) => (acc += +modifiers[m.modifier][rgoSizeKey] || 0),
                 0
               )
             : 0;
+          const continentRgoSizeModifier = GetContinentModifier(
+            key,
+            continents,
+            rgoSizeKey
+          );
+          const rgoSizeModifier =
+            provinceRgoSizeModifier + continentRgoSizeModifier;
 
-          const baseProduction = provinceSize * (1 + terrainModifier);
+          const baseProduction =
+            provinceSize * (1 + terrainModifier + rgoSizeModifier);
+
           console.log(province.name, {
             size: provinceSize,
             terrain: terrainType,
             'terrain modifier': terrainModifier,
-            'rgo size modifier': rgoSizeModifier,
+            'province modifier': provinceRgoSizeModifier,
+            'continent modifier': continentRgoSizeModifier,
           });
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
