@@ -12,24 +12,8 @@
         ]
       }
     },
-    "urban": {
-      "movement_cost": "1.0",
-      "defence": "2",
-      "color": {
-        "key": [
-          "140",
-          "150",
-          "130"
-        ]
-      },
-      "farm_rgo_size": "-0.5",
-      "farm_rgo_eff": "0.25",
-      "mine_rgo_size": "-0.5",
-      "mine_rgo_eff": "0.25",
-      "supply_limit": "10"
-    },
     "arctic": {
-      "movement_cost": "1.1",
+      "movement_cost": "1.0",
       "color": {
         "key": [
           "235",
@@ -37,59 +21,26 @@
           "235"
         ]
       },
-      "farm_rgo_size": "-0.8",
-      "farm_rgo_eff": "-0.4",
-      "mine_rgo_size": "0.0",
+      "farm_rgo_size": "-0.5",
+      "farm_rgo_eff": "-0.2",
+      "mine_rgo_size": "-0.0",
       "mine_rgo_eff": "-0.2",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "attrition": "2"
+      "min_build_railroad": "1"
     },
-    "plains": {
-      "movement_cost": "1.0",
+    "farmlands": {
+      "movement_cost": "1.2",
       "color": {
         "key": [
-          "241",
-          "221",
-          "184"
+          "137",
+          "104",
+          "165"
         ]
       },
-      "farm_rgo_size": "0.0",
+      "farm_rgo_size": "0.2",
       "farm_rgo_eff": "0.0",
       "mine_rgo_size": "0.0",
       "mine_rgo_eff": "0.0",
       "supply_limit": "10"
-    },
-    "steppe": {
-      "movement_cost": "1.0",
-      "color": {
-        "key": [
-          "211",
-          "201",
-          "184"
-        ]
-      },
-      "farm_rgo_size": "0.0",
-      "farm_rgo_eff": "-0.1",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "4"
-    },
-    "savanna": {
-      "movement_cost": "1.0",
-      "color": {
-        "key": [
-          "220",
-          "201",
-          "199"
-        ]
-      },
-      "farm_rgo_size": "0.0",
-      "farm_rgo_eff": "-0.15",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "4"
     },
     "forest": {
       "movement_cost": "1.2",
@@ -106,46 +57,6 @@
       "mine_rgo_size": "0.0",
       "mine_rgo_eff": "0.0",
       "supply_limit": "6",
-      "combat_width": "-0.20"
-    },
-    "jungle": {
-      "movement_cost": "1.3",
-      "attrition": "1.5",
-      "defence": "2",
-      "color": {
-        "key": [
-          "32",
-          "151",
-          "0"
-        ]
-      },
-      "farm_rgo_size": "-0.25",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "-0.2",
-      "supply_limit": "1",
-      "min_build_railroad": "3",
-      "min_build_fort": "1",
-      "combat_width": "-0.25"
-    },
-    "boreal": {
-      "movement_cost": "1.3",
-      "defence": "1",
-      "attrition": "1",
-      "color": {
-        "key": [
-          "110",
-          "150",
-          "110"
-        ]
-      },
-      "farm_rgo_size": "-0.7",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-0.0",
-      "mine_rgo_eff": "-0.2",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
       "combat_width": "-0.20"
     },
     "hills": {
@@ -166,27 +77,91 @@
       "min_build_railroad": "1",
       "combat_width": "-0.33"
     },
-    "dryhills": {
-      "movement_cost": "1.2",
+    "woods": {
+      "movement_cost": "1.1",
       "defence": "1",
       "color": {
         "key": [
-          "70",
-          "135",
+          "165",
+          "205",
+          "108"
+        ]
+      },
+      "farm_rgo_size": "0.0",
+      "farm_rgo_eff": "0.0",
+      "mine_rgo_size": "0.0",
+      "mine_rgo_eff": "0.0",
+      "supply_limit": "6",
+      "combat_width": "-0.20"
+    },
+    "mountain": {
+      "movement_cost": "1.4",
+      "defence": "2",
+      "color": {
+        "key": [
+          "117",
+          "108",
+          "119"
+        ]
+      },
+      "farm_rgo_size": "0",
+      "farm_rgo_eff": "-0.25",
+      "mine_rgo_size": "0.0",
+      "mine_rgo_eff": "0.0",
+      "supply_limit": "2",
+      "combat_width": "-0.66",
+      "min_build_railroad": "3"
+    },
+    "steppe": {
+      "movement_cost": "1.0",
+      "color": {
+        "key": [
+          "211",
+          "201",
+          "184"
+        ]
+      },
+      "farm_rgo_size": "0.0",
+      "farm_rgo_eff": "0.0",
+      "mine_rgo_size": "0.0",
+      "mine_rgo_eff": "0.0",
+      "supply_limit": "8"
+    },
+    "plains": {
+      "movement_cost": "1.0",
+      "color": {
+        "key": [
+          "241",
+          "221",
+          "184"
+        ]
+      },
+      "farm_rgo_size": "0.0",
+      "farm_rgo_eff": "0.0",
+      "mine_rgo_size": "0.0",
+      "mine_rgo_eff": "0.0",
+      "supply_limit": "10"
+    },
+    "jungle": {
+      "movement_cost": "1.3",
+      "defence": "2",
+      "color": {
+        "key": [
+          "32",
+          "151",
           "0"
         ]
       },
       "farm_rgo_size": "0.0",
-      "farm_rgo_eff": "-0.15",
+      "farm_rgo_eff": "-0.2",
       "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "3",
-      "min_build_railroad": "1",
-      "combat_width": "-0.33"
+      "mine_rgo_eff": "-0.2",
+      "supply_limit": "2",
+      "min_build_railroad": "2",
+      "combat_width": "-0.25"
     },
     "marsh": {
       "movement_cost": "1.4",
-      "attrition": "1",
       "defence": "1",
       "color": {
         "key": [
@@ -195,99 +170,13 @@
           "105"
         ]
       },
-      "farm_rgo_size": "-0.25",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-0.25",
-      "mine_rgo_eff": "-0.3",
-      "supply_limit": "3",
-      "min_build_railroad": "2",
-      "combat_width": "-0.25"
-    },
-    "farmlands": {
-      "movement_cost": "1.0",
-      "color": {
-        "key": [
-          "137",
-          "104",
-          "165"
-        ]
-      },
       "farm_rgo_size": "0.0",
-      "farm_rgo_eff": "0.25",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "10"
-    },
-    "mining_district": {
-      "movement_cost": "1.0",
-      "color": {
-        "key": [
-          "137",
-          "104",
-          "165"
-        ]
-      },
-      "farm_rgo_size": "0.0",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.25",
-      "supply_limit": "10"
-    },
-    "mountain": {
-      "movement_cost": "1.4",
-      "defence": "3",
-      "color": {
-        "key": [
-          "117",
-          "108",
-          "119"
-        ]
-      },
-      "farm_rgo_size": "-0.2",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "0.1",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "2",
-      "combat_width": "-0.6",
-      "min_build_railroad": "3"
-    },
-    "montane_tundra": {
-      "movement_cost": "1.4",
-      "defence": "3",
-      "color": {
-        "key": [
-          "117",
-          "108",
-          "120"
-        ]
-      },
-      "farm_rgo_size": "-0.8",
-      "farm_rgo_eff": "-0.5",
-      "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "combat_width": "-0.6",
-      "attrition": "2"
-    },
-    "montane_forest": {
-      "movement_cost": "1.5",
-      "defence": "3",
-      "color": {
-        "key": [
-          "117",
-          "108",
-          "121"
-        ]
-      },
-      "farm_rgo_size": "-0.4",
       "farm_rgo_eff": "-0.2",
       "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "0.0",
+      "mine_rgo_eff": "-0.2",
       "supply_limit": "2",
-      "combat_width": "-0.70",
-      "min_build_railroad": "3"
+      "min_build_railroad": "2",
+      "combat_width": "-0.25"
     },
     "desert": {
       "movement_cost": "1.5",
@@ -298,253 +187,25 @@
           "0"
         ]
       },
-      "farm_rgo_size": "-0.8",
-      "farm_rgo_eff": "-0.5",
-      "mine_rgo_size": "-0.8",
-      "mine_rgo_eff": "-0.5",
-      "min_build_railroad": "6",
-      "min_build_fort": "1",
-      "attrition": "2"
-    },
-    "semidesert": {
-      "movement_cost": "1.2",
-      "color": {
-        "key": [
-          "208",
-          "155",
-          "0"
-        ]
-      },
-      "farm_rgo_size": "-0.3",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-0.1",
-      "mine_rgo_eff": "-0.1",
-      "supply_limit": "2",
-      "min_build_railroad": "2",
-      "attrition": "1"
-    },
-    "coastal_desert": {
-      "movement_cost": "1.2",
-      "color": {
-        "key": [
-          "208",
-          "156",
-          "0"
-        ]
-      },
-      "farm_rgo_size": "-0.4",
+      "farm_rgo_size": "-0.5",
       "farm_rgo_eff": "-0.2",
       "mine_rgo_size": "0.0",
-      "mine_rgo_eff": "-0.1",
-      "supply_limit": "2",
-      "min_build_railroad": "3",
-      "attrition": "1"
+      "mine_rgo_eff": "0"
     },
-    "small_island": {
+    "coastal_desert": {
       "movement_cost": "1.0",
-      "attrition": "1",
       "color": {
         "key": [
-          "210",
+          "208",
           "155",
-          "10"
+          "0"
         ]
       },
-      "farm_rgo_size": "-0.5",
+      "farm_rgo_size": "-0.25",
       "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "-0.5",
+      "mine_rgo_size": "0.0",
       "mine_rgo_eff": "0.0",
-      "supply_limit": "2",
-      "combat_width": "-0.3"
-    },
-    "coral_island": {
-      "movement_cost": "1.0",
-      "attrition": "2",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "11"
-        ]
-      },
-      "farm_rgo_size": "-0.95",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "-0.95",
-      "mine_rgo_eff": "0.0",
-      "min_build_railroad": "6",
-      "min_build_fort": "6"
-    },
-    "new_world_boreal": {
-      "movement_cost": "1.3",
-      "defence": "1",
-      "attrition": "1",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "17"
-        ]
-      },
-      "farm_rgo_size": "-10.7",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-10.0",
-      "mine_rgo_eff": "-0.2",
-      "immigrant_attract": "-0.6",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "combat_width": "-0.20"
-    },
-    "new_world_montane_tundra": {
-      "movement_cost": "1.4",
-      "defence": "3",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "16"
-        ]
-      },
-      "farm_rgo_size": "-10.8",
-      "farm_rgo_eff": "-0.5",
-      "mine_rgo_size": "-10.0",
-      "mine_rgo_eff": "0.0",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "immigrant_attract": "-0.9",
-      "combat_width": "-0.6",
-      "attrition": "2"
-    },
-    "new_world_arctic": {
-      "movement_cost": "1.1",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "15"
-        ]
-      },
-      "farm_rgo_size": "-10.8",
-      "farm_rgo_eff": "-0.4",
-      "mine_rgo_size": "-10.0",
-      "mine_rgo_eff": "-0.2",
-      "min_build_naval_base": "4",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "attrition": "2",
-      "immigrant_attract": "-0.9"
-    },
-    "new_world_mountain": {
-      "movement_cost": "1.4",
-      "defence": "3",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "14"
-        ]
-      },
-      "farm_rgo_size": "-10.2",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "-10",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "2",
-      "combat_width": "-0.6",
-      "min_build_railroad": "3",
-      "immigrant_attract": "-0.4"
-    },
-    "new_world_jungle": {
-      "movement_cost": "1.3",
-      "attrition": "1.5",
-      "defence": "2",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "13"
-        ]
-      },
-      "farm_rgo_size": "-10.25",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-10.0",
-      "mine_rgo_eff": "-0.2",
-      "supply_limit": "1",
-      "min_build_railroad": "3",
-      "min_build_fort": "1",
-      "combat_width": "-0.25",
-      "immigrant_attract": "-0.4"
-    },
-    "new_world_plains": {
-      "movement_cost": "1.0",
-      "attrition": "1",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "12"
-        ]
-      },
-      "farm_rgo_size": "-10.0",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "-10.0",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "10"
-    },
-    "new_world_small_island": {
-      "movement_cost": "1.0",
-      "attrition": "1",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "11"
-        ]
-      },
-      "farm_rgo_size": "-10.5",
-      "farm_rgo_eff": "0.0",
-      "mine_rgo_size": "-10.5",
-      "mine_rgo_eff": "0.0",
-      "supply_limit": "2",
-      "combat_width": "-0.3",
-      "assimilation_rate": "-0.5",
-      "immigrant_attract": "-0.75"
-    },
-    "new_world_desert": {
-      "movement_cost": "1.5",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "30"
-        ]
-      },
-      "farm_rgo_size": "-9.0",
-      "farm_rgo_eff": "-0.5",
-      "mine_rgo_size": "-9.0",
-      "mine_rgo_eff": "-0.5",
-      "min_build_railroad": "4",
-      "min_build_fort": "1",
-      "attrition": "2",
-      "immigrant_attract": "-0.5"
-    },
-    "new_world_semidesert": {
-      "movement_cost": "1.2",
-      "color": {
-        "key": [
-          "210",
-          "155",
-          "31"
-        ]
-      },
-      "farm_rgo_size": "-7.0",
-      "farm_rgo_eff": "-0.3",
-      "mine_rgo_size": "-7.0",
-      "mine_rgo_eff": "-0.1",
-      "supply_limit": "2",
-      "min_build_railroad": "2",
-      "immigrant_attract": "-0.25",
-      "attrition": "1"
+      "supply_limit": "2"
     }
   },
   "ocean1": {
@@ -557,8 +218,7 @@
     "has_texture": "no"
   },
   "text_0": {
-    "type": "arctic",
-    "color": {
+    "type = arctic color": {
       "key": [
         "0"
       ]
@@ -566,8 +226,7 @@
     "priority": "0"
   },
   "text_1": {
-    "type": "arctic",
-    "color": {
+    "type = arctic color": {
       "key": [
         "1"
       ]
@@ -575,8 +234,7 @@
     "priority": "1"
   },
   "text_2": {
-    "type": "arctic",
-    "color": {
+    "type = arctic color": {
       "key": [
         "2"
       ]
@@ -584,8 +242,7 @@
     "priority": "2"
   },
   "text_3": {
-    "type": "arctic",
-    "color": {
+    "type = arctic color": {
       "key": [
         "3"
       ]
@@ -593,8 +250,7 @@
     "priority": "3"
   },
   "text_4": {
-    "type": "arctic",
-    "color": {
+    "type = arctic color": {
       "key": [
         "4"
       ]
@@ -602,8 +258,7 @@
     "priority": "4"
   },
   "text_5": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "5"
       ]
@@ -611,8 +266,7 @@
     "priority": "5"
   },
   "text_6": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "6"
       ]
@@ -620,8 +274,7 @@
     "priority": "6"
   },
   "text_7": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "7"
       ]
@@ -629,8 +282,7 @@
     "priority": "7"
   },
   "text_8": {
-    "type": "farmlands",
-    "color": {
+    "type = farmlands color": {
       "key": [
         "8"
       ]
@@ -638,8 +290,7 @@
     "priority": "8"
   },
   "text_9": {
-    "type": "farmlands",
-    "color": {
+    "type = farmlands color": {
       "key": [
         "9"
       ]
@@ -647,8 +298,7 @@
     "priority": "9"
   },
   "text_10": {
-    "type": "farmlands",
-    "color": {
+    "type = farmlands color": {
       "key": [
         "10"
       ]
@@ -656,8 +306,7 @@
     "priority": "10"
   },
   "text_11": {
-    "type": "farmlands",
-    "color": {
+    "type = farmlands color": {
       "key": [
         "11"
       ]
@@ -665,8 +314,7 @@
     "priority": "11"
   },
   "text_12": {
-    "type": "forest",
-    "color": {
+    "type = forest color": {
       "key": [
         "12"
       ]
@@ -674,8 +322,7 @@
     "priority": "12"
   },
   "text_13": {
-    "type": "forest",
-    "color": {
+    "type = forest color": {
       "key": [
         "13"
       ]
@@ -683,8 +330,7 @@
     "priority": "13"
   },
   "text_14": {
-    "type": "forest",
-    "color": {
+    "type = forest color": {
       "key": [
         "14"
       ]
@@ -692,8 +338,7 @@
     "priority": "14"
   },
   "text_15": {
-    "type": "forest",
-    "color": {
+    "type = forest color": {
       "key": [
         "15"
       ]
@@ -701,8 +346,7 @@
     "priority": "15"
   },
   "text_16": {
-    "type": "hills",
-    "color": {
+    "type = hills color": {
       "key": [
         "16"
       ]
@@ -710,8 +354,7 @@
     "priority": "16"
   },
   "text_17": {
-    "type": "hills",
-    "color": {
+    "type = hills color": {
       "key": [
         "17"
       ]
@@ -719,8 +362,7 @@
     "priority": "17"
   },
   "text_18": {
-    "type": "hills",
-    "color": {
+    "type = hills color": {
       "key": [
         "18"
       ]
@@ -728,8 +370,7 @@
     "priority": "18"
   },
   "text_19": {
-    "type": "hills",
-    "color": {
+    "type = hills color": {
       "key": [
         "19"
       ]
@@ -737,8 +378,7 @@
     "priority": "19"
   },
   "text_20": {
-    "type": "forest",
-    "color": {
+    "type = woods color": {
       "key": [
         "20"
       ]
@@ -746,8 +386,7 @@
     "priority": "20"
   },
   "text_21": {
-    "type": "forest",
-    "color": {
+    "type = woods color": {
       "key": [
         "21"
       ]
@@ -755,8 +394,7 @@
     "priority": "21"
   },
   "text_22": {
-    "type": "forest",
-    "color": {
+    "type = woods color": {
       "key": [
         "22"
       ]
@@ -764,8 +402,7 @@
     "priority": "22"
   },
   "text_23": {
-    "type": "forest",
-    "color": {
+    "type = woods color": {
       "key": [
         "23"
       ]
@@ -773,8 +410,7 @@
     "priority": "23"
   },
   "text_24": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "24"
       ]
@@ -782,8 +418,7 @@
     "priority": "24"
   },
   "text_25": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "25"
       ]
@@ -791,8 +426,7 @@
     "priority": "25"
   },
   "text_26": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "26"
       ]
@@ -800,8 +434,7 @@
     "priority": "26"
   },
   "text_27": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "27"
       ]
@@ -809,8 +442,7 @@
     "priority": "27"
   },
   "text_28": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "28"
       ]
@@ -818,8 +450,7 @@
     "priority": "28"
   },
   "text_29": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "29"
       ]
@@ -827,8 +458,7 @@
     "priority": "29"
   },
   "text_30": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "30"
       ]
@@ -836,8 +466,7 @@
     "priority": "30"
   },
   "text_31": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "31"
       ]
@@ -845,8 +474,7 @@
     "priority": "31"
   },
   "text_32": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "32"
       ]
@@ -854,8 +482,7 @@
     "priority": "32"
   },
   "text_33": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "33"
       ]
@@ -863,8 +490,7 @@
     "priority": "33"
   },
   "text_34": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "34"
       ]
@@ -872,8 +498,7 @@
     "priority": "34"
   },
   "text_35": {
-    "type": "plains",
-    "color": {
+    "type = plains color": {
       "key": [
         "35"
       ]
@@ -881,8 +506,7 @@
     "priority": "35"
   },
   "text_36": {
-    "type": "steppe",
-    "color": {
+    "type = steppe color": {
       "key": [
         "36"
       ]
@@ -890,8 +514,7 @@
     "priority": "36"
   },
   "text_37": {
-    "type": "steppe",
-    "color": {
+    "type = steppe color": {
       "key": [
         "37"
       ]
@@ -899,8 +522,7 @@
     "priority": "37"
   },
   "text_38": {
-    "type": "steppe",
-    "color": {
+    "type = steppe color": {
       "key": [
         "38"
       ]
@@ -908,8 +530,7 @@
     "priority": "38"
   },
   "text_39": {
-    "type": "steppe",
-    "color": {
+    "type = steppe color": {
       "key": [
         "39"
       ]
@@ -917,8 +538,7 @@
     "priority": "39"
   },
   "text_40": {
-    "type": "jungle",
-    "color": {
+    "type = jungle color": {
       "key": [
         "40"
       ]
@@ -926,8 +546,7 @@
     "priority": "40"
   },
   "text_41": {
-    "type": "jungle",
-    "color": {
+    "type = jungle color": {
       "key": [
         "41"
       ]
@@ -935,8 +554,7 @@
     "priority": "41"
   },
   "text_42": {
-    "type": "jungle",
-    "color": {
+    "type = jungle color": {
       "key": [
         "42"
       ]
@@ -944,8 +562,7 @@
     "priority": "42"
   },
   "text_43": {
-    "type": "jungle",
-    "color": {
+    "type = jungle color": {
       "key": [
         "43"
       ]
@@ -953,8 +570,7 @@
     "priority": "43"
   },
   "text_44": {
-    "type": "marsh",
-    "color": {
+    "type = marsh color": {
       "key": [
         "44"
       ]
@@ -962,8 +578,7 @@
     "priority": "44"
   },
   "text_45": {
-    "type": "marsh",
-    "color": {
+    "type = marsh color": {
       "key": [
         "45"
       ]
@@ -971,8 +586,7 @@
     "priority": "45"
   },
   "text_46": {
-    "type": "marsh",
-    "color": {
+    "type = marsh color": {
       "key": [
         "46"
       ]
@@ -980,8 +594,7 @@
     "priority": "46"
   },
   "text_47": {
-    "type": "marsh",
-    "color": {
+    "type = marsh color": {
       "key": [
         "47"
       ]
@@ -989,8 +602,7 @@
     "priority": "47"
   },
   "text_48": {
-    "type": "desert",
-    "color": {
+    "type = desert color": {
       "key": [
         "48"
       ]
@@ -998,8 +610,7 @@
     "priority": "48"
   },
   "text_49": {
-    "type": "desert",
-    "color": {
+    "type = desert color": {
       "key": [
         "49"
       ]
@@ -1007,8 +618,7 @@
     "priority": "49"
   },
   "text_50": {
-    "type": "desert",
-    "color": {
+    "type = desert color": {
       "key": [
         "50"
       ]
@@ -1016,8 +626,7 @@
     "priority": "50"
   },
   "text_51": {
-    "type": "desert",
-    "color": {
+    "type = desert color": {
       "key": [
         "51"
       ]
@@ -1025,8 +634,7 @@
     "priority": "51"
   },
   "text_52": {
-    "type": "coastal_desert",
-    "color": {
+    "type = coastal_desert color": {
       "key": [
         "52"
       ]
@@ -1034,8 +642,7 @@
     "priority": "52"
   },
   "text_53": {
-    "type": "coastal_desert",
-    "color": {
+    "type = coastal_desert color": {
       "key": [
         "53"
       ]
@@ -1043,8 +650,7 @@
     "priority": "53"
   },
   "text_54": {
-    "type": "coastal_desert",
-    "color": {
+    "type = coastal_desert color": {
       "key": [
         "54"
       ]
@@ -1052,8 +658,7 @@
     "priority": "54"
   },
   "text_55": {
-    "type": "coastal_desert",
-    "color": {
+    "type = coastal_desert color": {
       "key": [
         "55"
       ]
@@ -1061,8 +666,7 @@
     "priority": "55"
   },
   "text_56": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "56"
       ]
@@ -1070,8 +674,7 @@
     "priority": "56"
   },
   "text_57": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "57"
       ]
@@ -1079,8 +682,7 @@
     "priority": "57"
   },
   "text_58": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "58"
       ]
@@ -1088,8 +690,7 @@
     "priority": "58"
   },
   "text_59": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "59"
       ]
@@ -1097,8 +698,7 @@
     "priority": "59"
   },
   "text_60": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "60"
       ]
@@ -1106,8 +706,7 @@
     "priority": "60"
   },
   "text_61": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "61"
       ]
@@ -1115,8 +714,7 @@
     "priority": "61"
   },
   "text_62": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "62"
       ]
@@ -1124,8 +722,7 @@
     "priority": "62"
   },
   "text_63": {
-    "type": "mountain",
-    "color": {
+    "type = mountain color": {
       "key": [
         "63"
       ]
