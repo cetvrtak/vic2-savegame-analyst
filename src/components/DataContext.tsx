@@ -20,7 +20,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
       const jsonPromises = files.map(async (file) => {
         const path = `../assets/${mod}/${file}`;
         const key = file.split('/').slice(-1)[0].split('.')[0];
-        const jsonData = await import(path);
+        const module = await import(path);
+        const jsonData = module.default || module;
 
         return { key, jsonData };
       });
