@@ -97,13 +97,14 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           const provinceSize = GetProvinceSize(key, province, terrain);
 
           const terrainType = provinceTerrainMapping[key];
-          const terrainModifier = province.hasOwnProperty('farmers')
-            ? Number(terrain[terrainType]?.farm_rgo_size)
-            : Number(terrain[terrainType]?.mine_rgo_size);
+          const rgoSizeKey = province.hasOwnProperty('farmers')
+            ? 'farm_rgo_size'
+            : 'mine_rgo_size';
+          const terrainModifier = Number(terrain[terrainType][rgoSizeKey]);
 
           const rgoSizeModifier = Array.isArray(province.modifier)
             ? province.modifier.reduce(
-                (acc, m) => (acc += +modifiers[m.modifier].farm_rgo_size || 0),
+                (acc, m) => (acc += +modifiers[m.modifier][rgoSizeKey] || 0),
                 0
               )
             : 0;
