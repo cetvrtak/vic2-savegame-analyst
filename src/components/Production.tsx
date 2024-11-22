@@ -35,7 +35,11 @@ type ProductionProps = {
   world: World;
 };
 
-const GetProvinceSize = (key: string, province: Province, terrain: TerrainType): number => {
+const GetProvinceSize = (
+  key: string,
+  province: Province,
+  terrain: TerrainType
+): number => {
   const baseWorkplaces = 40000;
   const farmers = province.hasOwnProperty('farmers')
     ? province.farmers
@@ -60,10 +64,10 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
   }>({});
 
   const { data, loadJsonFiles } = useData();
-  
+
   useEffect(() => {
     loadJsonFiles(['map/terrain.json', 'common/modifiers.json']);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!data) return;
