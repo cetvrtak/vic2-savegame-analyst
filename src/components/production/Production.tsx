@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import { useData } from './DataContext';
+import { useData } from '../DataContext';
 
 interface TerrainData {
   farm_rgo_size?: string;

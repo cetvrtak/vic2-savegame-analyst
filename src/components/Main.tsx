@@ -1,7 +1,7 @@
 import { AppState } from './types';
 import Population from './Population';
 import PopsNeeds from './PopsNeeds';
-import Production from './Production';
+import Production from './production/Production';
 
 type MainProps = { appState: AppState };
 
