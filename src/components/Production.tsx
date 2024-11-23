@@ -92,6 +92,30 @@ const GetIssuesModifier = (
   }, 0);
 };
 
+function GetCountryData(
+  countries: string[],
+  world: World,
+  issues: Record<string, any>
+) {
+  const countryData: Record<string, any> = {};
+  for (const country of countries) {
+    countryData[country] = {
+      farm_rgo_size: GetIssuesModifier(
+        world[country] as Country,
+        issues,
+        'farm_rgo_size'
+      ),
+      mine_rgo_size: GetIssuesModifier(
+        world[country] as Country,
+        issues,
+        'mine_rgo_size'
+      ),
+    };
+  }
+
+  return countryData;
+}
+
 const Production: React.FC<ProductionProps> = ({ world }) => {
   const countries = ['RUS', 'ARA', 'GRE'];
   const tradeGoods = ['tobacco', 'cotton', 'fruit'];
@@ -115,30 +139,19 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
     function calculateProduction() {
       const productionData: { [key: string]: { [key: string]: number } } = {};
-      const countryData: Record<string, any> = {};
 
       const terrain: TerrainType = data.terrain.categories;
       const modifiers: Record<string, any> = data.modifiers;
       const continents: Record<string, any> = data.continent;
       const issues: Record<string, any> = data.issues;
 
+      const countryData = GetCountryData(countries, world, issues);
+
       for (const country of countries) {
         productionData[country] = {};
         for (const good of tradeGoods) {
           productionData[country][good] = 0;
         }
-
-        countryData[country] = {};
-        countryData[country].farm_rgo_size = GetIssuesModifier(
-          world[country] as Country,
-          issues,
-          'farm_rgo_size'
-        );
-        countryData[country].mine_rgo_size = GetIssuesModifier(
-          world[country] as Country,
-          issues,
-          'mine_rgo_size'
-        );
       }
 
       for (const key in world) {
