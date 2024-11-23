@@ -27,9 +27,11 @@ type Province = {
   modifier: { modifier: string }[];
 };
 
-type World = {
-  [key: string]: Province;
+type Country = {
+  [reform: string]: string;
 };
+type Issues = Record<string, any>;
+type World = Record<string, Province | Country>;
 
 type ProductionProps = {
   world: World;
@@ -70,6 +72,26 @@ const GetContinentModifier = (
   );
 };
 
+const GetIssuesModifier = (
+  country: Country,
+  issues: Issues,
+  rgoSizeKey: string
+): number => {
+  return Object.values(issues).reduce((acc, category) => {
+    Object.entries(category as Issues).forEach(([reformName, reform]) => {
+      Object.entries(reform as Issues).forEach(([stanceName, stance]) => {
+        if (
+          stance.hasOwnProperty(rgoSizeKey) &&
+          country[reformName] === stanceName
+        ) {
+          acc += +stance[rgoSizeKey];
+        }
+      });
+    });
+    return acc;
+  }, 0);
+};
+
 const Production: React.FC<ProductionProps> = ({ world }) => {
   const countries = ['RUS', 'ARA', 'GRE'];
   const tradeGoods = ['tobacco', 'cotton', 'fruit'];
@@ -84,6 +106,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       'map/terrain.json',
       'map/continent.json',
       'common/modifiers.json',
+      'common/issues.json',
     ]);
   }, []);
 
@@ -92,23 +115,38 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
     function calculateProduction() {
       const productionData: { [key: string]: { [key: string]: number } } = {};
+      const countryData: Record<string, any> = {};
+
       const terrain: TerrainType = data.terrain.categories;
       const modifiers: Record<string, any> = data.modifiers;
       const continents: Record<string, any> = data.continent;
+      const issues: Record<string, any> = data.issues;
 
       for (const country of countries) {
         productionData[country] = {};
         for (const good of tradeGoods) {
           productionData[country][good] = 0;
         }
+
+        countryData[country] = {};
+        countryData[country].farm_rgo_size = GetIssuesModifier(
+          world[country] as Country,
+          issues,
+          'farm_rgo_size'
+        );
+        countryData[country].mine_rgo_size = GetIssuesModifier(
+          world[country] as Country,
+          issues,
+          'mine_rgo_size'
+        );
       }
 
       for (const key in world) {
-        const goodsType = world[key].rgo?.goods_type || '';
-        const owner = world[key].owner || '';
+        const province = world[key] as Province;
+        const goodsType = province.rgo?.goods_type || '';
+        const ownerTag = province.owner || '';
 
-        if (countries.includes(owner) && tradeGoods.includes(goodsType)) {
-          const province = world[key];
+        if (countries.includes(ownerTag) && tradeGoods.includes(goodsType)) {
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
@@ -132,19 +170,15 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
             continents,
             rgoSizeKey
           );
+
+          const issuesRgoSizeModifier = countryData[ownerTag][rgoSizeKey];
           const rgoSizeModifier =
-            provinceRgoSizeModifier + continentRgoSizeModifier;
+            provinceRgoSizeModifier +
+            continentRgoSizeModifier +
+            issuesRgoSizeModifier;
 
           const baseProduction =
             provinceSize * (1 + terrainModifier + rgoSizeModifier);
-
-          console.log(province.name, {
-            size: provinceSize,
-            terrain: terrainType,
-            'terrain modifier': terrainModifier,
-            'province modifier': provinceRgoSizeModifier,
-            'continent modifier': continentRgoSizeModifier,
-          });
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
           const throughput = 1;
@@ -157,7 +191,8 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
           const production = baseProduction * throughput * outputEfficiency;
 
-          productionData[owner][goodsType!] += Math.round(production * 10) / 10;
+          productionData[ownerTag][goodsType!] +=
+            Math.round(production * 10) / 10;
         }
       }
 
