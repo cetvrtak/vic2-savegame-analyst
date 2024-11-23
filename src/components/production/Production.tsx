@@ -1,38 +1,13 @@
 ﻿import { useEffect, useState } from 'react';
+import {
+  TerrainType,
+  Province,
+  Country,
+  Issues,
+  World,
+  ProductionProps,
+} from './types';
 import { useData } from '../DataContext';
-
-interface TerrainData {
-  farm_rgo_size?: string;
-  [key: string]: any;
-}
-type TerrainType = Record<string, TerrainData>;
-
-type Province = {
-  farmers: { size: string } | { size: string }[];
-  labourers: { size: string } | { size: string }[];
-  rgo?: {
-    goods_type: string;
-    employment: {
-      employees: {
-        count: string;
-        key: { count: string } | { count: string }[];
-      };
-    };
-  };
-  owner: string;
-  name: string;
-  modifier: { modifier: string }[];
-};
-
-type Country = {
-  [reform: string]: string;
-};
-type Issues = Record<string, any>;
-type World = Record<string, Province | Country>;
-
-type ProductionProps = {
-  world: World;
-};
 
 const GetProvinceSize = (
   key: string,
