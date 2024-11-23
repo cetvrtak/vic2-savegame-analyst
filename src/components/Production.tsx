@@ -1,8 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import ProvinceTerrainMapping from '../assets/map/provinceTerrainMapping.json';
 import { useData } from './DataContext';
-
-const provinceTerrainMapping: Record<string, string> = ProvinceTerrainMapping;
 
 interface TerrainData {
   farm_rgo_size?: string;
@@ -40,7 +37,8 @@ type ProductionProps = {
 const GetProvinceSize = (
   key: string,
   province: Province,
-  terrain: TerrainType
+  terrain: TerrainType,
+  provinceTerrainMapping: Record<string, string>
 ): number => {
   const baseWorkplaces = 40000;
   const farmers = province.hasOwnProperty('farmers')
@@ -130,6 +128,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       'common/issues.json',
       'common/modifiers.json',
       'map/continent.json',
+      'map/provinceTerrainMapping.json',
       'map/terrain.json',
     ]);
   }, []);
@@ -140,6 +139,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
     function calculateProduction() {
       const productionData: { [key: string]: { [key: string]: number } } = {};
 
+      const terrainMap: Record<string, string> = data.provinceTerrainMapping;
       const terrain: TerrainType = data.terrain.categories;
       const modifiers: Record<string, any> = data.modifiers;
       const continents: Record<string, any> = data.continent;
@@ -164,9 +164,14 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           // Production = Base Production * Throughput * Output Efficiency
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          const provinceSize = GetProvinceSize(key, province, terrain);
+          const provinceSize = GetProvinceSize(
+            key,
+            province,
+            terrain,
+            terrainMap
+          );
 
-          const terrainType = provinceTerrainMapping[key];
+          const terrainType = terrainMap[key];
           const rgoSizeKey = province.hasOwnProperty('farmers')
             ? 'farm_rgo_size'
             : 'mine_rgo_size';
