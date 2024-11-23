@@ -127,10 +127,10 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
   useEffect(() => {
     loadJsonFiles([
-      'map/terrain.json',
-      'map/continent.json',
-      'common/modifiers.json',
       'common/issues.json',
+      'common/modifiers.json',
+      'map/continent.json',
+      'map/terrain.json',
     ]);
   }, []);
 
