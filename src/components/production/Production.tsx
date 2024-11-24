@@ -66,20 +66,20 @@ const GetIssuesModifier = (
 };
 
 function GetCountryData(
-  countries: string[],
+  selectedTags: string[],
   world: World,
   issues: Record<string, any>
 ) {
   const countryData: Record<string, any> = {};
-  for (const country of countries) {
-    countryData[country] = {
+  for (const tag of selectedTags) {
+    countryData[tag] = {
       farm_rgo_size: GetIssuesModifier(
-        world[country] as Country,
+        world[tag] as Country,
         issues,
         'farm_rgo_size'
       ),
       mine_rgo_size: GetIssuesModifier(
-        world[country] as Country,
+        world[tag] as Country,
         issues,
         'mine_rgo_size'
       ),
@@ -90,8 +90,8 @@ function GetCountryData(
 }
 
 const Production: React.FC<ProductionProps> = ({ world }) => {
-  const countries = ['RUS', 'ARA', 'GRE'];
-  const tradeGoods = ['tobacco', 'cotton', 'fruit'];
+  const selectedTags = ['RUS', 'ARA', 'GRE'];
+  const selectedGoods = ['tobacco', 'cotton', 'fruit'];
   const [production, setProduction] = useState<{
     [key: string]: { [key: string]: number };
   }>({});
@@ -120,12 +120,12 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       const continents: Record<string, any> = data.continent;
       const issues: Record<string, any> = data.issues;
 
-      const countryData = GetCountryData(countries, world, issues);
+      const countryData = GetCountryData(selectedTags, world, issues);
 
-      for (const country of countries) {
-        productionData[country] = {};
-        for (const good of tradeGoods) {
-          productionData[country][good] = 0;
+      for (const tag of selectedTags) {
+        productionData[tag] = {};
+        for (const good of selectedGoods) {
+          productionData[tag][good] = 0;
         }
       }
 
@@ -134,7 +134,10 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
         const goodsType = province.rgo?.goods_type || '';
         const ownerTag = province.owner || '';
 
-        if (countries.includes(ownerTag) && tradeGoods.includes(goodsType)) {
+        if (
+          selectedTags.includes(ownerTag) &&
+          selectedGoods.includes(goodsType)
+        ) {
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
@@ -199,7 +202,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
     <div>
       <div className="country-selector">
         <div className="btn-wrapper">
-          {countries.map((tag) => (
+          {selectedTags.map((tag) => (
             <button className="btn" value={tag} key={tag}>
               {tag}
             </button>
@@ -208,7 +211,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       </div>
       <div className="goods-selector">
         <div className="btn-wrapper">
-          {tradeGoods.map((good) => (
+          {selectedGoods.map((good) => (
             <button className="btn" value={good} key={good}>
               {good}
             </button>
@@ -219,16 +222,16 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
         <thead>
           <tr>
             <th>Country</th>
-            {tradeGoods.map((goodsType) => (
+            {selectedGoods.map((goodsType) => (
               <th key={goodsType}>{goodsType}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {countries.map((tag) => (
+          {selectedTags.map((tag) => (
             <tr key={tag}>
               <td>{tag}</td>
-              {tradeGoods.map((goodsType) => (
+              {selectedGoods.map((goodsType) => (
                 <td key={goodsType}>{production[tag]?.[goodsType] || 0}</td>
               ))}
             </tr>
