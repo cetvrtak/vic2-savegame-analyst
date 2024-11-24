@@ -1,93 +1,8 @@
 ﻿import { useEffect, useState } from 'react';
-import {
-  TerrainType,
-  Province,
-  Country,
-  Issues,
-  World,
-  ProductionProps,
-} from './types';
+import { TerrainType, ProductionProps } from './types';
+import Country from '../utils/Country';
+import Province from '../utils/Province';
 import { useData } from '../DataContext';
-
-const GetProvinceSize = (
-  key: string,
-  province: Province,
-  terrain: TerrainType,
-  provinceTerrainMapping: Record<string, string>
-): number => {
-  const baseWorkplaces = 40000;
-  const farmers = province.hasOwnProperty('farmers')
-    ? province.farmers
-    : province.labourers;
-  const numFarmers = Array.isArray(farmers)
-    ? farmers?.reduce((acc, cur) => (acc += +cur.size), 0)
-    : +farmers.size;
-
-  const terrainType = provinceTerrainMapping[key];
-  const terrainModifier = Number(terrain[terrainType]?.farm_rgo_size);
-
-  return Math.floor(
-    1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + terrainModifier))
-  );
-};
-
-const GetContinentModifier = (
-  key: string,
-  continents: Record<string, any>,
-  rgoSizeKey: string
-): number => {
-  return Object.values(continents).reduce(
-    (modifier: number, cur: Record<string, any>) =>
-      (modifier = cur.provinces.key.includes(key)
-        ? Number(cur[rgoSizeKey] || 0)
-        : modifier),
-    0
-  );
-};
-
-const GetIssuesModifier = (
-  country: Country,
-  issues: Issues,
-  rgoSizeKey: string
-): number => {
-  return Object.values(issues).reduce((acc, category) => {
-    Object.entries(category as Issues).forEach(([reformName, reform]) => {
-      Object.entries(reform as Issues).forEach(([stanceName, stance]) => {
-        if (
-          stance.hasOwnProperty(rgoSizeKey) &&
-          country[reformName] === stanceName
-        ) {
-          acc += +stance[rgoSizeKey];
-        }
-      });
-    });
-    return acc;
-  }, 0);
-};
-
-function GetCountryData(
-  selectedTags: string[],
-  world: World,
-  issues: Record<string, any>
-) {
-  const countryData: Record<string, any> = {};
-  for (const tag of selectedTags) {
-    countryData[tag] = {
-      farm_rgo_size: GetIssuesModifier(
-        world[tag] as Country,
-        issues,
-        'farm_rgo_size'
-      ),
-      mine_rgo_size: GetIssuesModifier(
-        world[tag] as Country,
-        issues,
-        'mine_rgo_size'
-      ),
-    };
-  }
-
-  return countryData;
-}
 
 const Production: React.FC<ProductionProps> = ({ world }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
@@ -120,9 +35,13 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       const continents: Record<string, any> = data.continent;
       const issues: Record<string, any> = data.issues;
 
-      const countryData = GetCountryData(selectedTags, world, issues);
-
+      const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
+        const country = new Country(tag, world[tag]);
+        country.farm_rgo_size = country.GetRgoSize(issues, 'farm_rgo_size');
+        country.mine_rgo_size = country.GetRgoSize(issues, 'mine_rgo_size');
+        countries[tag] = country;
+
         productionData[tag] = {};
         for (const good of selectedGoods) {
           productionData[tag][good] = 0;
@@ -130,9 +49,9 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
       }
 
       for (const key in world) {
-        const province = world[key] as Province;
-        const goodsType = province.rgo?.goods_type || '';
-        const ownerTag = province.owner || '';
+        const province = new Province(key, world[key]);
+        const goodsType = province.data.rgo?.goods_type || '';
+        const ownerTag = province.data.owner || '';
 
         if (
           selectedTags.includes(ownerTag) &&
@@ -142,36 +61,16 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
           // Production = Base Production * Throughput * Output Efficiency
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          const provinceSize = GetProvinceSize(
-            key,
-            province,
-            terrain,
-            terrainMap
-          );
+          const provinceSize = province.GetProvinceSize(terrain, terrainMap);
 
           const terrainType = terrainMap[key];
-          const rgoSizeKey = province.hasOwnProperty('farmers')
-            ? 'farm_rgo_size'
-            : 'mine_rgo_size';
+          const rgoSizeKey = `${province.rgoType}_rgo_size`;
           const terrainModifier = Number(terrain[terrainType][rgoSizeKey]);
 
-          const provinceRgoSizeModifier = Array.isArray(province.modifier)
-            ? province.modifier.reduce(
-                (acc, m) => (acc += +modifiers[m.modifier][rgoSizeKey] || 0),
-                0
-              )
-            : 0;
-          const continentRgoSizeModifier = GetContinentModifier(
-            key,
-            continents,
-            rgoSizeKey
-          );
+          const provinceRgoSize = province.GetRgoSize(modifiers, continents);
 
-          const issuesRgoSizeModifier = countryData[ownerTag][rgoSizeKey];
-          const rgoSizeModifier =
-            provinceRgoSizeModifier +
-            continentRgoSizeModifier +
-            issuesRgoSizeModifier;
+          const countryRgoSize = countries[ownerTag][rgoSizeKey];
+          const rgoSizeModifier = provinceRgoSize + countryRgoSize;
 
           const baseProduction =
             provinceSize * (1 + terrainModifier + rgoSizeModifier);

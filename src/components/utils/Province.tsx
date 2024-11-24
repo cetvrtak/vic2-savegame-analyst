@@ -1,0 +1,69 @@
+// Use Province class to derive province data
+// Either from other province object properties
+// Or combined with game data
+import { TerrainType } from '../production/types';
+
+class Province {
+  id: string;
+  data: Record<string, any>;
+
+  rgoType: string = '';
+
+  constructor(id: string, data: Record<string, any>) {
+    this.id = id;
+    this.data = data;
+
+    this.rgoType = this.data.hasOwnProperty('farmers') ? 'farm' : 'mine';
+  }
+
+  GetProvinceSize = (
+    terrain: TerrainType,
+    provinceTerrainMapping: Record<string, string>
+  ): number => {
+    const baseWorkplaces = 40000;
+    const farmers = this.data.hasOwnProperty('farmers')
+      ? this.data.farmers
+      : this.data.labourers;
+    const numFarmers = Array.isArray(farmers)
+      ? farmers?.reduce((acc, cur) => (acc += +cur.size), 0)
+      : +farmers.size;
+
+    const terrainType = provinceTerrainMapping[this.id];
+    const terrainModifier = Number(terrain[terrainType]?.farm_rgo_size);
+
+    return Math.floor(
+      1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + terrainModifier))
+    );
+  };
+
+  GetRgoSizeFromModifiers = (modifiers: Record<string, any>) =>
+    Array.isArray(this.data.modifier)
+      ? this.data.modifier.reduce(
+          (acc, m) =>
+            (acc += +modifiers[m.modifier][`${this.rgoType}_rgo_size`] || 0),
+          0
+        )
+      : 0;
+
+  GetRgoSizeFromContinent = (continents: Record<string, any>): number => {
+    return Object.values(continents).reduce(
+      (modifier: number, continent: Record<string, any>) =>
+        (modifier = continent.provinces.key.includes(this.id)
+          ? Number(continent[`${this.rgoType}_rgo_size`] || 0)
+          : modifier),
+      0
+    );
+  };
+
+  GetRgoSize = (
+    modifiers: Record<string, any>,
+    continents: Record<string, any>
+  ): number => {
+    return (
+      this.GetRgoSizeFromModifiers(modifiers) +
+      this.GetRgoSizeFromContinent(continents)
+    );
+  };
+}
+
+export default Province;
