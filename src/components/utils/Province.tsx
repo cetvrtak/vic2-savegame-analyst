@@ -21,15 +21,16 @@ class Province {
     provinceTerrainMapping: Record<string, string>
   ): number => {
     const baseWorkplaces = 40000;
-    const farmers = this.data.hasOwnProperty('farmers')
-      ? this.data.farmers
-      : this.data.labourers;
+    const farmers =
+      this.rgoType === 'farm' ? this.data.farmers : this.data.labourers;
     const numFarmers = Array.isArray(farmers)
       ? farmers?.reduce((acc, cur) => (acc += +cur.size), 0)
       : +farmers.size;
 
     const terrainType = provinceTerrainMapping[this.id];
-    const terrainModifier = Number(terrain[terrainType]?.farm_rgo_size);
+    const terrainModifier = Number(
+      terrain[terrainType][`${this.rgoType}_rgo_size`]
+    );
 
     return Math.floor(
       1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + terrainModifier))
