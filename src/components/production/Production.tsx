@@ -99,8 +99,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
 
           const production = baseProduction * throughput * outputEfficiency;
 
-          productionData[ownerTag][goodsType!] +=
-            Math.round(production * 10) / 10;
+          productionData[ownerTag][goodsType!] += production;
         }
       }
 
@@ -144,7 +143,9 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             <tr key={tag}>
               <td>{tag}</td>
               {selectedGoods.map((goodsType) => (
-                <td key={goodsType}>{production[tag]?.[goodsType] || 0}</td>
+                <td key={goodsType}>
+                  {production[tag]?.[goodsType].toFixed(1) || 0}
+                </td>
               ))}
             </tr>
           ))}
