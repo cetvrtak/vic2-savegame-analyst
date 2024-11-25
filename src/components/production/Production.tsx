@@ -1,8 +1,9 @@
 ﻿import { useEffect, useState } from 'react';
+import { useData } from '../DataContext';
 import { TerrainType, ProductionProps } from './types';
+import World from '../utils/World';
 import Country from '../utils/Country';
 import Province from '../utils/Province';
-import { useData } from '../DataContext';
 
 const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
@@ -17,6 +18,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     loadJsonFiles([
       'common/issues.json',
       'common/modifiers.json',
+      'common/production_types.json',
       'map/continent.json',
       'map/provinceTerrainMapping.json',
       'map/terrain.json',
@@ -34,6 +36,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       const modifiers: Record<string, any> = data.modifiers;
       const continents: Record<string, any> = data.continent;
       const issues: Record<string, any> = data.issues;
+      const world = new World(saveData, data);
 
       const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
@@ -68,12 +71,13 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const terrainModifier = Number(terrain[terrainType][rgoSizeKey]);
 
           const provinceRgoSize = province.GetRgoSize(modifiers, continents);
-
           const countryRgoSize = countries[ownerTag][rgoSizeKey];
           const rgoSizeModifier = provinceRgoSize + countryRgoSize;
 
+          const baseOutput = world.goodsOutput[goodsType];
+
           const baseProduction =
-            provinceSize * (1 + terrainModifier + rgoSizeModifier);
+            provinceSize * (1 + terrainModifier + rgoSizeModifier) * baseOutput;
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
           const throughput = 1;
