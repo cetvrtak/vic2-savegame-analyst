@@ -6,7 +6,7 @@ class World {
   saveData: Record<string, any>;
 
   // Game files
-  productionTypes: Record<string, any>;
+  production: Record<string, any>;
 
   // Derived data
   goodsOutput: Record<string, number>;
@@ -14,13 +14,13 @@ class World {
   constructor(saveData: Record<string, any>, filesData: Record<string, any>) {
     this.saveData = saveData;
 
-    this.productionTypes = filesData.production_types;
+    this.production = filesData.production;
 
     this.goodsOutput = this.CreateGoodOutputMap();
   }
 
   private CreateGoodOutputMap = (): Record<string, number> => {
-    return Object.values(this.productionTypes).reduce(
+    return Object.values(this.production).reduce(
       (map: Record<string, number>, type: Record<string, any>) =>
         type.output_goods && {
           ...map,

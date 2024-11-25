@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useData } from '../DataContext';
-import { TerrainType, ProductionProps } from './types';
+import { ProductionProps } from './types';
 import World from '../utils/World';
 import Country from '../utils/Country';
 import Province from '../utils/Province';
@@ -18,9 +18,9 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     loadJsonFiles([
       'common/issues.json',
       'common/modifiers.json',
-      'common/production_types.json',
-      'map/continent.json',
-      'map/provinceTerrainMapping.json',
+      'common/production.json',
+      'map/continents.json',
+      'map/terrainMap.json',
       'map/terrain.json',
     ]);
   }, []);
@@ -31,18 +31,19 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     function calculateProduction() {
       const productionData: { [key: string]: { [key: string]: number } } = {};
 
-      const terrainMap: Record<string, string> = data.provinceTerrainMapping;
-      const terrain: TerrainType = data.terrain.categories;
-      const modifiers: Record<string, any> = data.modifiers;
-      const continents: Record<string, any> = data.continent;
-      const issues: Record<string, any> = data.issues;
       const world = new World(saveData, data);
 
       const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
         const country = new Country(tag, saveData[tag]);
-        country.farm_rgo_size = country.GetRgoSize(issues, 'farm_rgo_size');
-        country.mine_rgo_size = country.GetRgoSize(issues, 'mine_rgo_size');
+        country.farm_rgo_size = country.GetRgoSize(
+          data.issues,
+          'farm_rgo_size'
+        );
+        country.mine_rgo_size = country.GetRgoSize(
+          data.issues,
+          'mine_rgo_size'
+        );
         countries[tag] = country;
 
         productionData[tag] = {};
@@ -64,13 +65,21 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Production = Base Production * Throughput * Output Efficiency
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          const provinceSize = province.GetProvinceSize(terrain, terrainMap);
+          const provinceSize = province.GetProvinceSize(
+            data.terrain.categories,
+            data.terrainMap
+          );
 
-          const terrainType = terrainMap[key];
+          const terrainType = data.terrainMap[key];
           const rgoSizeKey = `${province.rgoType}_rgo_size`;
-          const terrainModifier = Number(terrain[terrainType][rgoSizeKey]);
+          const terrainModifier = Number(
+            data.terrain.categories[terrainType][rgoSizeKey]
+          );
 
-          const provinceRgoSize = province.GetRgoSize(modifiers, continents);
+          const provinceRgoSize = province.GetRgoSize(
+            data.modifiers,
+            data.continents
+          );
           const countryRgoSize = countries[ownerTag][rgoSizeKey];
           const rgoSizeModifier = provinceRgoSize + countryRgoSize;
 

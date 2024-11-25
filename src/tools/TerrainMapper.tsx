@@ -214,7 +214,7 @@ const TerrainMapper: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'provinceTerrainMapping.json';
+      link.download = 'terrainMap.json';
       link.click();
       URL.revokeObjectURL(url);
     }
@@ -231,7 +231,7 @@ const TerrainMapper: React.FC = () => {
       />
       {provinceTerrainMapping && (
         <button className="btn" onClick={downloadJson}>
-          Download provinceTerrainMapping.json
+          Download terrainMap.json
         </button>
       )}
     </>
