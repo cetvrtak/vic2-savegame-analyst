@@ -87,7 +87,16 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             provinceSize * (1 + terrainModifier + rgoSizeModifier) * baseOutput;
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
-          const throughput = 1;
+          const numWorkers = province.GetNumWorkers();
+          const maxWorkers = 1;
+          const rgoThroughputEff = 0;
+          const warExhaustion = 0;
+          const overseasPenalty = 1;
+
+          const throughput =
+            (numWorkers / maxWorkers) *
+            (1 + rgoThroughputEff - warExhaustion) *
+            overseasPenalty;
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:

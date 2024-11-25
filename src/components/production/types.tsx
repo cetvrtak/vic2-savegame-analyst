@@ -8,6 +8,11 @@ interface TerrainData {
 }
 export type TerrainType = Record<string, TerrainData>;
 
+export type Employees = {
+  count: string;
+  province_pop_id: Record<string, any>;
+};
+
 export type Province = {
   farmers: { size: string } | { size: string }[];
   labourers: { size: string } | { size: string }[];

@@ -1,7 +1,7 @@
 // Use Province class to derive province data
 // Either from other province object properties
 // Or combined with game data
-import { TerrainType } from '../production/types';
+import { TerrainType, Employees } from '../production/types';
 
 class Province {
   id: string;
@@ -63,6 +63,19 @@ class Province {
       this.GetRgoSizeFromModifiers(modifiers) +
       this.GetRgoSizeFromContinent(continents)
     );
+  };
+
+  GetNumWorkers = (): number => {
+    if (!this.data.rgo.employment.employees) return 0;
+
+    const employees = this.data.rgo.employment.employees.key;
+
+    return Array.isArray(employees)
+      ? employees.reduce(
+          (acc: number, cur: Employees) => (acc += +cur.count),
+          0
+        )
+      : employees.count;
   };
 }
 
