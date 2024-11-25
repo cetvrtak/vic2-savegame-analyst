@@ -16,9 +16,11 @@ const App: React.FC = () => {
       <Header dispatch={dispatch} />
 
       <DataProvider>
-        <ModSelector />
         {!state.world ? (
-          <LoadSave dispatch={dispatch} state={state} />
+          <>
+            <ModSelector />
+            <LoadSave dispatch={dispatch} state={state} />
+          </>
         ) : (
           <Main appState={state} />
         )}
