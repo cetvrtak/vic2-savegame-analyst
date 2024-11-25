@@ -17,6 +17,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       'common/issues.json',
       'common/modifiers.json',
       'common/production.json',
+      'history/pops.json',
       'map/continents.json',
       'map/terrainMap.json',
       'map/terrain.json',
@@ -65,7 +66,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
           const provinceSize = province.GetProvinceSize(
             data.terrain.categories,
-            data.terrainMap
+            data.terrainMap,
+            data.pops[key].farmers
           );
 
           const terrainType = data.terrainMap[key];

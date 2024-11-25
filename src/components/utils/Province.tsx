@@ -18,13 +18,14 @@ class Province {
 
   GetProvinceSize = (
     terrain: TerrainType,
-    provinceTerrainMapping: Record<string, string>
+    provinceTerrainMapping: Record<string, string>,
+    farmers: Record<string, any>
   ): number => {
+    if (!farmers) return 1;
+
     const baseWorkplaces = 40000;
-    const farmers =
-      this.rgoType === 'farm' ? this.data.farmers : this.data.labourers;
     const numFarmers = Array.isArray(farmers)
-      ? farmers?.reduce((acc, cur) => (acc += +cur.size), 0)
+      ? farmers.reduce((acc, cur) => (acc += +cur.size), 0)
       : +farmers.size;
 
     const terrainType = provinceTerrainMapping[this.id];
