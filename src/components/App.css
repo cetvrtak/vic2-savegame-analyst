@@ -192,6 +192,15 @@ progress::-moz-progress-bar {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.tool-box-checkbox {
+  color: #333;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px;
+}
 
 .tab-selector-container {
   margin-bottom: 64px;
