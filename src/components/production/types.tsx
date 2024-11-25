@@ -1,3 +1,7 @@
+export interface ProductionData {
+  [country: string]: { [goods: string]: number };
+}
+
 interface TerrainData {
   farm_rgo_size?: string;
   [key: string]: any;

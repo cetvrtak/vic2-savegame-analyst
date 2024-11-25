@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useData } from '../DataContext';
-import { ProductionProps } from './types';
+import { ProductionData, ProductionProps } from './types';
 import World from '../utils/World';
 import Country from '../utils/Country';
 import Province from '../utils/Province';
@@ -8,9 +8,7 @@ import Province from '../utils/Province';
 const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
   const selectedGoods = ['tobacco', 'cotton', 'fruit'];
-  const [production, setProduction] = useState<{
-    [key: string]: { [key: string]: number };
-  }>({});
+  const [production, setProduction] = useState<ProductionData>({});
 
   const { data, loadJsonFiles } = useData();
 
@@ -29,7 +27,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     if (!data) return;
 
     function calculateProduction() {
-      const productionData: { [key: string]: { [key: string]: number } } = {};
+      const productionData: ProductionData = {};
 
       const world = new World(saveData, data);
 
