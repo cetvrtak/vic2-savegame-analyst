@@ -41,7 +41,7 @@ const Main: React.FC<MainProps> = ({ appState }) => {
         />
       )}
       {appState.activeTab === 'production' && (
-        <Production world={appState.world} />
+        <Production saveData={appState.world} />
       )}
     </main>
   );

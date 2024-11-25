@@ -4,7 +4,7 @@ import Country from '../utils/Country';
 import Province from '../utils/Province';
 import { useData } from '../DataContext';
 
-const Production: React.FC<ProductionProps> = ({ world }) => {
+const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
   const selectedGoods = ['tobacco', 'cotton', 'fruit'];
   const [production, setProduction] = useState<{
@@ -37,7 +37,7 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
 
       const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
-        const country = new Country(tag, world[tag]);
+        const country = new Country(tag, saveData[tag]);
         country.farm_rgo_size = country.GetRgoSize(issues, 'farm_rgo_size');
         country.mine_rgo_size = country.GetRgoSize(issues, 'mine_rgo_size');
         countries[tag] = country;
@@ -48,8 +48,8 @@ const Production: React.FC<ProductionProps> = ({ world }) => {
         }
       }
 
-      for (const key in world) {
-        const province = new Province(key, world[key]);
+      for (const key in saveData) {
+        const province = new Province(key, saveData[key]);
         const goodsType = province.data.rgo?.goods_type || '';
         const ownerTag = province.data.owner || '';
 

@@ -28,5 +28,5 @@ export type Issues = Record<string, any>;
 export type World = Record<string, Province | Country>;
 
 export type ProductionProps = {
-  world: World;
+  saveData: World;
 };
