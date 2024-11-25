@@ -15,6 +15,7 @@ const JsonExporter: React.FC = () => {
 
   useEffect(() => {
     const generateJson = async () => {
+      setJsonResult(null);
       if (files && files.length > 0) {
         try {
           let results: Record<string, any> = {};
