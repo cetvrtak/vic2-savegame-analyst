@@ -34,39 +34,42 @@ class World {
     );
   };
 
-  private CreateGoodsWorkerTypesMap = (): Record<string, string[]>  => {
+  private CreateGoodsWorkerTypesMap = (): Record<string, string[]> => {
     return Object.values(this.production).reduce(
       (map: Record<string, string[]>, type: Record<string, any>) => {
         if (!type.output_goods || !type.template) {
           return map;
-        };
+        }
 
         const template = this.production[type.template];
         const employees = template.employees.key;
-        const goodsWorkerTypes = employees.map((t) => t.poptype);
+        const goodsWorkerTypes = employees.map(
+          (t: { poptype: string }) => t.poptype
+        );
         return {
           ...map,
-          [type.output_goods]: goodsWorkerTypes
+          [type.output_goods]: goodsWorkerTypes,
         };
       },
       {}
     );
-  }
+  };
 
   private DetermineRgoWorkers = (): string[] => {
     return Object.values(this.production).reduce(
-      (acc: string[], type: Record<string, any>) =>
-        {
-          if (type.type !== 'rgo') {
-            return acc;
-          }
+      (acc: string[], type: Record<string, any>) => {
+        if (type.type !== 'rgo') {
+          return acc;
+        }
 
-          const workers = type.employees.key.map((e) => e.poptype);
-          return [ ...new Set([ ...acc, ...workers ]) ];
-        },
+        const workers = type.employees.key.map(
+          (e: { poptype: string }) => e.poptype
+        );
+        return [...new Set([...acc, ...workers])];
+      },
       []
     );
-  }
+  };
 }
 
 export default World;

@@ -18,17 +18,20 @@ class Province {
 
   private AggregateWorkers = (
     pops: Record<string, any>,
-    workerTypes: string[]): { type: string, size: number }[] => {
-      return workerTypes.map((type) => {
-        const poptype = pops[type];
+    workerTypes: string[]
+  ): { type: string; size: number }[] => {
+    return workerTypes.map((type) => {
+      const poptype = pops[type];
 
-        const size = Array.isArray(poptype)
-          ? poptype.reduce((acc: number, pop: { size: number }) => acc += Number(pop.size), 0)
-          : Number(poptype?.size) || 0;
+      const size = Array.isArray(poptype)
+        ? poptype.reduce(
+            (acc: number, pop: { size: number }) => (acc += Number(pop.size)),
+            0
+          )
+        : Number(poptype?.size) || 0;
 
-        return { 'type': type, 'size': size };
-      }
-    );
+      return { type, size };
+    });
   };
 
   GetProvinceSize = (
