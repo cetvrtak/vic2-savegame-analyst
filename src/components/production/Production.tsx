@@ -16,6 +16,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     loadJsonFiles([
       'common/issues.json',
       'common/modifiers.json',
+      'common/nationalvalues.json',
       'common/production.json',
       'history/pops.json',
       'map/continents.json',
@@ -35,13 +36,18 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
         const country = new Country(tag, saveData[tag]);
-        country.farm_rgo_size = country.GetRgoSize(
+        country.farm_rgo_size = country.GetModifierFromIssues(
           data.issues,
           'farm_rgo_size'
         );
-        country.mine_rgo_size = country.GetRgoSize(
+        country.mine_rgo_size = country.GetModifierFromIssues(
           data.issues,
           'mine_rgo_size'
+        );
+        country.rgo_throughput_eff = country.GetRgoThroughputEff(
+          data.modifiers,
+          data.issues,
+          data.nationalvalues
         );
         countries[tag] = country;
 
@@ -93,13 +99,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const numWorkers = province.GetNumWorkers();
           const maxWorkers =
             40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
-          const rgoThroughputEff = 0;
-          const warExhaustion = 0;
+          const rgoThroughputEff = countries[ownerTag].rgo_throughput_eff;
           const overseasPenalty = 1;
 
           const throughput =
             (numWorkers / maxWorkers) *
-            (1 + rgoThroughputEff - warExhaustion) *
+            (1 + rgoThroughputEff) *
             overseasPenalty;
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
