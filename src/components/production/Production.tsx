@@ -91,7 +91,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
 
           // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
           const numWorkers = province.GetNumWorkers();
-          const maxWorkers = 1;
+          const maxWorkers =
+            40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
           const rgoThroughputEff = 0;
           const warExhaustion = 0;
           const overseasPenalty = 1;
