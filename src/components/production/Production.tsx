@@ -67,7 +67,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const provinceSize = province.GetProvinceSize(
             data.terrain.categories,
             data.terrainMap,
-            data.pops[key].farmers
+            data.pops[key], // province pops
+            world.rgoWorkers
           );
 
           const terrainType = data.terrainMap[key];

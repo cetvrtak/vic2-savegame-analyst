@@ -16,17 +16,36 @@ class Province {
     this.rgoType = this.data.hasOwnProperty('farmers') ? 'farm' : 'mine';
   }
 
+  private AggregateWorkers = (
+    pops: Record<string, any>,
+    workerTypes: string[]): { type: string, size: number }[] => {
+      return workerTypes.map((type) => {
+        const poptype = pops[type];
+
+        const size = Array.isArray(poptype)
+          ? poptype.reduce((acc: number, pop: { size: number }) => acc += Number(pop.size), 0)
+          : Number(poptype?.size) || 0;
+
+        return { 'type': type, 'size': size };
+      }
+    );
+  };
+
   GetProvinceSize = (
     terrain: TerrainType,
     provinceTerrainMapping: Record<string, string>,
-    farmers: Record<string, any>
+    pops: Record<string, any>,
+    workerTypes: string[]
   ): number => {
-    if (!farmers) return 1;
+    /*** Vic2 considers only the largest rgo pop type for province size ***/
+    /*** Usually it's farmers, if there are any ***/
+    /*** otherwise it's serfs or slaves ***/
 
     const baseWorkplaces = 40000;
-    const numFarmers = Array.isArray(farmers)
-      ? farmers.reduce((acc, cur) => (acc += +cur.size), 0)
-      : +farmers.size;
+
+    let aggregatedWorkers = this.AggregateWorkers(pops, workerTypes);
+    aggregatedWorkers.sort((a, b) => b.size - a.size);
+    const numFarmers = aggregatedWorkers[0].size;
 
     const terrainType = provinceTerrainMapping[this.id];
     const terrainModifier = Number(
