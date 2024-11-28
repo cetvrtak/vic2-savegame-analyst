@@ -16,10 +16,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     loadJsonFiles([
       'common/issues.json',
       'common/modifiers.json',
+      'common/national_focus.json',
       'common/nationalvalues.json',
       'common/production.json',
       'history/pops.json',
       'map/continents.json',
+      'map/region.json',
       'map/terrainMap.json',
       'map/terrain.json',
     ]);
@@ -100,11 +102,17 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const maxWorkers =
             40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
           const rgoThroughputEff = countries[ownerTag].rgo_throughput_eff;
+          const localRgoThroughputEff = province.GetRgoThroughputEff(
+            data.modifiers,
+            data.national_focus,
+            Object.entries(data.region),
+            countries[ownerTag].data.national_focus
+          );
           const overseasPenalty = 1;
 
           const throughput =
             (numWorkers / maxWorkers) *
-            (1 + rgoThroughputEff) *
+            (1 + rgoThroughputEff + localRgoThroughputEff) *
             overseasPenalty;
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)

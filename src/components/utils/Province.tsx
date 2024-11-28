@@ -2,6 +2,7 @@
 // Either from other province object properties
 // Or combined with game data
 import { TerrainType, Employees } from '../production/types';
+import { Modifier, NationalFocusGroup, RegionDefinition } from './types';
 
 class Province {
   id: string;
@@ -60,11 +61,10 @@ class Province {
     );
   };
 
-  GetRgoSizeFromModifiers = (modifiers: Record<string, any>) =>
+  GetModifierFromEvents = (modifiers: Record<string, any>, modifier: string) =>
     Array.isArray(this.data.modifier)
       ? this.data.modifier.reduce(
-          (acc, m) =>
-            (acc += +modifiers[m.modifier][`${this.rgoType}_rgo_size`] || 0),
+          (acc, m) => (acc += +modifiers[m.modifier][modifier] || 0),
           0
         )
       : 0;
@@ -84,7 +84,7 @@ class Province {
     continents: Record<string, any>
   ): number => {
     return (
-      this.GetRgoSizeFromModifiers(modifiers) +
+      this.GetModifierFromEvents(modifiers, `${this.rgoType}_rgo_size`) +
       this.GetRgoSizeFromContinent(continents)
     );
   };
@@ -100,6 +100,68 @@ class Province {
           0
         )
       : employees.count;
+  };
+
+  GetModifierFromNationalFocus = (
+    modifier: string,
+    nationalFocuses: Record<string, NationalFocusGroup>,
+    regions: RegionDefinition[],
+    countryFocuses: Record<string, string>
+  ): number => {
+    // Clean up countryFocuses keys by removing quotes
+    const cleanedCountryFocuses = Object.fromEntries(
+      Object.entries(countryFocuses).map(([key, value]) => [
+        key.replace(/"/g, ''),
+        value,
+      ])
+    );
+
+    // Find the state ID for the current province
+    const stateID = regions.findIndex((region) =>
+      region[1].key.includes(this.id)
+    );
+    if (stateID === -1) {
+      throw new Error(
+        `Bad state definitions: ${this.data.name} province ID=${this.id} wasn't found in state definitions`
+      );
+    }
+
+    // Get the national focus name for the state
+    const focusName = cleanedCountryFocuses[stateID];
+    if (!focusName) {
+      return 0; // State doesn't have a focus set
+    }
+
+    // Find the focus group containing the focus name
+    for (const focusGroup of Object.values(nationalFocuses)) {
+      if (focusName in focusGroup) {
+        // Return the requested modifier, defaulting to 0 if not found
+        return Number(focusGroup[focusName][modifier] || 0);
+      }
+    }
+
+    // Focus name not found in any focus group
+    return 0;
+  };
+
+  GetRgoThroughputEff = (
+    modifiers: Record<string, Modifier>,
+    nationalFocuses: Record<string, NationalFocusGroup>,
+    regions: RegionDefinition[],
+    countryFocuses: Record<string, string>
+  ): number => {
+    const effFromEvents = this.GetModifierFromEvents(
+      modifiers,
+      'local_RGO_throughput'
+    );
+    const effFromFocus = this.GetModifierFromNationalFocus(
+      'local_RGO_throughput',
+      nationalFocuses,
+      regions,
+      countryFocuses
+    );
+
+    return effFromEvents + effFromFocus;
   };
 }
 
