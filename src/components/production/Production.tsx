@@ -163,13 +163,11 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           </tr>
         </thead>
         <tbody>
-          {selectedTags.map((tag) => (
+          {Object.entries(production).map(([tag, data]) => (
             <tr key={tag}>
               <td>{tag}</td>
-              {selectedGoods.map((goodsType) => (
-                <td key={goodsType}>
-                  {production[tag]?.[goodsType].toFixed(1) || 0}
-                </td>
+              {Object.entries(data).map(([goodsType, value]) => (
+                <td key={goodsType}>{value.toFixed(1) || 0}</td>
               ))}
             </tr>
           ))}
