@@ -1,40 +1,39 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
+import { useData } from '../components/DataContext';
+import { TerrainType } from '../components/production/types';
 import {
   createProvincePixelsMap,
   getProvinceDefinitions,
   getProvincesBmp,
   getTerrainBmp,
 } from './MapUtils';
-import ColorMap from '../assets/map/terrainColormap.json';
-import ProvinceHistory from '../assets/history/provinces.json';
-import Terrain from '../assets/map/terrain.json';
-
-const colorMap: Record<string, string> = ColorMap;
-
-interface ProvinceData {
-  terrain?: string;
-  [key: string]: any; // Allows for any other properties without type checking
-}
-type ProvinceRecord = Record<string, ProvinceData>;
-const provinceHistory: ProvinceRecord = ProvinceHistory;
-
-const terrain: Record<string, any> = Terrain;
 
 const TerrainMapper: React.FC = () => {
   const [provinceTerrainMapping, setProvinceTerrainMapping] = useState<Record<
     number,
     string
   > | null>(null);
+  const { data, loadJsonFiles } = useData();
+
+  useEffect(() => {
+    loadJsonFiles([
+      'map/terrainColormap.json',
+      'history/provinces.json',
+      'map/terrain.json',
+    ]);
+  }, []);
 
   const GetTexture = (color: string): string => {
-    for (const [key, value] of Object.entries(colorMap)) {
+    for (const [key, value] of Object.entries(data.terrainColormap)) {
       if (value === color) return key;
     }
     return '';
   };
 
   const GetTerrainType = (texture: string): string => {
-    for (const [_, textureDefinition] of Object.entries(terrain)) {
+    for (const [_, textureDefinition] of Object.entries(
+      data.terrain as TerrainType
+    )) {
       if (textureDefinition.color?.key.includes(texture))
         return textureDefinition.type;
     }
@@ -77,7 +76,7 @@ const TerrainMapper: React.FC = () => {
     // Step 2: Use the provincePixelsMap to determine dominant terrain for each province
     for (const province of provinceDefinitions) {
       // Get terrain from history file
-      const terrainType = provinceHistory[province.id]?.terrain;
+      const terrainType = data.provinces[province.id]?.terrain;
       if (terrainType) {
         mapping[province.id] = terrainType;
         continue;

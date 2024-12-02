@@ -13,9 +13,9 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Header dispatch={dispatch} />
-
       <DataProvider>
+        <Header dispatch={dispatch} />
+
         {!state.world ? (
           <>
             <ModSelector />
