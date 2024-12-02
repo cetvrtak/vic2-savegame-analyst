@@ -99,3 +99,20 @@ export const getTerrainBmp = async (files: FileList): Promise<ImageData> => {
 
   return await getPixelsFromBMP(terrainBMP);
 };
+
+export const getProvinceByPixel = (
+  idx: number,
+  provinceDefinitions: ProvinceDefinition[],
+  provincesBmp: ImageData
+): number | null => {
+  if (idx < 0 || idx >= provincesBmp.data.length) return null;
+  const r = provincesBmp.data[idx];
+  const g = provincesBmp.data[idx + 1];
+  const b = provincesBmp.data[idx + 2];
+
+  const province = provinceDefinitions.find(
+    (prov) => prov.color[0] === r && prov.color[1] === g && prov.color[2] === b
+  );
+
+  return province ? province.id : null;
+};

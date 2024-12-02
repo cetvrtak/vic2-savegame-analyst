@@ -2,6 +2,7 @@
 import { Action } from './actions';
 import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
+import AdjacencyMapper from '../tools/AdjacencyMapper';
 import ToolsMenuItem from './ToolsMenuItem';
 
 const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
@@ -76,6 +77,13 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
           menuHovered={showToolsMenu}
         >
           <TerrainMapper />
+        </ToolsMenuItem>
+        <ToolsMenuItem
+          title="Adjacency Mapper"
+          icon="adjacency.svg"
+          menuHovered={showToolsMenu}
+        >
+          <AdjacencyMapper />
         </ToolsMenuItem>
       </div>
     </header>

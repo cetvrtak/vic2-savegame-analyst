@@ -1,4 +1,5 @@
-﻿import JsonExporter from '../tools/JsonExporter';
+﻿import AdjacencyMapper from '../tools/AdjacencyMapper';
+import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
 import { Action } from './actions';
 
@@ -22,6 +23,7 @@ const Tools: React.FC<{
       </div>
       <JsonExporter />
       <TerrainMapper />
+      <AdjacencyMapper />
     </div>
   );
 };
