@@ -9,26 +9,30 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
   const selectedGoods = ['tobacco', 'cotton', 'fruit'];
   const [production, setProduction] = useState<ProductionData>({});
+  const [jsonFilesLoaded, setJsonFilesLoaded] = useState<Boolean>(false);
 
   const { data, loadJsonFiles } = useData();
 
   useEffect(() => {
-    loadJsonFiles([
-      'common/issues.json',
-      'common/modifiers.json',
-      'common/national_focus.json',
-      'common/nationalvalues.json',
-      'common/production.json',
-      'history/pops.json',
-      'map/continents.json',
-      'map/region.json',
-      'map/terrainMap.json',
-      'map/terrain.json',
-    ]);
+    (async () => {
+      await loadJsonFiles([
+        'common/issues.json',
+        'common/modifiers.json',
+        'common/national_focus.json',
+        'common/nationalvalues.json',
+        'common/production.json',
+        'history/pops.json',
+        'map/continents.json',
+        'map/region.json',
+        'map/terrainMap.json',
+        'map/terrain.json',
+      ]);
+      setJsonFilesLoaded(true);
+    })();
   }, []);
 
   useEffect(() => {
-    if (!data) return;
+    if (!jsonFilesLoaded) return;
 
     function calculateProduction() {
       const productionData: ProductionData = {};
@@ -131,7 +135,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     }
 
     calculateProduction();
-  }, [data]);
+  }, [jsonFilesLoaded]);
 
   return (
     <div>
