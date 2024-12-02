@@ -1,6 +1,9 @@
 // Use World class to derive world/game data
 // As opposed to:
 //  * Save game data - retrieved directly AppState
+
+import { Continents } from './types';
+
 //  * Game files data - retrieved from DataContext
 class World {
   saveData: Record<string, any>;
@@ -12,6 +15,7 @@ class World {
   goodsOutput: Record<string, number>;
   goodsWorkerTypes: Record<string, string[]>;
   rgoWorkers: string[];
+  provinceToContinentMap: Record<string, string>;
 
   constructor(saveData: Record<string, any>, filesData: Record<string, any>) {
     this.saveData = saveData;
@@ -21,6 +25,9 @@ class World {
     this.goodsOutput = this.CreateGoodOutputMap();
     this.goodsWorkerTypes = this.CreateGoodsWorkerTypesMap();
     this.rgoWorkers = this.DetermineRgoWorkers();
+    this.provinceToContinentMap = this.mapProvinceToContinent(
+      filesData.continents
+    );
   }
 
   private CreateGoodOutputMap = (): Record<string, number> => {
@@ -69,6 +76,20 @@ class World {
       },
       []
     );
+  };
+
+  private mapProvinceToContinent = (
+    continents: Continents
+  ): Record<string, string> => {
+    const provinceToContinent: Record<string, string> = {};
+
+    for (const [continent, data] of Object.entries(continents)) {
+      for (const province of data.provinces.key) {
+        provinceToContinent[province] = continent;
+      }
+    }
+
+    return provinceToContinent;
   };
 }
 

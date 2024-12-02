@@ -26,6 +26,7 @@ export type ProvinceData = {
     };
   };
   owner: string;
+  controller: string;
   name: string;
   modifier: { modifier: string }[];
 };

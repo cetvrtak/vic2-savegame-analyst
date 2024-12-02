@@ -22,6 +22,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'common/nationalvalues.json',
         'common/production.json',
         'history/pops.json',
+        'map/adjacencyMap.json',
         'map/continents.json',
         'map/region.json',
         'map/terrainMap.json',
@@ -55,6 +56,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           data.issues,
           data.nationalvalues
         );
+
+        const provinces = Object.entries(saveData).filter(
+          ([_, provinceData]) => provinceData.controller === tag
+        );
+        country.SetControlledProvinces(provinces);
+        country.SetControlledProvinceNeighbors(data.adjacencyMap);
         countries[tag] = country;
 
         productionData[tag] = {};
@@ -111,6 +118,10 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.national_focus,
             Object.entries(data.region),
             countries[ownerTag].data.national_focus
+          );
+          const isOverseas = province.IsOverseas(
+            countries[ownerTag],
+            world.provinceToContinentMap
           );
           const overseasPenalty = 1;
 

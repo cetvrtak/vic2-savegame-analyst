@@ -3,13 +3,16 @@
 // and game data
 import { Issues } from '../production/types';
 import { Modifier } from './types';
+import Province from './Province';
 
 class Country {
   tag: string;
   data: Record<string, any>;
+
   farm_rgo_size: number = 0;
   mine_rgo_size: number = 0;
   rgo_throughput_eff: number = 0;
+  controlledProvinces: Record<string, Province> = {};
 
   constructor(tag: string, data: Record<string, any>) {
     this.tag = tag;
@@ -89,6 +92,22 @@ class Country {
     );
 
     return effFromModifiers + effFromIssues + effFromNV + effFromWarExhaustion;
+  };
+
+  SetControlledProvinces = (provinces: Record<string, any>[]) => {
+    this.controlledProvinces = provinces.reduce(
+      (acc: Record<string, Province>, prov: Record<string, any>) => ({
+        ...acc,
+        [prov[0]]: new Province(prov[0], prov[1]),
+      }),
+      {}
+    );
+  };
+
+  SetControlledProvinceNeighbors = (adjacencyMap: Record<string, string[]>) => {
+    for (const [id, province] of Object.entries(this.controlledProvinces)) {
+      province.neighbors = adjacencyMap[id];
+    }
   };
 }
 
