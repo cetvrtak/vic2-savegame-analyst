@@ -13,7 +13,7 @@ export type Employees = {
   province_pop_id: Record<string, any>;
 };
 
-export type Province = {
+export type ProvinceData = {
   farmers: { size: string } | { size: string }[];
   labourers: { size: string } | { size: string }[];
   rgo?: {
@@ -30,11 +30,11 @@ export type Province = {
   modifier: { modifier: string }[];
 };
 
-export type Country = {
+export type CountryData = {
   [reform: string]: string;
 };
 export type Issues = Record<string, any>;
-export type World = Record<string, Province | Country>;
+export type World = Record<string, ProvinceData | CountryData>;
 
 export type ProductionProps = {
   saveData: World;
