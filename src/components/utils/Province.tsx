@@ -178,6 +178,11 @@ class Province {
       return false; // Not overseas
     }
 
+    // Check if controlled on another continent
+    if (!owner.controlledProvinces[this.id]) {
+      return true; // Is overseas
+    }
+
     // Perform BFS to check for land connection
     const visited = new Set<string>();
     const queue: string[] = [owner.data.capital];
