@@ -1,5 +1,5 @@
 export interface ProvinceDefinition {
-  id: number;
+  id: string;
   color: [number, number, number];
   name: string;
 }
@@ -8,7 +8,7 @@ const parseDefinitionCSV = (data: string): ProvinceDefinition[] => {
   return data.split('\n').map((line) => {
     const [id, r, g, b, name] = line.split(';');
     return {
-      id: parseInt(id),
+      id,
       color: [parseInt(r), parseInt(g), parseInt(b)],
       name,
     };
@@ -47,8 +47,8 @@ const getPixelsFromBMP = (file: File): Promise<ImageData> => {
 export const createProvincePixelsMap = (
   provinceDefinitions: ProvinceDefinition[],
   provincesBmp: ImageData
-): Record<number, number[]> => {
-  const provincePixelsMap: Record<number, number[]> = {};
+): Record<string, number[]> => {
+  const provincePixelsMap: Record<string, number[]> = {};
 
   for (let y = 0; y < provincesBmp.height; y++) {
     for (let x = 0; x < provincesBmp.width; x++) {
@@ -104,7 +104,7 @@ export const getProvinceByPixel = (
   idx: number,
   provinceDefinitions: ProvinceDefinition[],
   provincesBmp: ImageData
-): number | null => {
+): string | null => {
   if (idx < 0 || idx >= provincesBmp.data.length) return null;
   const r = provincesBmp.data[idx];
   const g = provincesBmp.data[idx + 1];

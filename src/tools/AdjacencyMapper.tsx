@@ -8,8 +8,8 @@ import {
 
 const AdjacencyMapper: React.FC = () => {
   const [neighborsMap, setNeighborsMap] = useState<Record<
-    number,
-    number[]
+    string,
+    string[]
   > | null>(null);
 
   const createProvinceNeighborsMap = async (
@@ -26,14 +26,14 @@ const AdjacencyMapper: React.FC = () => {
       provinceDefinitions,
       provincesBmp
     );
-    const neighborsMap: Record<number, Set<number>> = {};
+    const neighborsMap: Record<string, Set<string>> = {};
 
     for (const provinceId of Object.keys(provincePixelsMap)) {
-      neighborsMap[Number(provinceId)] = new Set();
+      neighborsMap[provinceId] = new Set();
     }
 
     for (const [provinceId, pixels] of Object.entries(provincePixelsMap)) {
-      const currentProvinceId = Number(provinceId);
+      const currentProvinceId = provinceId;
 
       for (const idx of pixels) {
         const adjacentOffsets = [
@@ -59,9 +59,9 @@ const AdjacencyMapper: React.FC = () => {
     }
 
     // Convert sets to arrays for JSON compatibility
-    const neighborsMapJson: Record<number, number[]> = {};
+    const neighborsMapJson: Record<string, string[]> = {};
     for (const [id, neighbors] of Object.entries(neighborsMap)) {
-      neighborsMapJson[Number(id)] = Array.from(neighbors);
+      neighborsMapJson[id] = Array.from(neighbors);
     }
 
     setNeighborsMap(neighborsMapJson);
