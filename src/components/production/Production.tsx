@@ -11,7 +11,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const [production, setProduction] = useState<ProductionData>({});
   const [jsonFilesLoaded, setJsonFilesLoaded] = useState<Boolean>(false);
 
-  const { data, loadJsonFiles } = useData();
+  const { data, loadJsonFiles, loadCsvFiles } = useData();
 
   useEffect(() => {
     (async () => {
@@ -28,6 +28,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'map/terrainMap.json',
         'map/terrain.json',
       ]);
+      await loadCsvFiles(['map/adjacencies.csv']);
       setJsonFilesLoaded(true);
     })();
   }, []);
@@ -61,6 +62,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           ([_, provinceData]) => provinceData.controller === tag
         );
         country.SetControlledProvinces(provinces);
+        country.SetStraitsConnections(world.straits);
         country.SetControlledProvinceNeighbors(data.adjacencyMap);
         countries[tag] = country;
 

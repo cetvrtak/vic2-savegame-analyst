@@ -5,6 +5,7 @@ type DataContextType = {
   setMod: (folder: string) => void;
   data: any;
   loadJsonFiles: (files: string[]) => Promise<void>;
+  loadCsvFiles: (files: string[]) => Promise<void>;
 };
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -44,8 +45,38 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const loadCsvFiles = async (files: string[]) => {
+    try {
+      const csvPromises = files.map(async (file) => {
+        const path = `${mod}/${file}`;
+        const key = file.split('/').slice(-1)[0].split('.')[0];
+        const response = await fetch(path);
+        const csvContent = await response.text();
+
+        return { key, csvContent };
+      });
+
+      // Wait for all files to be loaded
+      const results = await Promise.all(csvPromises);
+
+      setData((prevData: any) =>
+        results.reduce(
+          (acc, { key, csvContent }) => ({
+            ...acc,
+            [key]: csvContent,
+          }),
+          { ...prevData } // Preserve existing data
+        )
+      );
+    } catch (error) {
+      console.error('Failed to load CSV files:', error);
+    }
+  };
+
   return (
-    <DataContext.Provider value={{ mod, setMod, data, loadJsonFiles }}>
+    <DataContext.Provider
+      value={{ mod, setMod, data, loadJsonFiles, loadCsvFiles }}
+    >
       {children}
     </DataContext.Provider>
   );

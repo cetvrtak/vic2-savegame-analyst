@@ -2,7 +2,7 @@
 // from other country properties
 // and game data
 import { Issues } from '../production/types';
-import { Modifier } from './types';
+import { Connection, Modifier, Straits } from './types';
 import Province from './Province';
 
 class Country {
@@ -13,6 +13,7 @@ class Country {
   mine_rgo_size: number = 0;
   rgo_throughput_eff: number = 0;
   controlledProvinces: Record<string, Province> = {};
+  straitsConnections: Record<string, Connection[]> = {};
 
   constructor(tag: string, data: Record<string, any>) {
     this.tag = tag;
@@ -102,6 +103,32 @@ class Country {
       }),
       {}
     );
+  };
+
+  private AddStraitsConnection = (
+    from: string,
+    to: string,
+    through: string
+  ) => {
+    const connection: Connection = { to, through };
+
+    this.straitsConnections[from] = this.straitsConnections[from]
+      ? [...this.straitsConnections[from], connection]
+      : [connection];
+  };
+
+  SetStraitsConnections = (straits: Straits) => {
+    for (const [from, connections] of Object.entries(straits)) {
+      for (const { to, through } of connections) {
+        if (
+          this.controlledProvinces.hasOwnProperty(from) &&
+          this.controlledProvinces.hasOwnProperty(to)
+        ) {
+          this.AddStraitsConnection(from, to, through);
+          this.AddStraitsConnection(to, from, through);
+        }
+      }
+    }
   };
 
   SetControlledProvinceNeighbors = (adjacencyMap: Record<string, string[]>) => {

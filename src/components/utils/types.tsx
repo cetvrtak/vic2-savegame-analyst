@@ -10,3 +10,8 @@ export interface Continents {
     assimilation_rate: string;
   };
 }
+
+export type Connection = { to: string; through: string };
+export type Straits = {
+  [from: string]: Connection[];
+};

@@ -2,7 +2,7 @@
 // As opposed to:
 //  * Save game data - retrieved directly AppState
 
-import { Continents } from './types';
+import { Continents, Straits, Connection } from './types';
 
 //  * Game files data - retrieved from DataContext
 class World {
@@ -16,6 +16,7 @@ class World {
   goodsWorkerTypes: Record<string, string[]>;
   rgoWorkers: string[];
   provinceToContinentMap: Record<string, string>;
+  straits: Straits;
 
   constructor(saveData: Record<string, any>, filesData: Record<string, any>) {
     this.saveData = saveData;
@@ -28,6 +29,7 @@ class World {
     this.provinceToContinentMap = this.mapProvinceToContinent(
       filesData.continents
     );
+    this.straits = this.GetStraitsFromCSV(filesData.adjacencies);
   }
 
   private CreateGoodOutputMap = (): Record<string, number> => {
@@ -90,6 +92,46 @@ class World {
     }
 
     return provinceToContinent;
+  };
+
+  GetStraitsFromCSV = (csvContent: string): Straits => {
+    const lines = csvContent.split('\n').map((line) => line.trim());
+    const header = lines[0]?.split(';');
+    if (!header) throw new Error('Invalid CSV file: Missing header');
+
+    const fromIndex = header.indexOf('From');
+    const toIndex = header.indexOf('To');
+    // const typeIndex = header.indexOf('Type');
+    const throughIndex = header.indexOf('Through');
+    if (
+      // typeIndex === -1 ||
+      throughIndex === -1
+    ) {
+      throw new Error(
+        'Invalid CSV file: Missing required columns (Type, Through)'
+      );
+    }
+
+    let straits: Straits = {};
+    for (const line of lines.slice(1)) {
+      if (!line || line.startsWith('#')) continue;
+
+      const columns = line.split(';');
+      if (
+        // columns[typeIndex]?.trim() === 'sea' &&
+        columns[throughIndex]?.trim()
+      ) {
+        const through = columns[throughIndex].trim();
+        const from = columns[fromIndex].trim();
+        const to = columns[toIndex].trim();
+        const connection: Connection = { to, through };
+
+        straits[from] = straits[from]
+          ? [...straits[from], connection]
+          : [connection];
+      }
+    }
+    return straits;
   };
 }
 
