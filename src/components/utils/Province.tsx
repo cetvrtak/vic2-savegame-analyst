@@ -3,7 +3,6 @@
 // Or combined with game data
 import { TerrainType, Employees } from '../production/types';
 import { Modifier, NationalFocusGroup, RegionDefinition } from './types';
-import Country from './Country';
 
 class Province {
   id: string;
@@ -164,48 +163,6 @@ class Province {
     );
 
     return effFromEvents + effFromFocus;
-  };
-
-  IsOverseas = (
-    owner: Country,
-    provinceToContinentMap: Record<string, string>
-  ): boolean => {
-    const provinceContinent = provinceToContinentMap[this.id];
-    const capitalContinent = provinceToContinentMap[owner.data.capital];
-
-    // Check if on the same continent
-    if (provinceContinent === capitalContinent) {
-      return false; // Not overseas
-    }
-
-    // Check if controlled on another continent
-    if (!owner.controlledProvinces[this.id]) {
-      return true; // Is overseas
-    }
-
-    // Perform BFS to check for land connection
-    const visited = new Set<string>();
-    const queue: string[] = [owner.data.capital];
-
-    while (queue.length > 0) {
-      const current = queue.shift()!;
-      visited.add(current);
-
-      const currentProvince = owner.controlledProvinces[current];
-      if (!currentProvince) continue;
-
-      if (currentProvince.id === this.id) {
-        return false; // Land connection found
-      }
-
-      for (const neighbor of currentProvince.neighbors) {
-        if (!visited.has(neighbor)) {
-          queue.push(neighbor);
-        }
-      }
-    }
-
-    return true; // No land connection found, province is overseas
   };
 }
 

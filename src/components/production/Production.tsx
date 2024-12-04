@@ -121,8 +121,9 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             Object.entries(data.region),
             countries[ownerTag].data.national_focus
           );
-          const isOverseas = province.IsOverseas(
-            countries[ownerTag],
+
+          const isOverseas = countries[ownerTag].isOverseas(
+            province.id,
             world.provinceToContinentMap
           );
           const overseasPenalty = 1;

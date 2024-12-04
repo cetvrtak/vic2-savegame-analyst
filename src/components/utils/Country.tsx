@@ -15,6 +15,8 @@ class Country {
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
 
+  private connectedProvinces: Set<string> | null = null;
+
   constructor(tag: string, data: Record<string, any>) {
     this.tag = tag;
     this.data = data;
@@ -136,6 +138,87 @@ class Country {
       province.neighbors = adjacencyMap[id];
     }
   };
+
+  /**
+   * Computes all provinces connected to the capital via controlled provinces and straits.
+   * Utilizes BFS for traversal.
+   */
+  private computeConnectedProvinces(): Set<string> {
+    const visited = new Set<string>();
+    const queue: string[] = [this.data.capital];
+
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      if (visited.has(current)) continue;
+
+      // Determine if current province is a controlled province
+      const currentProvince = this.controlledProvinces[current];
+
+      if (!currentProvince) {
+        continue; // Skip if not controlled
+      }
+
+      visited.add(current);
+
+      for (const neighbor of currentProvince.neighbors) {
+        if (!visited.has(neighbor) && !queue.includes(neighbor)) {
+          queue.push(neighbor);
+        }
+      }
+
+      // Add to queue provinces connected by a strait to the current province
+      if (!this.straitsConnections[current]) {
+        continue;
+      }
+
+      for (const connection of this.straitsConnections[current]) {
+        if (!visited.has(connection.to) && !queue.includes(connection.to)) {
+          queue.push(connection.to);
+        }
+      }
+    }
+
+    return visited;
+  }
+
+  /**
+   * Retrieves the set of all connected provinces. Computes and caches the result if not already done.
+   */
+  private getConnectedProvinces(): Set<string> {
+    if (!this.connectedProvinces) {
+      this.connectedProvinces = this.computeConnectedProvinces();
+    }
+    return this.connectedProvinces;
+  }
+
+  /**
+   * Determines if a given province is overseas.
+   * A province is considered overseas if:
+   * - It is on a different continent from the capital.
+   * - There is no land connection through controlled provinces and straits to the capital.
+   *
+   * @param provinceId - The ID of the province to check.
+   * @param provinceToContinentMap - A mapping from province IDs to their respective continents.
+   * @returns `true` if the province is overseas, `false` otherwise.
+   */
+  public isOverseas(
+    provinceId: string,
+    provinceToContinentMap: Record<string, string>
+  ): boolean {
+    const provinceContinent = provinceToContinentMap[provinceId];
+    const capitalContinent = provinceToContinentMap[this.data.capital];
+
+    // If on the same continent, it's not overseas
+    if (provinceContinent === capitalContinent) {
+      return false;
+    }
+
+    // Get all connected provinces via controlled provinces and straits
+    const connectedProvinces = this.getConnectedProvinces();
+
+    // If the province is not in the connected set, it's overseas
+    return !connectedProvinces.has(provinceId);
+  }
 }
 
 export default Country;
