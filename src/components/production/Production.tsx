@@ -27,6 +27,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'map/region.json',
         'map/terrainMap.json',
         'map/terrain.json',
+        'poptypes.json',
         'technologies.json',
       ]);
       await loadCsvFiles(['map/adjacencies.csv']);
@@ -126,10 +127,15 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             (1 - overseasPenalty);
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
+          const aristocratsPercentage = owner.GetPopsPercentageInState(
+            'aristocrats',
+            owner.GetStateId(province.id),
+            Object.keys(data.poptypes)
+          );
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
-          const outputEfficiency = 1;
+          const outputEfficiency = 1 + aristocratsPercentage;
 
           const production = baseProduction * throughput * outputEfficiency;
 

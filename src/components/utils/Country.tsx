@@ -6,18 +6,23 @@ import {
   Connection,
   Inventions,
   Modifier,
+  Pop,
   Straits,
   Technologies,
 } from './types';
 import Province from './Province';
+import State from './State';
 
 class Country {
   tag: string;
   data: Record<string, any>;
 
+  states: Record<string, State> = {};
+
   farm_rgo_size: number = 0;
   mine_rgo_size: number = 0;
   rgo_throughput_eff: number = 0;
+  ownedProvinces: Record<string, Province> = {};
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
 
@@ -26,6 +31,8 @@ class Country {
   constructor(tag: string, data: Record<string, any>) {
     this.tag = tag;
     this.data = data;
+
+    this.CreateStates();
   }
 
   GetModifierFromIssues = (issues: Issues, modifier: string): number => {
@@ -166,6 +173,16 @@ class Country {
     );
   };
 
+  SetOwnedProvinces = (provinces: Record<string, any>[]) => {
+    this.ownedProvinces = provinces.reduce(
+      (acc: Record<string, Province>, prov: Record<string, any>) => ({
+        ...acc,
+        [prov[0]]: new Province(prov[0], prov[1]),
+      }),
+      {}
+    );
+  };
+
   private AddStraitsConnection = (
     from: string,
     to: string,
@@ -278,6 +295,54 @@ class Country {
     // If the province is not in the connected set, it's overseas
     return !connectedProvinces.has(provinceId);
   }
+
+  CreateStates = () => {
+    for (const state of this.data.state) {
+      this.states[state.id.id] = new State(state);
+    }
+  };
+
+  GetStateId = (provId: string): string => {
+    const state = Object.values(this.states).find((s) =>
+      s.data.provinces.key.includes(provId)
+    );
+
+    return state?.data.id.id;
+  };
+
+  GetPopsPercentageInState = (
+    pop: string,
+    stateId: string,
+    popTypes: string[]
+  ): number => {
+    let count: number = 0;
+    let total: number = 0;
+
+    const state = this.states[stateId];
+
+    for (const provId of state.data.provinces.key) {
+      const province: Province = this.ownedProvinces[provId];
+
+      for (const popType of popTypes) {
+        const provincePop: Pop[] | undefined = province.GetPop(popType);
+        if (!provincePop) {
+          continue;
+        }
+
+        const popSize: number = provincePop.reduce(
+          (acc: number, pop: Pop) => (acc += Number(pop.size)),
+          0
+        );
+        total += popSize || 0;
+
+        if (popType === pop) {
+          count += popSize || 0;
+        }
+      }
+    }
+
+    return count / total;
+  };
 }
 
 export default Country;

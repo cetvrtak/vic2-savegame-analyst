@@ -2,7 +2,7 @@
 // Either from other province object properties
 // Or combined with game data
 import { TerrainType, Employees } from '../production/types';
-import { Modifier, NationalFocusGroup, RegionDefinition } from './types';
+import { Modifier, NationalFocusGroup, Pop, RegionDefinition } from './types';
 
 class Province {
   id: string;
@@ -163,6 +163,14 @@ class Province {
     );
 
     return effFromEvents + effFromFocus;
+  };
+
+  GetPop = (popType: string): Pop[] | undefined => {
+    return Array.isArray(this.data[popType])
+      ? this.data[popType]
+      : this.data[popType]
+      ? [this.data[popType]]
+      : undefined;
   };
 }
 

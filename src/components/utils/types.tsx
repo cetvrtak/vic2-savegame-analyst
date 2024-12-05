@@ -18,3 +18,7 @@ export type Straits = {
 
 export type Technologies = Record<string, any>;
 export type Inventions = Record<string, any>;
+
+export type Pop = {
+  [size: string]: string;
+};

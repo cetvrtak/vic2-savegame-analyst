@@ -156,12 +156,17 @@ class World {
         this.filesData.nationalvalues
       );
 
-      const provinces = Object.entries(this.saveData).filter(
+      const controlledProvinces = Object.entries(this.saveData).filter(
         ([_, provinceData]) => provinceData.controller === tag
       );
-      country.SetControlledProvinces(provinces);
+      country.SetControlledProvinces(controlledProvinces);
       country.SetStraitsConnections(this.straits);
       country.SetControlledProvinceNeighbors(this.filesData.adjacencyMap);
+
+      const ownedProvinces = Object.entries(this.saveData).filter(
+        ([_, provinceData]) => provinceData.owner === tag
+      );
+      country.SetOwnedProvinces(ownedProvinces);
 
       this.countries[tag] = country;
     }
