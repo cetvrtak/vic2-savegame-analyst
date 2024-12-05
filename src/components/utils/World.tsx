@@ -2,6 +2,7 @@
 // As opposed to:
 //  * Save game data - retrieved directly AppState
 
+import Country from './Country';
 import { Continents, Straits, Connection } from './types';
 
 //  * Game files data - retrieved from DataContext
@@ -9,9 +10,12 @@ class World {
   saveData: Record<string, any>;
 
   // Game files
+  filesData: Record<string, any>;
   production: Record<string, any>;
 
   // Derived data
+  countries: Record<string, Country> = {};
+
   goodsOutput: Record<string, number>;
   goodsWorkerTypes: Record<string, string[]>;
   rgoWorkers: string[];
@@ -21,6 +25,7 @@ class World {
   constructor(saveData: Record<string, any>, filesData: Record<string, any>) {
     this.saveData = saveData;
 
+    this.filesData = filesData;
     this.production = filesData.production;
 
     this.goodsOutput = this.CreateGoodOutputMap();
@@ -132,6 +137,38 @@ class World {
       }
     }
     return straits;
+  };
+
+  CreateCountries = (tags: string[]) => {
+    for (const tag of tags) {
+      const country = new Country(tag, this.saveData[tag]);
+      country.farm_rgo_size = country.GetModifierFromIssues(
+        this.filesData.issues,
+        'farm_rgo_size'
+      );
+      country.mine_rgo_size = country.GetModifierFromIssues(
+        this.filesData.issues,
+        'mine_rgo_size'
+      );
+      country.rgo_throughput_eff = country.GetRgoThroughputEff(
+        this.filesData.modifiers,
+        this.filesData.issues,
+        this.filesData.nationalvalues
+      );
+
+      const provinces = Object.entries(this.saveData).filter(
+        ([_, provinceData]) => provinceData.controller === tag
+      );
+      country.SetControlledProvinces(provinces);
+      country.SetStraitsConnections(this.straits);
+      country.SetControlledProvinceNeighbors(this.filesData.adjacencyMap);
+
+      this.countries[tag] = country;
+    }
+  };
+
+  GetCountry = (tag: string): Country => {
+    return this.countries[tag];
   };
 }
 

@@ -97,6 +97,12 @@ class Country {
     return effFromModifiers + effFromIssues + effFromNV + effFromWarExhaustion;
   };
 
+  GetRgoSize = (rgoSizeKey: string): number => {
+    return rgoSizeKey === 'farm_rgo_size'
+      ? this.farm_rgo_size
+      : this.mine_rgo_size;
+  };
+
   SetControlledProvinces = (provinces: Record<string, any>[]) => {
     this.controlledProvinces = provinces.reduce(
       (acc: Record<string, Province>, prov: Record<string, any>) => ({

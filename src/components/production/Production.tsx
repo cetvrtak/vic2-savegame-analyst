@@ -2,7 +2,6 @@
 import { useData } from '../DataContext';
 import { ProductionData, ProductionProps } from './types';
 import World from '../utils/World';
-import Country from '../utils/Country';
 import Province from '../utils/Province';
 
 const Production: React.FC<ProductionProps> = ({ saveData }) => {
@@ -40,32 +39,9 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       const productionData: ProductionData = {};
 
       const world = new World(saveData, data);
+      world.CreateCountries(selectedTags);
 
-      const countries: Record<string, any> = {};
       for (const tag of selectedTags) {
-        const country = new Country(tag, saveData[tag]);
-        country.farm_rgo_size = country.GetModifierFromIssues(
-          data.issues,
-          'farm_rgo_size'
-        );
-        country.mine_rgo_size = country.GetModifierFromIssues(
-          data.issues,
-          'mine_rgo_size'
-        );
-        country.rgo_throughput_eff = country.GetRgoThroughputEff(
-          data.modifiers,
-          data.issues,
-          data.nationalvalues
-        );
-
-        const provinces = Object.entries(saveData).filter(
-          ([_, provinceData]) => provinceData.controller === tag
-        );
-        country.SetControlledProvinces(provinces);
-        country.SetStraitsConnections(world.straits);
-        country.SetControlledProvinceNeighbors(data.adjacencyMap);
-        countries[tag] = country;
-
         productionData[tag] = {};
         for (const good of selectedGoods) {
           productionData[tag][good] = 0;
@@ -76,6 +52,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         const province = new Province(key, saveData[key]);
         const goodsType = province.data.rgo?.goods_type || '';
         const ownerTag = province.data.owner || '';
+        const owner = world.GetCountry(ownerTag);
 
         if (
           selectedTags.includes(ownerTag) &&
@@ -102,7 +79,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.modifiers,
             data.continents
           );
-          const countryRgoSize = countries[ownerTag][rgoSizeKey];
+          const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
           const rgoSizeModifier = provinceRgoSize + countryRgoSize;
 
           const baseOutput = world.goodsOutput[goodsType];
@@ -114,20 +91,20 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const numWorkers = province.GetNumWorkers();
           const maxWorkers =
             40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
-          const rgoThroughputEff = countries[ownerTag].rgo_throughput_eff;
+          const rgoThroughputEff = owner.rgo_throughput_eff;
           const localRgoThroughputEff = province.GetRgoThroughputEff(
             data.modifiers,
             data.national_focus,
             Object.entries(data.region),
-            countries[ownerTag].data.national_focus
+            owner.data.national_focus
           );
 
-          const isOverseas = countries[ownerTag].isOverseas(
+          const isOverseas = owner.isOverseas(
             province.id,
             world.provinceToContinentMap
           );
           const overseasPenalty =
-            isOverseas * countries[ownerTag].data.overseas_penalty;
+            Number(isOverseas) * owner.data.overseas_penalty;
 
           const throughput =
             (numWorkers / maxWorkers) *
