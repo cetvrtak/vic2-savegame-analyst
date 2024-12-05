@@ -75,15 +75,16 @@ const TerrainMapper: React.FC = () => {
 
     // Step 2: Use the provincePixelsMap to determine dominant terrain for each province
     for (const province of provinceDefinitions) {
+      const id: number = Number(province.id);
       // Get terrain from history file
-      const terrainType = data.provinces[province.id]?.terrain;
+      const terrainType = data.provinces[id]?.terrain;
       if (terrainType) {
-        mapping[province.id] = terrainType;
+        mapping[id] = terrainType;
         continue;
       }
 
       const terrainTypeFrequency: Record<string, number> = {};
-      const pixelIndices = provincePixelsMap[province.id];
+      const pixelIndices = provincePixelsMap[id];
 
       if (pixelIndices) {
         for (const idx of pixelIndices) {
@@ -104,7 +105,7 @@ const TerrainMapper: React.FC = () => {
         )[0];
 
         if (dominantTerrainType) {
-          mapping[province.id] = dominantTerrainType;
+          mapping[id] = dominantTerrainType;
         }
       }
     }
