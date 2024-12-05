@@ -88,7 +88,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const provinceSize = province.GetProvinceSize(
             data.terrain.categories,
             data.terrainMap,
-            data.pops[key], // province pops
+            data.pops[key], // history pops
             world.rgoWorkers
           );
 
@@ -126,12 +126,13 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             province.id,
             world.provinceToContinentMap
           );
-          const overseasPenalty = 1;
+          const overseasPenalty =
+            isOverseas * countries[ownerTag].data.overseas_penalty;
 
           const throughput =
             (numWorkers / maxWorkers) *
             (1 + rgoThroughputEff + localRgoThroughputEff) *
-            overseasPenalty;
+            (1 - overseasPenalty);
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
