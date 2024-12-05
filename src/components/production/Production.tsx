@@ -21,11 +21,13 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'common/nationalvalues.json',
         'common/production.json',
         'history/pops.json',
+        'inventions.json',
         'map/adjacencyMap.json',
         'map/continents.json',
         'map/region.json',
         'map/terrainMap.json',
         'map/terrain.json',
+        'technologies.json',
       ]);
       await loadCsvFiles(['map/adjacencies.csv']);
       setJsonFilesLoaded(true);
@@ -80,7 +82,19 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.continents
           );
           const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
-          const rgoSizeModifier = provinceRgoSize + countryRgoSize;
+          const rgoSizeFromModifiers = provinceRgoSize + countryRgoSize;
+          const rgoSizeFromTech = owner.GetRgoSizeFromTech(
+            goodsType,
+            data.technologies
+          );
+          const rgoSizeFromInventions = owner.GetRgoSizeFromInventions(
+            goodsType,
+            data.inventions
+          );
+          const rgoSizeFromTechnologies =
+            rgoSizeFromTech + rgoSizeFromInventions;
+          const rgoSizeModifier =
+            rgoSizeFromModifiers + rgoSizeFromTechnologies;
 
           const baseOutput = world.goodsOutput[goodsType];
 

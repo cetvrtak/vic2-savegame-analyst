@@ -2,7 +2,13 @@
 // from other country properties
 // and game data
 import { Issues } from '../production/types';
-import { Connection, Modifier, Straits } from './types';
+import {
+  Connection,
+  Inventions,
+  Modifier,
+  Straits,
+  Technologies,
+} from './types';
 import Province from './Province';
 
 class Country {
@@ -101,6 +107,53 @@ class Country {
     return rgoSizeKey === 'farm_rgo_size'
       ? this.farm_rgo_size
       : this.mine_rgo_size;
+  };
+
+  GetRgoSizeFromTech = (goods: string, techs: Technologies): number => {
+    const countryTechs = Object.keys(this.data.technology);
+    let rgoSizeModifer = 0;
+
+    for (const tech of countryTechs) {
+      if (!techs[tech].rgo_size) {
+        continue;
+      }
+
+      const techModifiers = techs[tech].rgo_size;
+      if (Array.isArray(techModifiers)) {
+        for (const modifier of techModifiers) {
+          rgoSizeModifer += Number(modifier[goods]) || 0;
+        }
+      } else {
+        rgoSizeModifer += Number(techs[tech].rgo_size[goods] || 0);
+      }
+    }
+
+    return rgoSizeModifer;
+  };
+
+  GetRgoSizeFromInventions = (
+    goods: string,
+    inventions: Inventions
+  ): number => {
+    const countryInventions: string[] = this.data.active_inventions.key;
+    let modifier = 0;
+
+    for (const inventionId of countryInventions) {
+      const inventionIndex = parseInt(inventionId);
+      const invention = Object.values(inventions)[inventionIndex];
+
+      if (invention.rgo_size) {
+        // effects defined directly under invention
+        modifier = Number(invention.rgo_size[goods]) || 0;
+      }
+
+      const effects = invention.effect;
+      if (effects && effects.rgo_size) {
+        modifier += Number(effects.rgo_size[goods]) || 0;
+      }
+    }
+
+    return modifier;
   };
 
   SetControlledProvinces = (provinces: Record<string, any>[]) => {

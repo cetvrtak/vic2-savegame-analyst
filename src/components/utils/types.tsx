@@ -15,3 +15,6 @@ export type Connection = { to: string; through: string };
 export type Straits = {
   [from: string]: Connection[];
 };
+
+export type Technologies = Record<string, any>;
+export type Inventions = Record<string, any>;

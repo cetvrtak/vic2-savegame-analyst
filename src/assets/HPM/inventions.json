@@ -79,7 +79,8 @@
   },
   "railroad_transport_groups": {
     "limit": {
-      "strategic_mobility": "1"
+      "strategic_mobility": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "0",
@@ -294,7 +295,8 @@
   },
   "gas_attack_capability": {
     "limit": {
-      "military_directionism": "1"
+      "military_directionism": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "0",
@@ -315,17 +317,26 @@
   },
   "gas_defense_capability": {
     "limit": {
-      "military_directionism": "1"
+      "military_directionism": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "0",
-      "modifier": {
-        "factor": "5",
-        "war": "yes",
-        "war_countries": {
-          "invention": "gas_attack_capability"
+      "modifier": [
+        {
+          "factor": "5",
+          "war": "yes",
+          "war_countries": {
+            "invention": "gas_attack_capability"
+          }
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "gas_attack_capability"
+          }
         }
-      }
+      ]
     },
     "effect": {
       "gas_defence": "yes"
@@ -513,7 +524,8 @@
   },
   "tank_experiments": {
     "limit": {
-      "infiltration": "1"
+      "infiltration": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "1",
@@ -714,7 +726,22 @@
       "flintlock_rifles": "1"
     },
     "chance": {
-      "base": "5",
+      "base": "100"
+    },
+    "effect": {
+      "combat_width": "-1"
+    }
+  },
+  "bayonet_charge": {
+    "limit": {
+      "flintlock_rifles": "1",
+      "OR": {
+        "civilized": "yes",
+        "year": "1840"
+      }
+    },
+    "chance": {
+      "base": "4",
       "modifier": [
         {
           "factor": "2",
@@ -724,7 +751,7 @@
           "factor": "2",
           "war": "yes",
           "war_countries": {
-            "invention": "flintlock_rifle_armament"
+            "invention": "bayonet_charge"
           }
         }
       ]
@@ -754,7 +781,7 @@
   },
   "muzzle_loaded_rifle_armament": {
     "limit": {
-      "muzzle_loaded_rifles": "1"
+      "muzzle_loaded_rifles": "1 invention"
     },
     "chance": {
       "base": "5",
@@ -791,7 +818,7 @@
   },
   "breech_loaded_rifle_armament": {
     "limit": {
-      "breech_loaded_rifles": "1"
+      "breech_loaded_rifles": "1 invention"
     },
     "chance": {
       "base": "5",
@@ -836,7 +863,7 @@
   },
   "machine_gun_armament": {
     "limit": {
-      "machine_guns": "1"
+      "machine_guns": "1 invention"
     },
     "chance": {
       "base": "5",
@@ -885,13 +912,20 @@
   },
   "colonial_negotiations": {
     "limit": {
-      "year": "1870",
-      "breech_loaded_rifles": "1"
+      "year": "1880",
+      "breech_loaded_rifles": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
       "base": "0",
       "modifier": [
+        {
+          "factor": "-75",
+          "NOT": {
+            "year": "1880"
+          }
+        },
         {
           "factor": "25",
           "machine_guns": "1"
@@ -919,12 +953,12 @@
       ]
     },
     "effect": {
-      "colonial_life_rating": "-10"
+      "colonial_life_rating": "-5"
     }
   },
   "bolt_action_rifle_armament": {
     "limit": {
-      "bolt_action_rifles": "1"
+      "bolt_action_rifles": "1 invention"
     },
     "chance": {
       "base": "5",
@@ -1372,7 +1406,8 @@
   },
   "mobilization_time_tables": {
     "limit": {
-      "military_plans": "1"
+      "military_plans": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "2",
@@ -1393,7 +1428,8 @@
   },
   "personnel_category_tables": {
     "limit": {
-      "military_plans": "1"
+      "military_plans": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "2",
@@ -2203,7 +2239,8 @@
   },
   "multitude_of_financial_instruments": {
     "limit": {
-      "stock_exchange": "1"
+      "stock_exchange": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2225,7 +2262,8 @@
   },
   "insurance_companies": {
     "limit": {
-      "stock_exchange": "1"
+      "stock_exchange": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2242,12 +2280,13 @@
       ]
     },
     "effect": {
-      "tax_eff": "1"
+      "tax_eff": "2"
     }
   },
   "regulated_buying_and_selling_of_stocks": {
     "limit": {
-      "stock_exchange": "1"
+      "stock_exchange": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2264,7 +2303,7 @@
       ]
     },
     "effect": {
-      "tax_eff": "1"
+      "tax_eff": "2"
     }
   },
   "liquidation_of_assets": {
@@ -2330,8 +2369,7 @@
       ]
     },
     "effect": {
-      "factory_cost": "-0.01",
-      "farm_RGO_eff": "0.5"
+      "factory_cost": "-0.01"
     }
   },
   "industrial_rnd_investments": {
@@ -2428,7 +2466,8 @@
   },
   "market_behaviour_monitoring": {
     "limit": {
-      "bank_inspection_board": "1"
+      "bank_inspection_board": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2489,7 +2528,7 @@
       ]
     },
     "effect": {
-      "tax_eff": "3"
+      "tax_eff": "1"
     }
   },
   "decimal_monetary_system": {
@@ -2511,7 +2550,7 @@
       ]
     },
     "effect": {
-      "tax_eff": "3"
+      "tax_eff": "1"
     }
   },
   "double_standard": {
@@ -2533,7 +2572,7 @@
       ]
     },
     "effect": {
-      "tax_eff": "2"
+      "tax_eff": "1"
     }
   },
   "fixed_intramonetary_exchange_rates": {
@@ -2581,7 +2620,7 @@
       ]
     },
     "effect": {
-      "tax_eff": "3"
+      "tax_eff": "1"
     }
   },
   "international_monetary_exchange_rates": {
@@ -2683,7 +2722,7 @@
   },
   "john_ramsay_mcculloch": {
     "limit": {
-      "early_classical_theory_and_critique": "1"
+      "late_classical_theory": "1"
     },
     "news": "no",
     "chance": {
@@ -2700,12 +2739,12 @@
       ]
     },
     "effect": {
-      "activate_building": "furniture_factory"
+      "loan_interest": "-0.002"
     }
   },
   "nassau_william_sr": {
     "limit": {
-      "early_classical_theory_and_critique": "1"
+      "late_classical_theory": "1"
     },
     "news": "no",
     "chance": {
@@ -2722,34 +2761,13 @@
       ]
     },
     "effect": {
-      "activate_building": "paper_mill"
-    }
-  },
-  "james_mill": {
-    "limit": {
-      "early_classical_theory_and_critique": "1"
-    },
-    "news": "no",
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "nationalvalue": "nv_equality"
-        },
-        {
-          "factor": "1",
-          "ruling_party_ideology": "liberal"
-        }
-      ]
-    },
-    "effect": {
-      "activate_building": "luxury_furniture_factory"
+      "loan_interest": "-0.002"
     }
   },
   "john_elliot_cairnes": {
     "limit": {
-      "late_classical_theory": "1"
+      "late_classical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2771,7 +2789,8 @@
   },
   "robert_torrens": {
     "limit": {
-      "late_classical_theory": "1"
+      "late_classical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2793,7 +2812,8 @@
   },
   "john_stuart_mill": {
     "limit": {
-      "late_classical_theory": "1"
+      "late_classical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2815,19 +2835,40 @@
   },
   "pierre_joseph_proudhon": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
-      "base": "2",
+      "base": "5",
       "modifier": [
         {
-          "factor": "3",
-          "nationalvalue": "nv_equality"
+          "factor": "5",
+          "nationalvalue": "nv_liberty"
         },
         {
           "factor": "2",
           "ruling_party_ideology": "socialist"
+        },
+        {
+          "factor": "2",
+          "invention": "atheism"
+        },
+        {
+          "factor": "2",
+          "invention": "secularization"
+        },
+        {
+          "factor": "2",
+          "invention": "authoritarianism"
+        },
+        {
+          "factor": "2",
+          "invention": "rationalism"
+        },
+        {
+          "factor": "2",
+          "invention": "collectivism"
         }
       ]
     },
@@ -2837,7 +2878,8 @@
   },
   "karl_marx": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2848,12 +2890,44 @@
           "ruling_party_ideology": "communist"
         },
         {
-          "factor": "2",
+          "factor": "5",
           "nationalvalue": "nv_equality"
         },
         {
           "factor": "1",
           "economic_policy": "planned_economy"
+        },
+        {
+          "factor": "8",
+          "invention": "friedrich_engels"
+        },
+        {
+          "factor": "2",
+          "invention": "egalitarianism"
+        },
+        {
+          "factor": "2",
+          "invention": "social_justice"
+        },
+        {
+          "factor": "2",
+          "invention": "atheism"
+        },
+        {
+          "factor": "2",
+          "invention": "secularization"
+        },
+        {
+          "factor": "2",
+          "invention": "rationalism"
+        },
+        {
+          "factor": "2",
+          "invention": "determinism"
+        },
+        {
+          "factor": "2",
+          "invention": "collectivism"
         }
       ]
     },
@@ -2863,15 +2937,48 @@
   },
   "friedrich_engels": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
       "base": "2",
       "modifier": [
         {
-          "factor": "2",
+          "factor": "4",
           "invention": "karl_marx"
+        },
+        {
+          "factor": "2",
+          "invention": "egalitarianism"
+        },
+        {
+          "factor": "2",
+          "invention": "social_justice"
+        },
+        {
+          "factor": "2",
+          "invention": "atheism"
+        },
+        {
+          "factor": "2",
+          "invention": "rationalism"
+        },
+        {
+          "factor": "2",
+          "invention": "secularization"
+        },
+        {
+          "factor": "2",
+          "invention": "determinism"
+        },
+        {
+          "factor": "2",
+          "invention": "collectivism"
+        },
+        {
+          "factor": "5",
+          "nationalvalue": "nv_equality"
         },
         {
           "factor": "1",
@@ -2885,7 +2992,8 @@
   },
   "eduard_bernstein": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2915,7 +3023,8 @@
   },
   "sidney_webb": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2943,7 +3052,8 @@
   },
   "karl_kautsky": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2967,9 +3077,10 @@
       "permanent_prestige": "1"
     }
   },
-  "jean_jaur�s": {
+  "jean_jaures": {
     "limit": {
-      "collectivist_theory": "1"
+      "collectivist_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -2991,7 +3102,8 @@
   },
   "friedrich_list": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3013,7 +3125,8 @@
   },
   "wilhelm_roscher": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3035,7 +3148,8 @@
   },
   "bruno_hildebrand": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3057,7 +3171,8 @@
   },
   "karl_knies": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3079,7 +3194,8 @@
   },
   "gustav_von_schmoller": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3101,7 +3217,8 @@
   },
   "adolph_wagner": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3123,7 +3240,8 @@
   },
   "william_cunningham": {
     "limit": {
-      "the_historical_theory": "1"
+      "the_historical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3143,9 +3261,10 @@
       "permanent_prestige": "1"
     }
   },
-  "johann_heinrich_von_th�nen": {
+  "johann_heinrich_von_thunen": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3165,9 +3284,10 @@
       "permanent_prestige": "1"
     }
   },
-  "l�on_walras": {
+  "leon_walras": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3189,7 +3309,8 @@
   },
   "stanley_jevons": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3211,7 +3332,8 @@
   },
   "carl_menger": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3233,7 +3355,8 @@
   },
   "thorstein_veblen": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3255,7 +3378,8 @@
   },
   "alfred_marshall": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3277,7 +3401,8 @@
   },
   "augustin_cournot": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3299,7 +3424,8 @@
   },
   "jules_dupuit": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3321,7 +3447,8 @@
   },
   "vilfredo_pareto": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3343,7 +3470,8 @@
   },
   "knut_wicksell": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3365,7 +3493,8 @@
   },
   "irving_fischer": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3387,7 +3516,8 @@
   },
   "joseph_schumpeter": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3407,9 +3537,10 @@
       "permanent_prestige": "1"
     }
   },
-  "eugen_von_b�hm_bawerk": {
+  "eugen_von_bohm_bawerk": {
     "limit": {
-      "neoclassical_theory": "1"
+      "neoclassical_theory": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3431,7 +3562,8 @@
   },
   "john_maynard_keynes": {
     "limit": {
-      "keynesian_economics": "1"
+      "keynesian_economics": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3455,7 +3587,8 @@
   },
   "richard_kahn": {
     "limit": {
-      "keynesian_economics": "1"
+      "keynesian_economics": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3477,7 +3610,8 @@
   },
   "ludwig_von_mises": {
     "limit": {
-      "keynesian_economics": "1"
+      "keynesian_economics": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3503,7 +3637,8 @@
   },
   "friedrich_hayek": {
     "limit": {
-      "keynesian_economics": "1"
+      "keynesian_economics": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3526,6 +3661,7 @@
   "polypoly_structure": {
     "news": "no",
     "limit": {
+      "has_country_flag": "existing_country",
       "market_structure": "1",
       "NOT": {
         "OR": {
@@ -3553,6 +3689,7 @@
   "oligopoly_structure": {
     "news": "no",
     "limit": {
+      "has_country_flag": "existing_country",
       "market_structure": "1",
       "NOT": {
         "OR": {
@@ -3580,6 +3717,7 @@
   "monopoly_structure": {
     "news": "no",
     "limit": {
+      "has_country_flag": "existing_country",
       "market_structure": "1",
       "NOT": {
         "OR": {
@@ -3926,7 +4064,8 @@
   },
   "import_substitution_industrialization": {
     "limit": {
-      "government_interventionism": "1"
+      "government_interventionism": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -3952,6 +4091,27 @@
     },
     "effect": {
       "activate_building": "synthetic_oil_factory"
+    }
+  },
+  "modern_winemaking": {
+    "limit": {
+      "guild_based_production": "1",
+      "OR": {
+        "NOT": {
+          "has_country_flag": "ibadi_country"
+        },
+        "has_country_flag": "post_colonial_country"
+      }
+    },
+    "news": "no",
+    "chance": {
+      "base": "100"
+    },
+    "effect": {
+      "activate_building": "winery",
+      "factory_goods_throughput": {
+        "liquor": "0.05"
+      }
     }
   },
   "work_classification": {
@@ -4373,7 +4533,7 @@
           "nationalvalue": "nv_equality"
         },
         {
-          "factor": "-2",
+          "factor": "-1",
           "OR": {
             "invention": "realist_music"
           }
@@ -5092,7 +5252,7 @@
         },
         {
           "factor": "2",
-          "invention": "genetics:_heredity"
+          "invention": "genetics_heredity"
         },
         {
           "factor": "1",
@@ -5101,7 +5261,7 @@
       ]
     },
     "effect": {
-      "education_efficiency": "0.50"
+      "education_efficiency": "0.3"
     }
   },
   "social_darwinism": {
@@ -5128,7 +5288,7 @@
   },
   "sociology": {
     "limit": {
-      "social_science": "1"
+      "biologism": "1"
     },
     "news": "no",
     "chance": {
@@ -5141,6 +5301,30 @@
         {
           "factor": "2",
           "scientific_management": "1"
+        }
+      ]
+    },
+    "core_pop_consciousness_modifier": "0.01"
+  },
+  "political_science": {
+    "limit": {
+      "biologism": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "revolution_n_counterrevolution": "1"
+        },
+        {
+          "factor": "1",
+          "military_directionism": "1"
+        },
+        {
+          "factor": "1",
+          "naval_directionism": "1"
         }
       ]
     },
@@ -5161,30 +5345,6 @@
         {
           "factor": "2",
           "behaviorism": "1"
-        }
-      ]
-    },
-    "core_pop_consciousness_modifier": "0.01"
-  },
-  "political_science": {
-    "limit": {
-      "social_science": "1"
-    },
-    "news": "no",
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "revolution_n_counterrevolution": "1"
-        },
-        {
-          "factor": "1",
-          "military_directionism": "1"
-        },
-        {
-          "factor": "1",
-          "naval_directionism": "1"
         }
       ]
     },
@@ -5257,7 +5417,7 @@
   },
   "paternalism": {
     "limit": {
-      "enlightenment_thought": "1"
+      "state_n_government": "1"
     },
     "news": "no",
     "chance": {
@@ -5275,11 +5435,15 @@
         }
       ]
     },
-    "org_regain": "0.05"
+    "org_regain": "0.05",
+    "effect": {
+      "plurality": "-0.05"
+    }
   },
   "constitutionalism": {
     "limit": {
-      "enlightenment_thought": "1"
+      "state_n_government": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5304,7 +5468,8 @@
   },
   "atheism": {
     "limit": {
-      "enlightenment_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5330,7 +5495,8 @@
   },
   "egalitarianism": {
     "limit": {
-      "enlightenment_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5358,7 +5524,8 @@
   },
   "rationalism": {
     "limit": {
-      "enlightenment_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5380,7 +5547,8 @@
   },
   "authoritarianism": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5396,12 +5564,16 @@
         }
       }
     },
-    "core_pop_consciousness_modifier": "-0.02"
+    "core_pop_consciousness_modifier": "-0.02",
+    "effect": {
+      "plurality": "-0.05"
+    }
   },
   "hierarchical_order": {
     "news": "no",
     "limit": {
-      "ideological_thought": "1",
+      "has_country_flag": "existing_country",
+      "state_n_government": "1",
       "OR": {
         "government": "absolute_monarchy"
       }
@@ -5420,11 +5592,15 @@
       ]
     },
     "core_pop_militancy_modifier": "-0.01",
-    "core_pop_consciousness_modifier": "0.01"
+    "core_pop_consciousness_modifier": "0.01",
+    "effect": {
+      "plurality": "-0.05"
+    }
   },
   "traditionalism": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5448,7 +5624,10 @@
         }
       ]
     },
-    "core_pop_consciousness_modifier": "-0.01"
+    "core_pop_consciousness_modifier": "-0.01",
+    "effect": {
+      "plurality": "-0.05"
+    }
   },
   "political_religion": {
     "limit": {
@@ -5476,7 +5655,8 @@
   },
   "individualism": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5499,7 +5679,8 @@
   },
   "secularization": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5523,7 +5704,8 @@
   },
   "social_conscience": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5546,7 +5728,8 @@
   },
   "collectivism": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5568,7 +5751,8 @@
   },
   "determinism": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5594,7 +5778,8 @@
   },
   "social_justice": {
     "limit": {
-      "ideological_thought": "1"
+      "ideological_thought": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5638,7 +5823,8 @@
   },
   "clericalism_vs._anticlericalism": {
     "limit": {
-      "state_n_government": "1"
+      "state_n_government": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5682,7 +5868,8 @@
   },
   "meritocracy_vs._aristocracy": {
     "limit": {
-      "state_n_government": "1"
+      "state_n_government": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5704,7 +5891,8 @@
   },
   "national_fraternity": {
     "limit": {
-      "nationalism_n_imperialism": "1"
+      "nationalism_n_imperialism": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5716,7 +5904,7 @@
         },
         {
           "factor": "2",
-          "prestige": "50"
+          "prestige": "200"
         }
       ]
     },
@@ -5753,7 +5941,8 @@
   },
   "manifest_destiny": {
     "limit": {
-      "nationalism_n_imperialism": "1"
+      "nationalism_n_imperialism": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5780,7 +5969,8 @@
   },
   "expansionism": {
     "limit": {
-      "nationalism_n_imperialism": "1"
+      "nationalism_n_imperialism": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -5792,7 +5982,7 @@
         },
         {
           "factor": "2",
-          "badboy": "5"
+          "badboy": "1"
         }
       ]
     },
@@ -5803,13 +5993,20 @@
   },
   "mission_to_civilize": {
     "limit": {
-      "year": "1850",
-      "state_n_government": "1"
+      "year": "1860",
+      "state_n_government": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
       "base": "0",
       "modifier": [
+        {
+          "factor": "-75",
+          "NOT": {
+            "year": "1860"
+          }
+        },
         {
           "factor": "25",
           "nationalism_n_imperialism": "1"
@@ -5844,7 +6041,8 @@
   },
   "separatism": {
     "limit": {
-      "nationalism_n_imperialism": "1"
+      "nationalism_n_imperialism": "1",
+      "has_country_flag": "existing_country"
     },
     "news": "no",
     "chance": {
@@ -6104,8 +6302,40 @@
     },
     "news": "no",
     "chance": {
-      "base": "2",
+      "base": "-4",
       "modifier": [
+        {
+          "factor": "2",
+          "anti__rationalism": "1"
+        },
+        {
+          "factor": "5",
+          "mass_culture_n_the_avant_garde": "1"
+        },
+        {
+          "factor": "1",
+          "invention": "nihilism_and_the_will"
+        },
+        {
+          "factor": "1",
+          "invention": "futurism"
+        },
+        {
+          "factor": "1",
+          "invention": "existentialism"
+        },
+        {
+          "factor": "2",
+          "invention": "rhetoric_of_hate"
+        },
+        {
+          "factor": "2",
+          "invention": "dogma_of_violence"
+        },
+        {
+          "factor": "2",
+          "invention": "dogma_of_mass_action"
+        },
         {
           "factor": "2",
           "ruling_party_ideology": "fascist"
@@ -6113,6 +6343,10 @@
         {
           "factor": "1",
           "nationalvalue": "nv_order"
+        },
+        {
+          "factor": "2",
+          "invention": "paramilitary_groups"
         },
         {
           "factor": "3",
@@ -6182,7 +6416,7 @@
   },
   "mass_advertising": {
     "limit": {
-      "behaviorism": "1"
+      "psychoanalysis": "1"
     },
     "news": "no",
     "chance": {
@@ -6210,7 +6444,7 @@
   },
   "national_radio_networks": {
     "limit": {
-      "behaviorism": "1"
+      "psychoanalysis": "1"
     },
     "news": "no",
     "chance": {
@@ -6221,13 +6455,15 @@
           "year": "1920"
         },
         {
-          "factor": "2",
-          "government": "democracy"
-        },
-        {
           "factor": "-1",
           "NOT": {
             "press_rights": "free_press"
+          }
+        },
+        {
+          "factor": "-3",
+          "NOT": {
+            "invention": "vacuum_tube"
           }
         }
       ]
@@ -6240,7 +6476,7 @@
   },
   "the_talkies": {
     "limit": {
-      "behaviorism": "1"
+      "psychoanalysis": "1"
     },
     "news": "no",
     "chance": {
@@ -6261,6 +6497,1587 @@
       "suppression_points_modifier": "-0.05"
     },
     "core_pop_consciousness_modifier": "0.01"
+  },
+  "modern_sail_ships": {
+    "limit": {
+      "clipper_design": "1"
+    },
+    "chance": {
+      "base": "10",
+      "modifier": {
+        "factor": "10",
+        "alphabetic_flag_signaling": "1"
+      }
+    },
+    "effect": {
+      "clipper_transport": {
+        "maximum_speed": "9",
+        "fire_range": "0.2"
+      },
+      "frigate": {
+        "maximum_speed": "9",
+        "hull": "1",
+        "gun_power": "1",
+        "fire_range": "0.25",
+        "evasion": "0.15"
+      },
+      "manowar": {
+        "maximum_speed": "7",
+        "hull": "1",
+        "gun_power": "2",
+        "fire_range": "0.3"
+      }
+    }
+  },
+  "schrapnel_standard_design": {
+    "limit": {
+      "steel_breech_loaded_artillery": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "heavy_artillery"
+        },
+        {
+          "factor": "3",
+          "great_war_experience": "1"
+        }
+      ]
+    },
+    "effect": {
+      "artillery": {
+        "attack": "1"
+      }
+    }
+  },
+  "barbed_wire_defense": {
+    "limit": {
+      "deep_defense_system": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "trench_systems"
+        },
+        {
+          "factor": "3",
+          "great_war_experience": "1"
+        }
+      ]
+    },
+    "effect": {
+      "infantry": {
+        "defence": "0.5"
+      },
+      "guard": {
+        "defence": "0.5"
+      },
+      "engineer": {
+        "defence": "0.5"
+      },
+      "artillery": {
+        "defence": "1"
+      },
+      "irregular": {
+        "defence": "0.5"
+      }
+    }
+  },
+  "helmet_mass_production": {
+    "limit": {
+      "indirect_artillery_fire": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "1",
+          "advanced_metallurgy": "1"
+        },
+        {
+          "factor": "2",
+          "invention": "schrapnel_standard_design"
+        },
+        {
+          "factor": "3",
+          "great_war_experience": "1"
+        }
+      ]
+    },
+    "effect": {
+      "soldier_to_pop_loss": "0.01",
+      "infantry": {
+        "defence": "0.5"
+      },
+      "guard": {
+        "defence": "0.5"
+      },
+      "engineer": {
+        "defence": "0.5"
+      },
+      "irregular": {
+        "defence": "0.5"
+      }
+    }
+  },
+  "camouflage_uniforms": {
+    "limit": {
+      "infiltration": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "1.5",
+          "invention": "machine_gun_armament"
+        },
+        {
+          "factor": "3",
+          "great_war_experience": "1"
+        }
+      ]
+    },
+    "effect": {
+      "soldier_to_pop_loss": "0.01"
+    }
+  },
+  "young_school_doctrine": {
+    "limit": {
+      "battleship_column_doctrine": "1",
+      "tech_school": "naval_tech_school"
+    },
+    "chance": {
+      "base": "10",
+      "modifier": [
+        {
+          "factor": "-10",
+          "NOT": {
+            "tech_school": "naval_tech_school"
+          }
+        },
+        {
+          "factor": "-10",
+          "has_country_modifier": "academic_confusion"
+        }
+      ]
+    },
+    "effect": {
+      "colonial_points": "200"
+    }
+  },
+  "fleet_in_being_doctrine": {
+    "limit": {
+      "raider_group_doctrine": "1",
+      "tech_school": "naval_tech_school"
+    },
+    "chance": {
+      "base": "25",
+      "modifier": [
+        {
+          "factor": "-25",
+          "NOT": {
+            "tech_school": "naval_tech_school"
+          }
+        },
+        {
+          "factor": "-25",
+          "has_country_modifier": "academic_confusion"
+        }
+      ]
+    },
+    "effect": {
+      "colonial_points": "200"
+    }
+  },
+  "sea_power_doctrine": {
+    "limit": {
+      "blue_and_brown_water_schools": "1",
+      "tech_school": "naval_tech_school"
+    },
+    "chance": {
+      "base": "50",
+      "modifier": [
+        {
+          "factor": "-50",
+          "NOT": {
+            "tech_school": "naval_tech_school"
+          }
+        },
+        {
+          "factor": "-50",
+          "has_country_modifier": "academic_confusion"
+        }
+      ]
+    },
+    "effect": {
+      "colonial_points": "300"
+    }
+  },
+  "neocolonialism_doctrine": {
+    "limit": {
+      "steel_steamers": "1",
+      "tech_school": "naval_tech_school"
+    },
+    "chance": {
+      "base": "80",
+      "modifier": [
+        {
+          "factor": "-80",
+          "NOT": {
+            "tech_school": "naval_tech_school"
+          }
+        },
+        {
+          "factor": "-80",
+          "has_country_modifier": "academic_confusion"
+        }
+      ]
+    },
+    "effect": {
+      "colonial_points": "300"
+    }
+  },
+  "pattinson_process": {
+    "limit": {
+      "mechanized_mining": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": [
+        {
+          "iron": "0.1"
+        },
+        {
+          "precious_metal": "0.1"
+        },
+        {
+          "sulphur": "0.1"
+        }
+      ]
+    }
+  },
+  "parkes_process": {
+    "limit": {
+      "regenerative_furnaces": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": [
+        {
+          "iron": "0.1"
+        },
+        {
+          "precious_metal": "0.1"
+        },
+        {
+          "sulphur": "0.1"
+        }
+      ]
+    }
+  },
+  "square_set_timbering": {
+    "limit": {
+      "regenerative_furnaces": "1",
+      "year": "1860"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.2"
+      }
+    }
+  },
+  "electrolytic_refining": {
+    "limit": {
+      "regenerative_furnaces": "1",
+      "year": "1870"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "iron": "0.3"
+      }
+    }
+  },
+  "dynamite": {
+    "limit": {
+      "regenerative_furnaces": "1",
+      "year": "1860"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.25"
+      },
+      "rgo_size": [
+        {
+          "coal": "0.25"
+        },
+        {
+          "iron": "0.25"
+        },
+        {
+          "sulphur": "0.25"
+        }
+      ]
+    }
+  },
+  "deep_mining": {
+    "limit": {
+      "drilling_and_blasting": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.25"
+      }
+    }
+  },
+  "percussion_drill": {
+    "limit": {
+      "drilling_and_blasting": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "pneumatic_and_hydraulics": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.25"
+      }
+    }
+  },
+  "friction_hoist": {
+    "limit": {
+      "drilling_and_blasting": "1",
+      "year": "1875"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.1"
+      }
+    }
+  },
+  "lixiviation_mills": {
+    "limit": {
+      "drilling_and_blasting": "1",
+      "year": "1880"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "iron": "0.3"
+      }
+    }
+  },
+  "cyanide_milling": {
+    "limit": {
+      "drilling_and_blasting": "1",
+      "year": "1885"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": [
+        {
+          "iron": "0.1"
+        },
+        {
+          "precious_metal": "0.2"
+        }
+      ]
+    }
+  },
+  "trinitrotoluene": {
+    "limit": {
+      "drilling_and_blasting": "1",
+      "year": "1895"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.25"
+      },
+      "rgo_size": [
+        {
+          "coal": "0.25"
+        },
+        {
+          "iron": "0.25"
+        },
+        {
+          "sulphur": "0.25"
+        }
+      ]
+    }
+  },
+  "shrinkage_stoping": {
+    "limit": {
+      "electric_furnace": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "coal": "0.4"
+      }
+    }
+  },
+  "froth_flotation": {
+    "limit": {
+      "electric_furnace": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": [
+        {
+          "iron": "0.3"
+        },
+        {
+          "sulphur": "0.3"
+        }
+      ]
+    }
+  },
+  "hydraulic_excavator": {
+    "limit": {
+      "electric_furnace": "1",
+      "year": "1920"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": [
+        {
+          "iron": "0.5"
+        },
+        {
+          "coal": "0.5"
+        }
+      ]
+    }
+  },
+  "fish_trawlers": {
+    "limit": {
+      "steam_turbine_ships": "1"
+    },
+    "chance": {
+      "base": "6",
+      "modifier": [
+        {
+          "factor": "1",
+          "interchangeable_parts": "1"
+        },
+        {
+          "factor": "1",
+          "invention": "work_specialization"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "fish",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "fish",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-2",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "fish",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "fish",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "fish",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "fish": "0.3"
+      }
+    }
+  },
+  "industrial_paper_production": {
+    "limit": {
+      "freedom_of_trade": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "economic_policy": "laissez_faire"
+        },
+        {
+          "factor": "1",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "invention": "industrial_sawmills"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "paper_mill"
+    }
+  },
+  "industrial_furniture_production": {
+    "limit": {
+      "early_classical_theory_and_critique": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "1",
+          "prestige": "30"
+        },
+        {
+          "factor": "2",
+          "is_greater_power": "yes"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "invention": "industrial_sawmills"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "furniture_factory"
+    }
+  },
+  "industrial_luxury_furniture_production": {
+    "limit": {
+      "late_classical_theory": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "nationalvalue": "nv_equality"
+        },
+        {
+          "factor": "1",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "mechanical_production": "1",
+            "invention": "industrial_furniture_production"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "luxury_furniture_factory"
+    }
+  },
+  "industrial_sawmills": {
+    "limit": {
+      "early_classical_theory_and_critique": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "economic_policy": "laissez_faire"
+        },
+        {
+          "factor": "1",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "piston_steam_engine": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "lumber_mill"
+    }
+  },
+  "canning_process": {
+    "limit": {
+      "guild_based_production": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "economic_policy": "laissez_faire"
+        },
+        {
+          "factor": "1",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "piston_steam_engine": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "canned_food_factory"
+    }
+  },
+  "portland_cement": {
+    "limit": {
+      "freedom_of_trade": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "economic_policy": "laissez_faire"
+        },
+        {
+          "factor": "1",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "basic_chemistry": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "cement_factory"
+    }
+  },
+  "rotary_kiln": {
+    "limit": {
+      "combustion_engine": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "stiff_plastic_brickmaking_machine"
+        },
+        {
+          "factor": "2",
+          "assembly_line": "1"
+        },
+        {
+          "factor": "-6",
+          "NOT": {
+            "private_banks": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "factory_goods_output": {
+        "cement": "0.15"
+      }
+    }
   },
   "daimlers_automobile": {
     "limit": {
@@ -6340,7 +8157,26 @@
       ]
     },
     "effect": {
-      "farm_rgo_eff": "0.5"
+      "rgo_goods_output": [
+        {
+          "cotton": "0.03"
+        },
+        {
+          "coffee": "0.05"
+        },
+        {
+          "grain": "0.03"
+        },
+        {
+          "opium": "0.03"
+        },
+        {
+          "fruit": "0.03"
+        },
+        {
+          "cattle": "0.03"
+        }
+      ]
     }
   },
   "direct_current": {
@@ -6362,8 +8198,7 @@
     },
     "effect": {
       "rgo_output": "0.05",
-      "factory_throughput": "0.05",
-      "mine_rgo_eff": "0.5"
+      "factory_throughput": "0.05"
     }
   },
   "alternating_current": {
@@ -6412,7 +8247,7 @@
   },
   "sharp_n_roberts_power_loom": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6428,19 +8263,17 @@
       ]
     },
     "effect": {
-      "rgo_goods_output": [
-        {
-          "cotton": "0.2"
-        },
-        {
-          "wool": "0.2"
-        }
-      ]
+      "factory_goods_throughput": {
+        "fabric": "0.1"
+      },
+      "rgo_goods_output": {
+        "wool": "0.2"
+      }
     }
   },
   "jacquard_power_loom": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6452,6 +8285,14 @@
         {
           "factor": "2",
           "invention": "insurance_companies"
+        },
+        {
+          "factor": "-10",
+          "NOT": {
+            "mechanical_production": "1",
+            "piston_steam_engine": "1",
+            "invention": "industrial_furniture_production"
+          }
         }
       ]
     },
@@ -6464,25 +8305,23 @@
           "silk": "0.2"
         }
       ],
-      "factory_goods_output": {
-        "fabric": "0.05"
-      }
+      "activate_building": "luxury_clothes_factory"
     }
   },
   "northrop_power_loom": {
     "limit": {
-      "mechanical_production": "1"
+      "assembly_line": "1"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "2",
-          "invention": "jacquard_power_loom"
+          "invention": "dobby_loom"
         },
         {
           "factor": "2",
-          "invention": "insurance_companies"
+          "invention": "lighting"
         }
       ]
     },
@@ -6505,14 +8344,14 @@
   },
   "mechanical_saw": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "2",
-          "clean_coal": "1"
+          "regenerative_furnaces": "1"
         },
         {
           "factor": "2",
@@ -6523,7 +8362,7 @@
     "effect": {
       "rgo_goods_output": [
         {
-          "timber": "0.1"
+          "timber": "0.15"
         },
         {
           "tropical_wood": "0.1"
@@ -6533,7 +8372,7 @@
   },
   "mechanical_precision_saw": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6544,19 +8383,19 @@
         },
         {
           "factor": "2",
-          "practical_steam_engine": "1"
+          "high_pressure_steam_engine": "1"
         }
       ]
     },
     "effect": {
       "rgo_goods_output": {
-        "timber": "0.1"
+        "timber": "0.15"
       }
     }
   },
   "hussey_n_mccormicks_reaping_machine": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6574,20 +8413,20 @@
     "effect": {
       "rgo_goods_output": [
         {
-          "grain": "0.2"
+          "grain": "0.15"
         },
         {
-          "fruit": "0.2"
+          "fruit": "0.15"
         },
         {
-          "tea": "0.2"
+          "tea": "0.1"
         }
       ]
     }
   },
   "pitts_threshing_machine": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6598,27 +8437,27 @@
         },
         {
           "factor": "2",
-          "practical_steam_engine": "1"
+          "high_pressure_steam_engine": "1"
         }
       ]
     },
     "effect": {
       "rgo_goods_output": [
         {
-          "grain": "0.2"
+          "grain": "0.15"
         },
         {
-          "fruit": "0.2"
+          "fruit": "0.15"
         },
         {
-          "tea": "0.2"
+          "tea": "0.15"
         }
       ]
     }
   },
   "mechanized_slaughtering_block": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6629,7 +8468,7 @@
         },
         {
           "factor": "2",
-          "clean_coal": "1"
+          "regenerative_furnaces": "1"
         }
       ]
     },
@@ -6639,14 +8478,14 @@
           "cattle": "0.2"
         },
         {
-          "wool": "0.2"
+          "wool": "0.1"
         }
       ]
     }
   },
   "precision_work": {
     "limit": {
-      "mechanical_production": "1"
+      "interchangeable_parts": "1"
     },
     "chance": {
       "base": "2",
@@ -6675,7 +8514,7 @@
   },
   "machine_tools": {
     "limit": {
-      "interchangeable_parts": "1"
+      "semi_automatization": "1"
     },
     "chance": {
       "base": "2",
@@ -6694,13 +8533,12 @@
       "factory_goods_output": {
         "machine_parts": "0.02"
       },
-      "factory_throughput": "0.05",
-      "mine_RGO_eff": "0.5"
+      "factory_throughput": "0.05"
     }
   },
   "whitney_n_colts_standardized_small_arms": {
     "limit": {
-      "interchangeable_parts": "1"
+      "semi_automatization": "1"
     },
     "chance": {
       "base": "2",
@@ -6723,7 +8561,7 @@
   },
   "food_packing_system": {
     "limit": {
-      "interchangeable_parts": "1"
+      "semi_automatization": "1"
     },
     "chance": {
       "base": "2",
@@ -6746,7 +8584,7 @@
   },
   "integral_distillery_process": {
     "limit": {
-      "interchangeable_parts": "1"
+      "semi_automatization": "1"
     },
     "chance": {
       "base": "2",
@@ -6769,14 +8607,14 @@
   },
   "jiggs": {
     "limit": {
-      "interchangeable_parts": "1"
+      "semi_automatization": "1"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "1",
-          "high_n_low_pressure_steam_engines": "1"
+          "compound_steam_engines": "1"
         },
         {
           "factor": "2",
@@ -6795,9 +8633,78 @@
       ]
     }
   },
-  "electric_machinery": {
+  "dobby_loom": {
     "limit": {
       "semi_automatization": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "sharp_n_roberts_power_loom"
+        },
+        {
+          "factor": "2",
+          "invention": "insurance_companies"
+        }
+      ]
+    },
+    "effect": {
+      "factory_goods_throughput": {
+        "fabric": "0.1"
+      }
+    }
+  },
+  "steam_powered_silk_reels": {
+    "limit": {
+      "semi_automatization": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "sharp_n_roberts_power_loom"
+        },
+        {
+          "factor": "2",
+          "invention": "insurance_companies"
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "silk": "0.2"
+      }
+    }
+  },
+  "lancashire_loom": {
+    "limit": {
+      "semi_automatization": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "dobby_loom"
+        },
+        {
+          "factor": "2",
+          "invention": "inventory_planning"
+        }
+      ]
+    },
+    "effect": {
+      "factory_goods_output": {
+        "fabric": "0.05"
+      }
+    }
+  },
+  "electric_machinery": {
+    "limit": {
+      "pneumatic_and_hydraulics": "1"
     },
     "chance": {
       "base": "2",
@@ -6815,13 +8722,13 @@
     "effect": {
       "factory_cost": "0.05",
       "rgo_goods_output": {
-        "timber": "0.1"
+        "timber": "0.15"
       }
     }
   },
   "oil_pumping_machinery": {
     "limit": {
-      "semi_automatization": "1"
+      "pneumatic_and_hydraulics": "1"
     },
     "chance": {
       "base": "2",
@@ -6832,7 +8739,7 @@
         },
         {
           "factor": "2",
-          "cheap_steel": "1"
+          "drilling_and_blasting": "1"
         }
       ]
     },
@@ -6844,7 +8751,7 @@
   },
   "drying_techniques": {
     "limit": {
-      "semi_automatization": "1"
+      "pneumatic_and_hydraulics": "1"
     },
     "chance": {
       "base": "2",
@@ -6865,12 +8772,41 @@
           "tea": "0.2"
         },
         {
-          "coffee": "0.2"
+          "coffee": "0.3"
         },
         {
           "opium": "0.2"
         }
       ]
+    }
+  },
+  "stiff_plastic_brickmaking_machine": {
+    "limit": {
+      "steam_turbine": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "electric_machinery"
+        },
+        {
+          "factor": "2",
+          "inorganic_chemistry": "1"
+        },
+        {
+          "factor": "-6",
+          "NOT": {
+            "private_banks": "1"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "factory_goods_output": {
+        "cement": "0.15"
+      }
     }
   },
   "fordism": {
@@ -6955,13 +8891,13 @@
     "effect": {
       "rgo_goods_output": [
         {
-          "cattle": "0.2"
+          "cattle": "0.15"
         },
         {
-          "fruit": "0.2"
+          "fruit": "0.15"
         },
         {
-          "fish": "0.2"
+          "fish": "0.15"
         }
       ],
       "factory_goods_output": [
@@ -6976,7 +8912,7 @@
   },
   "ammunition_production": {
     "limit": {
-      "mechanized_mining": "1"
+      "hot_blast": "1"
     },
     "chance": {
       "base": "2",
@@ -6997,7 +8933,7 @@
   },
   "small_arms_production": {
     "limit": {
-      "mechanized_mining": "1"
+      "hot_blast": "1"
     },
     "chance": {
       "base": "2",
@@ -7018,7 +8954,7 @@
   },
   "explosives_production": {
     "limit": {
-      "mechanized_mining": "1"
+      "hot_blast": "1"
     },
     "chance": {
       "base": "2",
@@ -7039,7 +8975,7 @@
   },
   "artillery_production": {
     "limit": {
-      "mechanized_mining": "1"
+      "hot_blast": "1"
     },
     "chance": {
       "base": "2",
@@ -7060,18 +8996,74 @@
   },
   "pit_coal": {
     "limit": {
-      "clean_coal": "1"
+      "mechanized_mining": "1"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "2",
-          "practical_steam_engine": "1"
+          "high_pressure_steam_engine": "1"
         },
         {
           "factor": "2",
           "early_railroad": "1"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
         }
       ]
     },
@@ -7083,7 +9075,7 @@
   },
   "coke": {
     "limit": {
-      "clean_coal": "1"
+      "mechanized_mining": "1"
     },
     "chance": {
       "base": "2",
@@ -7095,6 +9087,62 @@
         {
           "factor": "2",
           "early_railroad": "1"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "coal",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "coal",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
         }
       ]
     },
@@ -7106,7 +9154,7 @@
   },
   "advanced_ore_roasting_processes": {
     "limit": {
-      "cheap_iron": "1"
+      "regenerative_furnaces": "1"
     },
     "chance": {
       "base": "2",
@@ -7118,6 +9166,62 @@
         {
           "factor": "2",
           "inorganic_chemistry": "1"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
         }
       ]
     },
@@ -7129,7 +9233,7 @@
   },
   "advanced_ore_grinding_processes": {
     "limit": {
-      "cheap_iron": "1"
+      "regenerative_furnaces": "1"
     },
     "chance": {
       "base": "2",
@@ -7141,6 +9245,62 @@
         {
           "factor": "2",
           "organized_factories": "1"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
         }
       ]
     },
@@ -7152,7 +9312,7 @@
   },
   "advanced_ore_smelting_processes": {
     "limit": {
-      "cheap_iron": "1"
+      "regenerative_furnaces": "1"
     },
     "chance": {
       "base": "2",
@@ -7164,6 +9324,62 @@
         {
           "factor": "2",
           "iron_railroad": "1"
+        },
+        {
+          "factor": "-10",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.05 type"
+            },
+            "province_control_days": "1825"
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.01 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_owned_province": {
+            "controlled_by": "THIS",
+            "trade_goods": "iron",
+            "unemployment_by_type": {
+              "value": "0.03 type"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_neighbor_country": {
+            "is_greater_power": "no",
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
+        },
+        {
+          "factor": "-1",
+          "any_greater_power": {
+            "any_owned_province": {
+              "trade_goods": "iron",
+              "unemployment_by_type": {
+                "value": "0.01 type"
+              },
+              "province_control_days": "365"
+            }
+          }
         }
       ]
     },
@@ -7175,14 +9391,15 @@
   },
   "bessemer_steel": {
     "limit": {
-      "cheap_iron": "1"
+      "regenerative_furnaces": "1",
+      "year": "1860"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "2",
-          "high_n_low_pressure_steam_engines": "1"
+          "compound_steam_engines": "1"
         },
         {
           "factor": "2",
@@ -7192,13 +9409,14 @@
     },
     "effect": {
       "factory_goods_throughput": {
-        "steel": "0.05"
+        "steel": "0.3"
       }
     }
   },
   "martin_steel": {
     "limit": {
-      "cheap_steel": "1"
+      "regenerative_furnaces": "1",
+      "year": "1870"
     },
     "chance": {
       "base": "2",
@@ -7215,13 +9433,14 @@
     },
     "effect": {
       "factory_goods_output": {
-        "steel": "0.02"
+        "steel": "0.05"
       }
     }
   },
   "thomas_steel": {
     "limit": {
-      "cheap_steel": "1"
+      "regenerative_furnaces": "1",
+      "year": "1880"
     },
     "chance": {
       "base": "2",
@@ -7238,7 +9457,7 @@
     },
     "effect": {
       "factory_goods_output": {
-        "steel": "0.02"
+        "steel": "0.05"
       }
     }
   },
@@ -7261,7 +9480,7 @@
     },
     "effect": {
       "factory_goods_output": {
-        "steel": "0.04"
+        "steel": "0.02"
       }
     }
   },
@@ -7285,6 +9504,9 @@
     "effect": {
       "rgo_goods_output": {
         "precious_metal": "0.05"
+      },
+      "factory_goods_output": {
+        "steel": "0.02"
       }
     }
   },
@@ -7351,7 +9573,7 @@
       ]
     },
     "effect": {
-      "pop_growth": "0.0002",
+      "pop_growth": "0.0001",
       "land_attrition": "-0.05",
       "soldier_to_pop_loss": "0.01"
     }
@@ -7369,13 +9591,14 @@
         },
         {
           "factor": "2",
-          "stock_exchange": "1"
+          "naval_plans": "1"
         }
       ]
     },
     "effect": {
       "land_attrition": "-0.05",
-      "soldier_to_pop_loss": "0.01"
+      "soldier_to_pop_loss": "0.01",
+      "pop_growth": "0.0001"
     }
   },
   "chemotherapy": {
@@ -7399,7 +9622,7 @@
       "land_attrition": "-0.05"
     }
   },
-  "genetics:_heredity": {
+  "genetics_heredity": {
     "limit": {
       "medicine": "1"
     },
@@ -7417,7 +9640,7 @@
       ]
     },
     "effect": {
-      "pop_growth": "0.0002"
+      "pop_growth": "0.0001"
     }
   },
   "clinical_thermometers_and_binaural_stethoscopes": {
@@ -7433,12 +9656,12 @@
         },
         {
           "factor": "2",
-          "organized_factories": "2"
+          "organized_factories": "1"
         }
       ]
     },
     "effect": {
-      "pop_growth": "0.0002"
+      "pop_growth": "0.0001"
     }
   },
   "prophylaxis_against_malaria": {
@@ -7477,12 +9700,42 @@
         },
         {
           "factor": "2",
-          "cheap_iron": "1"
+          "hot_blast": "1"
         }
       ]
     },
     "effect": {
       "shared_prestige": "10"
+    }
+  },
+  "germ_theory": {
+    "limit": {
+      "inorganic_chemistry": "1"
+    },
+    "chance": {
+      "base": "-2",
+      "modifier": [
+        {
+          "factor": "2",
+          "literacy": "0.40",
+          "industrial_score": "20",
+          "OR": {
+            "is_greater_power": "yes",
+            "is_secondary_power": "yes"
+          }
+        },
+        {
+          "factor": "2",
+          "invention": "vaccination"
+        },
+        {
+          "factor": "2",
+          "invention": "aerial_bacteria_and_antiseptic_principle"
+        }
+      ]
+    },
+    "effect": {
+      "pop_growth": "0.0002"
     }
   },
   "artificial_fertilizers": {
@@ -7503,7 +9756,29 @@
       ]
     },
     "effect": {
-      "farm_rgo_eff": "0.02",
+      "rgo_goods_output": [
+        {
+          "cotton": "0.02"
+        },
+        {
+          "tobacco": "0.02"
+        },
+        {
+          "coffee": "0.1"
+        },
+        {
+          "grain": "0.02"
+        },
+        {
+          "opium": "0.02"
+        },
+        {
+          "cattle": "0.02"
+        },
+        {
+          "fruit": "0.02"
+        }
+      ],
       "factory_goods_output": {
         "fertilizer": "0.05"
       }
@@ -7529,8 +9804,7 @@
     "effect": {
       "factory_goods_output": {
         "explosives": "0.02"
-      },
-      "mine_RGO_eff": "0.5"
+      }
     }
   },
   "chemical_wood_pulp_process": {
@@ -7611,7 +9885,7 @@
       "modifier": [
         {
           "factor": "2",
-          "clean_coal": "1"
+          "regenerative_furnaces": "1"
         },
         {
           "factor": "2",
@@ -7662,7 +9936,29 @@
       ]
     },
     "effect": {
-      "farm_rgo_eff": "0.05"
+      "rgo_goods_output": [
+        {
+          "cotton": "0.05"
+        },
+        {
+          "tobacco": "0.05"
+        },
+        {
+          "coffee": "0.05"
+        },
+        {
+          "grain": "0.05"
+        },
+        {
+          "opium": "0.05"
+        },
+        {
+          "cattle": "0.05"
+        },
+        {
+          "fruit": "0.05"
+        }
+      ]
     }
   },
   "cracking": {
@@ -7861,7 +10157,7 @@
   },
   "tulls_seed_drill": {
     "limit": {
-      "water_wheel_power": "1"
+      "piston_steam_engine": "1"
     },
     "chance": {
       "base": "6"
@@ -7873,20 +10169,23 @@
         },
         {
           "fruit": "0.1"
+        },
+        {
+          "coffee": "0.1"
         }
       ]
     }
   },
   "rotherham_plough": {
     "limit": {
-      "practical_steam_engine": "1"
+      "high_pressure_steam_engine": "1"
     },
     "chance": {
       "base": "6"
     },
     "effect": {
       "rgo_goods_output": {
-        "grain": "0.2"
+        "grain": "0.15"
       }
     }
   },
@@ -7910,6 +10209,24 @@
     "effect": {
       "factory_goods_output": {
         "telephones": "0.03"
+      }
+    }
+  },
+  "cotton_gin": {
+    "limit": {
+      "compound_steam_engines": "1",
+      "OR": {
+        "year": "1860",
+        "has_global_flag": "american_civil_war_has_happened",
+        "tag": "USA"
+      }
+    },
+    "chance": {
+      "base": "6"
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "cotton": "0.3"
       }
     }
   },
@@ -7950,69 +10267,6 @@
     "effect": {
       "navy_base": {
         "default_organisation": "5"
-      }
-    }
-  },
-  "speedy_maneuvering_tactic": {
-    "limit": {
-      "battleship_column_doctrine": "1"
-    },
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "invention": "ironclads"
-        },
-        {
-          "factor": "1",
-          "fire_control_systems": "1"
-        }
-      ]
-    },
-    "effect": {
-      "navy_base": {
-        "maximum_speed": "1"
-      }
-    }
-  },
-  "sealane_hunters": {
-    "limit": {
-      "raider_group_doctrine": "1"
-    },
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "weapon_platforms": "1"
-        },
-        {
-          "factor": "2",
-          "state_n_government": "1"
-        }
-      ]
-    },
-    "effect": {
-      "navy_base": {
-        "maximum_speed": "1"
-      }
-    }
-  },
-  "fast_ship_killer": {
-    "limit": {
-      "raider_group_doctrine": "1"
-    },
-    "chance": {
-      "base": "2",
-      "modifier": {
-        "factor": "2",
-        "naval_professionalism": "1"
-      }
-    },
-    "effect": {
-      "navy_base": {
-        "maximum_speed": "1"
       }
     }
   },
@@ -8243,11 +10497,23 @@
       "modifier": [
         {
           "factor": "2",
-          "clipper_design": "1"
+          "hot_blast": "1"
         },
         {
           "factor": "1",
           "naval_design_bureaus": "1"
+        },
+        {
+          "factor": "-6",
+          "NOT": {
+            "civilized": "yes"
+          }
+        },
+        {
+          "factor": "-6",
+          "NOT": {
+            "invention": "clipper_shipyard_construction"
+          }
         }
       ]
     },
@@ -8257,50 +10523,25 @@
       }
     }
   },
-  "mechanized_fishing_vessels": {
+  "clipper_shipyard_construction": {
     "limit": {
-      "steamers": "1"
+      "clipper_design": "1"
     },
     "chance": {
       "base": "2",
       "modifier": [
         {
           "factor": "2",
-          "steamers": "1"
+          "piston_steam_engine": "1"
         },
         {
-          "factor": "2",
-          "invention": "work_specialization"
+          "factor": "1",
+          "naval_design_bureaus": "1"
         }
       ]
     },
     "effect": {
-      "rgo_goods_output": {
-        "fish": "0.5"
-      }
-    }
-  },
-  "steamer_automatic_construction_plants": {
-    "limit": {
-      "steamers": "1"
-    },
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "steamers": "1"
-        },
-        {
-          "factor": "2",
-          "invention": "building_station_shipyards"
-        }
-      ]
-    },
-    "effect": {
-      "factory_goods_throughput": {
-        "steamer_convoy": "0.10"
-      }
+      "activate_building": "clipper_shipyard"
     }
   },
   "steamer_transports": {
@@ -8316,7 +10557,28 @@
         },
         {
           "factor": "1",
-          "clean_coal": "1"
+          "regenerative_furnaces": "1"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "steamer_transports"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "steamer_transports"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1850"
+        },
+        {
+          "factor": "10",
+          "iron_steamers": "1"
         }
       ]
     },
@@ -8338,6 +10600,27 @@
         {
           "factor": "3",
           "raider_group_doctrine": "1"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "steamer_transports"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "steamer_transports"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1850"
+        },
+        {
+          "factor": "10",
+          "iron_steamers": "1"
         }
       ]
     },
@@ -8345,9 +10628,89 @@
       "activate_unit": "commerce_raider"
     }
   },
-  "ironclads": {
+  "steamer_shipyard_construction": {
+    "limit": {
+      "steamers": "1"
+    },
+    "chance": {
+      "base": "5",
+      "modifier": [
+        {
+          "factor": "1",
+          "semi_automatization": "1"
+        },
+        {
+          "factor": "3",
+          "raider_group_doctrine": "1"
+        },
+        {
+          "factor": "-10",
+          "civilized": "no"
+        }
+      ]
+    },
+    "effect": {
+      "activate_building": "steamer_shipyard"
+    }
+  },
+  "steamer_automatic_construction_plants": {
     "limit": {
       "iron_steamers": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "semi_automatization": "1"
+        },
+        {
+          "factor": "2",
+          "invention": "building_station_shipyards"
+        },
+        {
+          "factor": "-10",
+          "civilized": "no"
+        }
+      ]
+    },
+    "effect": {
+      "factory_goods_throughput": {
+        "steamer_convoy": "0.10"
+      }
+    }
+  },
+  "mechanized_fishing_vessels": {
+    "limit": {
+      "iron_steamers": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "interchangeable_parts": "1"
+        },
+        {
+          "factor": "2",
+          "invention": "work_specialization"
+        },
+        {
+          "factor": "-10",
+          "civilized": "no"
+        }
+      ]
+    },
+    "effect": {
+      "rgo_goods_output": {
+        "fish": "0.5"
+      }
+    }
+  },
+  "ironclads": {
+    "limit": {
+      "iron_steamers": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "5",
@@ -8359,16 +10722,47 @@
         {
           "factor": "2",
           "invention": "torpedo_boats"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "ironclads"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "ironclads"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1865"
+        },
+        {
+          "factor": "10",
+          "year": "1875"
+        },
+        {
+          "factor": "10",
+          "steel_steamers": "1"
         }
       ]
     },
     "effect": {
-      "activate_unit": "ironclad"
+      "activate_unit": "ironclad",
+      "ironclad": {
+        "hull": "3",
+        "gun_power": "3",
+        "fire_range": "0.1"
+      }
     }
   },
   "monitors": {
     "limit": {
-      "iron_steamers": "1"
+      "iron_steamers": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "5",
@@ -8380,6 +10774,31 @@
         {
           "factor": "2",
           "invention": "torpedo_boats"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "monitors"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "monitors"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1865"
+        },
+        {
+          "factor": "10",
+          "year": "1875"
+        },
+        {
+          "factor": "10",
+          "steel_steamers": "1"
         }
       ]
     },
@@ -8401,6 +10820,31 @@
         {
           "factor": "2",
           "invention": "monitors"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "torpedo_boats"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "torpedo_boats"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1865"
+        },
+        {
+          "factor": "10",
+          "year": "1875"
+        },
+        {
+          "factor": "10",
+          "steel_steamers": "1"
         }
       ]
     },
@@ -8413,7 +10857,8 @@
   },
   "protected_cruisers": {
     "limit": {
-      "steel_steamers": "1"
+      "steel_steamers": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "3",
@@ -8424,7 +10869,32 @@
         },
         {
           "factor": "2",
-          "cheap_steel": "1"
+          "invention": "bessemer_steel"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "protected_cruisers"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "protected_cruisers"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1890"
+        },
+        {
+          "factor": "10",
+          "year": "1905"
+        },
+        {
+          "factor": "10",
+          "steam_turbine_ships": "1"
         }
       ]
     },
@@ -8434,7 +10904,8 @@
   },
   "pre_dreadnought": {
     "limit": {
-      "steel_steamers": "1"
+      "steel_steamers": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "5",
@@ -8445,26 +10916,51 @@
         },
         {
           "factor": "1",
-          "cheap_steel": "1"
+          "invention": "bessemer_steel"
         },
         {
           "factor": "1",
           "main_armament": "1"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "pre_dreadnought"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "pre_dreadnought"
+          }
+        },
+        {
+          "factor": "10",
+          "year": "1890"
+        },
+        {
+          "factor": "10",
+          "year": "1905"
+        },
+        {
+          "factor": "10",
+          "steam_turbine_ships": "1"
         }
       ]
     },
     "effect": {
-      "ironclad": {
-        "hull": "1",
-        "gun_power": "1",
-        "maximum_speed": "1"
-      },
-      "activate_unit": "battleship"
+      "activate_unit": "battleship",
+      "battleship": {
+        "hull": "10",
+        "gun_power": "10"
+      }
     }
   },
   "dreadnoughts": {
     "limit": {
-      "steam_turbine_ships": "1"
+      "steam_turbine_ships": "1",
+      "has_country_flag": "existing_country"
     },
     "chance": {
       "base": "5",
@@ -8476,11 +10972,32 @@
         {
           "factor": "2",
           "naval_logistics": "1"
+        },
+        {
+          "factor": "1",
+          "any_neighbor_country": {
+            "invention": "dreadnoughts"
+          }
+        },
+        {
+          "factor": "2",
+          "war": "yes",
+          "war_countries": {
+            "invention": "dreadnoughts"
+          }
+        },
+        {
+          "factor": "2",
+          "oil_driven_ships": "1"
         }
       ]
     },
     "effect": {
-      "activate_unit": "dreadnought"
+      "activate_unit": "dreadnought",
+      "dreadnought": {
+        "hull": "10",
+        "gun_power": "10"
+      }
     }
   },
   "advanced_cruisers": {
@@ -8502,7 +11019,7 @@
     },
     "effect": {
       "cruiser": {
-        "hull": "1",
+        "hull": "3",
         "gun_power": "1"
       }
     }
@@ -8557,11 +11074,11 @@
     },
     "effect": {
       "battleship": {
-        "hull": "1",
+        "hull": "3",
         "gun_power": "1"
       },
       "dreadnought": {
-        "hull": "1",
+        "hull": "3",
         "gun_power": "1"
       }
     }
@@ -8654,6 +11171,46 @@
       }
     }
   },
+  "sealane_hunters": {
+    "limit": {
+      "weapon_platforms": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "raider_group_doctrine": "1"
+        },
+        {
+          "factor": "2",
+          "state_n_government": "1"
+        }
+      ]
+    },
+    "effect": {
+      "navy_base": {
+        "maximum_speed": "1"
+      }
+    }
+  },
+  "fast_ship_killer": {
+    "limit": {
+      "weapon_platforms": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": {
+        "factor": "2",
+        "naval_professionalism": "1"
+      }
+    },
+    "effect": {
+      "navy_base": {
+        "maximum_speed": "1"
+      }
+    }
+  },
   "armour_piercing_projectiles": {
     "limit": {
       "weapon_platforms": "1"
@@ -8696,7 +11253,7 @@
         },
         {
           "factor": "1",
-          "cheap_iron": "1"
+          "hot_blast": "1"
         }
       ]
     },
@@ -8725,13 +11282,25 @@
         },
         {
           "factor": "2",
-          "cheap_iron": "1"
+          "hot_blast": "1"
         }
       ]
     },
     "effect": {
-      "navy_base": {
-        "hull": "1"
+      "ironclad": {
+        "hull": "5"
+      },
+      "monitor": {
+        "hull": "5"
+      },
+      "cruiser": {
+        "hull": "2"
+      },
+      "battleship": {
+        "hull": "2"
+      },
+      "dreadnought": {
+        "hull": "2"
       }
     }
   },
@@ -8822,32 +11391,6 @@
       }
     }
   },
-  "armoured_citadels": {
-    "limit": {
-      "main_armament": "1"
-    },
-    "chance": {
-      "base": "2",
-      "modifier": [
-        {
-          "factor": "2",
-          "invention": "armoured_turrets"
-        },
-        {
-          "factor": "1",
-          "cheap_steel": "1"
-        }
-      ]
-    },
-    "effect": {
-      "battleship": {
-        "hull": "2"
-      },
-      "dreadnought": {
-        "hull": "2"
-      }
-    }
-  },
   "heavy_caliber_guns": {
     "limit": {
       "main_armament": "1"
@@ -8871,6 +11414,32 @@
       },
       "dreadnought": {
         "gun_power": "2"
+      }
+    }
+  },
+  "armoured_citadels": {
+    "limit": {
+      "advanced_naval_design": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "armoured_turrets"
+        },
+        {
+          "factor": "1",
+          "invention": "bessemer_steel"
+        }
+      ]
+    },
+    "effect": {
+      "battleship": {
+        "hull": "5"
+      },
+      "dreadnought": {
+        "hull": "5"
       }
     }
   },
@@ -8932,7 +11501,7 @@
       "modifier": [
         {
           "factor": "2",
-          "cheap_steel": "1"
+          "invention": "bessemer_steel"
         },
         {
           "factor": "1",
@@ -8945,8 +11514,17 @@
       ]
     },
     "effect": {
+      "steam_transport": {
+        "hull": "5"
+      },
+      "cruiser": {
+        "hull": "5"
+      },
+      "battleship": {
+        "hull": "5"
+      },
       "dreadnought": {
-        "hull": "2"
+        "hull": "5"
       }
     }
   },
@@ -8968,8 +11546,17 @@
       ]
     },
     "effect": {
-      "navy_base": {
-        "hull": "1"
+      "steam_transport": {
+        "hull": "5"
+      },
+      "cruiser": {
+        "hull": "5"
+      },
+      "battleship": {
+        "hull": "5"
+      },
+      "dreadnought": {
+        "hull": "5"
       }
     }
   },
@@ -9036,7 +11623,7 @@
         },
         {
           "factor": "2",
-          "cheap_steel": "1"
+          "invention": "bessemer_steel"
         },
         {
           "factor": "1",
@@ -9441,6 +12028,29 @@
       }
     }
   },
+  "speedy_maneuvering_tactic": {
+    "limit": {
+      "naval_decision_making": "1"
+    },
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "invention": "ironclads"
+        },
+        {
+          "factor": "1",
+          "fire_control_systems": "1"
+        }
+      ]
+    },
+    "effect": {
+      "navy_base": {
+        "maximum_speed": "1"
+      }
+    }
+  },
   "independent_command": {
     "limit": {
       "naval_decision_making": "1"
@@ -9694,6 +12304,267 @@
     },
     "effect": {
       "naval_attrition": "-0.1"
+    }
+  },
+  "declaration_of_the_rights_of_man": {
+    "limit": {
+      "enlightenment_thought": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "ruling_party_ideology": "liberal"
+        },
+        {
+          "factor": "5",
+          "average_militancy": "4"
+        },
+        {
+          "factor": "-9",
+          "civilized": "no"
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": [
+        {
+          "faction": "liberal_rebels",
+          "value": "0.25"
+        },
+        {
+          "faction": "nationalist_rebels",
+          "value": "0.50"
+        },
+        {
+          "faction": "separatist_rebels",
+          "value": "0.50"
+        }
+      ]
+    }
+  },
+  "caste_privileges": {
+    "limit": {
+      "enlightenment_thought": "1",
+      "year": "1850",
+      "tag": "ENG"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "religious_policy": "moralism"
+        },
+        {
+          "factor": "5",
+          "year": "1855"
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": {
+        "faction": "indian_sepoys",
+        "value": "0.25"
+      }
+    }
+  },
+  "sati_abolished": {
+    "limit": {
+      "enlightenment_thought": "1",
+      "year": "1855",
+      "tag": "ENG"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "religious_policy": "moralism"
+        },
+        {
+          "factor": "5",
+          "year": "1860"
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": {
+        "faction": "indian_sepoys",
+        "value": "0.25"
+      }
+    }
+  },
+  "pig_fat_cartridges": {
+    "limit": {
+      "enlightenment_thought": "1",
+      "year": "1860",
+      "tag": "ENG"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "2",
+          "religious_policy": "moralism"
+        },
+        {
+          "factor": "5",
+          "year": "1865"
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": {
+        "faction": "indian_sepoys",
+        "value": "0.25"
+      }
+    }
+  },
+  "spirit_of_freedom": {
+    "limit": {
+      "enlightenment_thought": "1"
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "5",
+          "nationalvalue": "nv_liberty"
+        },
+        {
+          "factor": "5",
+          "nationalvalue": "nv_equality"
+        },
+        {
+          "factor": "5",
+          "year": "1847"
+        },
+        {
+          "factor": "-12",
+          "civilized": "no"
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": {
+        "faction": "liberal_rebels",
+        "value": "0.25"
+      }
+    }
+  },
+  "carlism": {
+    "limit": {
+      "classicism_n_early_romanticism": "1",
+      "OR": {
+        "tag": "SPC"
+      }
+    },
+    "news": "no",
+    "chance": {
+      "base": "2",
+      "modifier": [
+        {
+          "factor": "3",
+          "ruling_party_ideology": "reactionary"
+        },
+        {
+          "factor": "2",
+          "NOT": {
+            "government": "absolute_monarchy"
+          }
+        }
+      ]
+    },
+    "effect": {
+      "rebel_org_gain": [
+        {
+          "faction": "carlist_rebels",
+          "value": "0.75"
+        },
+        {
+          "faction": "christino_rebels",
+          "value": "0.75"
+        }
+      ]
+    }
+  },
+  "the_dark_continent": {
+    "limit": {
+      "has_country_flag": "existing_country",
+      "revolution_n_counterrevolution": "1",
+      "year": "1890"
+    },
+    "chance": {
+      "base": "0",
+      "modifier": [
+        {
+          "factor": "-60",
+          "NOT": {
+            "year": "1890"
+          }
+        },
+        {
+          "factor": "-100",
+          "NOT": {
+            "has_global_flag": "called_congo_conference",
+            "year": "1890"
+          }
+        },
+        {
+          "factor": "-100",
+          "NOT": {
+            "is_greater_power": "yes"
+          },
+          "OR": {
+            "has_country_flag": "civilizing_congo",
+            "has_country_modifier": "integrating_colony"
+          }
+        },
+        {
+          "factor": "20",
+          "biologism": "1"
+        },
+        {
+          "factor": "20",
+          "military_logistics": "1"
+        },
+        {
+          "factor": "20",
+          "steel_steamers": "1"
+        },
+        {
+          "factor": "10",
+          "any_greater_power": {
+            "invention": "the_dark_continent"
+          }
+        },
+        {
+          "factor": "10",
+          "any_neighbor_country": {
+            "invention": "the_dark_continent"
+          }
+        },
+        {
+          "factor": "-10",
+          "is_greater_power": "no",
+          "is_secondary_power": "yes"
+        },
+        {
+          "factor": "-10",
+          "is_greater_power": "no",
+          "is_secondary_power": "no"
+        }
+      ]
+    },
+    "effect": {
+      "colonial_life_rating": "-5"
     }
   }
 }
