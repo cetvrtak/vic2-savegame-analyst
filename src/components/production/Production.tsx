@@ -206,7 +206,11 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
               owner.data.national_focus,
               data.crime
             );
-          const rgoEfficiency = countryRgoEff + localRgoEff;
+          const isUnderSiege = world.IsUnderSiege(province.id);
+          const siegeRgoEff =
+            Number(isUnderSiege) * world.GetRgoEffFromSiege(province.rgoType);
+
+          const rgoEfficiency = countryRgoEff + localRgoEff + siegeRgoEff;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:

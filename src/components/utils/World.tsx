@@ -175,6 +175,20 @@ class World {
   GetCountry = (tag: string): Country => {
     return this.countries[tag];
   };
+
+  IsUnderSiege = (provinceId: string): boolean => {
+    const sieges: Record<string, any>[] = this.saveData.combat.siege_combat;
+    for (const siege of sieges) {
+      if (siege.location === provinceId) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  GetRgoEffFromSiege = (rgoType: string): number => {
+    return this.filesData.modifiers.has_siege[`${rgoType}_rgo_eff`];
+  };
 }
 
 export default World;
