@@ -116,51 +116,56 @@ class Country {
       : this.mine_rgo_size;
   };
 
-  GetRgoSizeFromTech = (goods: string, techs: Technologies): number => {
+  GetModifierFromTech = (
+    modifier: string,
+    techs: Technologies,
+    goods: string = ''
+  ): number => {
     const countryTechs = Object.keys(this.data.technology);
-    let rgoSizeModifer = 0;
+    let effect = 0;
 
     for (const tech of countryTechs) {
-      if (!techs[tech].rgo_size) {
+      if (!techs[tech][modifier]) {
         continue;
       }
 
-      const techModifiers = techs[tech].rgo_size;
+      const techModifiers = techs[tech][modifier];
       if (Array.isArray(techModifiers)) {
         for (const modifier of techModifiers) {
-          rgoSizeModifer += Number(modifier[goods]) || 0;
+          effect += Number(modifier[goods]) || 0;
         }
       } else {
-        rgoSizeModifer += Number(techs[tech].rgo_size[goods] || 0);
+        effect += Number(techs[tech][modifier][goods] || 0);
       }
     }
 
-    return rgoSizeModifer;
+    return effect;
   };
 
-  GetRgoSizeFromInventions = (
-    goods: string,
-    inventions: Inventions
+  GetModifierFromInventions = (
+    modifier: string,
+    inventions: Inventions,
+    goods: string = ''
   ): number => {
     const countryInventions: string[] = this.data.active_inventions.key;
-    let modifier = 0;
+    let effect = 0;
 
     for (const inventionId of countryInventions) {
       const inventionIndex = parseInt(inventionId);
       const invention = Object.values(inventions)[inventionIndex];
 
-      if (invention.rgo_size) {
+      if (invention[modifier]) {
         // effects defined directly under invention
-        modifier = Number(invention.rgo_size[goods]) || 0;
+        effect = Number(invention[modifier][goods]) || 0;
       }
 
       const effects = invention.effect;
-      if (effects && effects.rgo_size) {
-        modifier += Number(effects.rgo_size[goods]) || 0;
+      if (effects && effects[modifier]) {
+        effect += Number(effects[modifier][goods]) || 0;
       }
     }
 
-    return modifier;
+    return effect;
   };
 
   SetControlledProvinces = (provinces: Record<string, any>[]) => {

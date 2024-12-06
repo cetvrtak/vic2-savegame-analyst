@@ -84,13 +84,15 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           );
           const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
           const rgoSizeFromModifiers = provinceRgoSize + countryRgoSize;
-          const rgoSizeFromTech = owner.GetRgoSizeFromTech(
-            goodsType,
-            data.technologies
+          const rgoSizeFromTech = owner.GetModifierFromTech(
+            'rgo_size',
+            data.technologies,
+            goodsType
           );
-          const rgoSizeFromInventions = owner.GetRgoSizeFromInventions(
-            goodsType,
-            data.inventions
+          const rgoSizeFromInventions = owner.GetModifierFromInventions(
+            'rgo_size',
+            data.inventions,
+            goodsType
           );
           const rgoSizeFromTechnologies =
             rgoSizeFromTech + rgoSizeFromInventions;
