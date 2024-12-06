@@ -85,16 +85,28 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           );
           const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
           const rgoSizeFromModifiers = provinceRgoSize + countryRgoSize;
-          const rgoSizeFromTech = owner.GetModifierFromTech(
-            'rgo_size',
-            data.technologies,
-            goodsType
-          );
-          const rgoSizeFromInventions = owner.GetModifierFromInventions(
-            'rgo_size',
-            data.inventions,
-            goodsType
-          );
+
+          // Due to inconsistency in modifier naming in Vic2 files
+          // we need to get both versions of a modifier
+          const rgoSizeFromTech =
+            owner.GetModifierFromTech(
+              'rgo_size',
+              data.technologies,
+              goodsType
+            ) +
+            owner.GetModifierFromTech('RGO_size', data.technologies, goodsType);
+
+          const rgoSizeFromInventions =
+            owner.GetModifierFromInventions(
+              'rgo_size',
+              data.inventions,
+              goodsType
+            ) +
+            owner.GetModifierFromInventions(
+              'RGO_size',
+              data.inventions,
+              goodsType
+            );
           const rgoSizeFromTechnologies =
             rgoSizeFromTech + rgoSizeFromInventions;
           const rgoSizeModifier =
@@ -145,14 +157,23 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.inventions,
             goodsType
           );
-          const localRgoOutput = province.GetModifier(
-            'local_rgo_output',
-            data.modifiers,
-            data.national_focus,
-            data.region,
-            owner.data.national_focus,
-            data.crime
-          );
+          const localRgoOutput =
+            province.GetModifier(
+              'local_rgo_output',
+              data.modifiers,
+              data.national_focus,
+              data.region,
+              owner.data.national_focus,
+              data.crime
+            ) +
+            province.GetModifier(
+              'local_RGO_output',
+              data.modifiers,
+              data.national_focus,
+              data.region,
+              owner.data.national_focus,
+              data.crime
+            );
           const rgoEfficiency = 0;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
