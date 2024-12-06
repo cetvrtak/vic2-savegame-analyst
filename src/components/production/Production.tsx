@@ -113,7 +113,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             'local_RGO_throughput',
             data.modifiers,
             data.national_focus,
-            Object.entries(data.region),
+            data.region,
             owner.data.national_focus
           );
 

@@ -106,7 +106,7 @@ class Province {
   GetModifierFromNationalFocus = (
     modifier: string,
     nationalFocuses: Record<string, NationalFocusGroup>,
-    regions: RegionDefinition[],
+    regions: Record<string, RegionDefinition>,
     countryFocuses: Record<string, string>
   ): number => {
     // Clean up countryFocuses keys by removing quotes
@@ -118,8 +118,8 @@ class Province {
     );
 
     // Find the state ID for the current province
-    const stateID = regions.findIndex((region) =>
-      region[1].key.includes(this.id)
+    const stateID = Object.entries(regions).findIndex(([_, region]) =>
+      region.key.includes(this.id)
     );
     if (stateID === -1) {
       throw new Error(
@@ -149,8 +149,8 @@ class Province {
     modifier: string,
     modifiers: Record<string, Modifier>,
     nationalFocuses: Record<string, NationalFocusGroup>,
-    regions: RegionDefinition[],
-    countryFocuses: Record<string, string>
+    regions: Record<string, RegionDefinition>,
+    countryFocuses: Record<string, string>,
   ): number => {
     const eventModifiers = this.GetModifierFromEvents(modifier, modifiers);
     const focusModifiers = this.GetModifierFromNationalFocus(
