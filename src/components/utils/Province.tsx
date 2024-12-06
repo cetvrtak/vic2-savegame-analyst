@@ -62,7 +62,7 @@ class Province {
     );
   };
 
-  GetModifierFromEvents = (modifiers: Record<string, any>, modifier: string) =>
+  GetModifierFromEvents = (modifier: string, modifiers: Record<string, any>) =>
     Array.isArray(this.data.modifier)
       ? this.data.modifier.reduce(
           (acc, m) => (acc += +modifiers[m.modifier][modifier] || 0),
@@ -85,7 +85,7 @@ class Province {
     continents: Record<string, any>
   ): number => {
     return (
-      this.GetModifierFromEvents(modifiers, `${this.rgoType}_rgo_size`) +
+      this.GetModifierFromEvents(`${this.rgoType}_rgo_size`, modifiers) +
       this.GetRgoSizeFromContinent(continents)
     );
   };
@@ -145,24 +145,22 @@ class Province {
     return 0;
   };
 
-  GetRgoThroughputEff = (
+  GetModifier = (
+    modifier: string,
     modifiers: Record<string, Modifier>,
     nationalFocuses: Record<string, NationalFocusGroup>,
     regions: RegionDefinition[],
     countryFocuses: Record<string, string>
   ): number => {
-    const effFromEvents = this.GetModifierFromEvents(
-      modifiers,
-      'local_RGO_throughput'
-    );
-    const effFromFocus = this.GetModifierFromNationalFocus(
-      'local_RGO_throughput',
+    const eventModifiers = this.GetModifierFromEvents(modifier, modifiers);
+    const focusModifiers = this.GetModifierFromNationalFocus(
+      modifier,
       nationalFocuses,
       regions,
       countryFocuses
     );
 
-    return effFromEvents + effFromFocus;
+    return eventModifiers + focusModifiers;
   };
 
   GetPop = (popType: string): Pop[] | undefined => {

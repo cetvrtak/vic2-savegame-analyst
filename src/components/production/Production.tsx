@@ -109,7 +109,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const maxWorkers =
             40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
           const rgoThroughputEff = owner.rgo_throughput_eff;
-          const localRgoThroughputEff = province.GetRgoThroughputEff(
+          const localRgoThroughputEff = province.GetModifier(
+            'local_RGO_throughput',
             data.modifiers,
             data.national_focus,
             Object.entries(data.region),
