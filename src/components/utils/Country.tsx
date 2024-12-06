@@ -348,6 +348,41 @@ class Country {
 
     return count / total;
   };
+
+  GetModifier = (
+    modifier: string,
+    modifiers: Record<string, any>,
+    issues: Record<string, any>,
+    technologies: Record<string, any>,
+    inventions: Record<string, any>,
+    goodsType: string = ''
+  ): number => {
+    const eventsModifier = this.GetModifierFromEvents(modifiers, modifier);
+    const issuesModifier = this.GetModifierFromIssues(issues, modifier);
+
+    let techModifier = this.GetModifierFromTech(modifier, technologies);
+    if (modifier === 'rgo_output') {
+      techModifier += this.GetModifierFromTech(
+        'rgo_goods_output',
+        technologies,
+        goodsType
+      );
+    }
+
+    let inventionsModifier = this.GetModifierFromInventions(
+      modifier,
+      inventions
+    );
+    if (modifier === 'rgo_output') {
+      inventionsModifier += this.GetModifierFromInventions(
+        'rgo_goods_output',
+        inventions,
+        goodsType
+      );
+    }
+
+    return eventsModifier + issuesModifier + techModifier + inventionsModifier;
+  };
 }
 
 export default Country;

@@ -134,10 +134,22 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             owner.GetStateId(province.id),
             Object.keys(data.poptypes)
           );
+          const countryRgoOutput = owner.GetModifier(
+            'rgo_output',
+            data.modifiers,
+            data.issues,
+            data.technologies,
+            data.inventions,
+            goodsType
+          );
+          const localRgoOutput = 0;
+          const rgoEfficiency = 0;
+          const rgoOutputEff =
+            countryRgoOutput + localRgoOutput + rgoEfficiency;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
-          const outputEfficiency = 1 + aristocratsPercentage;
+          const outputEfficiency = 1 + aristocratsPercentage + rgoOutputEff;
 
           const production = baseProduction * throughput * outputEfficiency;
 
