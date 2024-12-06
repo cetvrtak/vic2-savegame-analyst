@@ -174,7 +174,39 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
               owner.data.national_focus,
               data.crime
             );
-          const rgoEfficiency = 0;
+          const countryRgoEff =
+            owner.GetModifier(
+              `${province.rgoType}_rgo_eff`,
+              data.modifiers,
+              data.issues,
+              data.technologies,
+              data.inventions
+            ) +
+            owner.GetModifier(
+              `${province.rgoType}_RGO_eff`,
+              data.modifiers,
+              data.issues,
+              data.technologies,
+              data.inventions
+            );
+          const localRgoEff =
+            province.GetModifier(
+              `${province.rgoType}_rgo_eff`,
+              data.modifiers,
+              data.national_focus,
+              data.region,
+              owner.data.national_focus,
+              data.crime
+            ) +
+            province.GetModifier(
+              `${province.rgoType}_RGO_eff`,
+              data.modifiers,
+              data.national_focus,
+              data.region,
+              owner.data.national_focus,
+              data.crime
+            );
+          const rgoEfficiency = countryRgoEff + localRgoEff;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
