@@ -22,3 +22,5 @@ export type Inventions = Record<string, any>;
 export type Pop = {
   [size: string]: string;
 };
+
+export type Crimes = Record<string, Modifier>;

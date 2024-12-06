@@ -2,7 +2,13 @@
 // Either from other province object properties
 // Or combined with game data
 import { TerrainType, Employees } from '../production/types';
-import { Modifier, NationalFocusGroup, Pop, RegionDefinition } from './types';
+import {
+  Crimes,
+  Modifier,
+  NationalFocusGroup,
+  Pop,
+  RegionDefinition,
+} from './types';
 
 class Province {
   id: string;
@@ -145,12 +151,24 @@ class Province {
     return 0;
   };
 
+  GetModifierFromCrime = (modifier: string, crimes: Crimes): number => {
+    const crimeIndex = this.data.crime;
+    if (!crimeIndex) {
+      return 0;
+    }
+
+    const [_, crime] = Object.entries(crimes)[crimeIndex];
+
+    return Number(crime[modifier]) || 0;
+  };
+
   GetModifier = (
     modifier: string,
     modifiers: Record<string, Modifier>,
     nationalFocuses: Record<string, NationalFocusGroup>,
     regions: Record<string, RegionDefinition>,
     countryFocuses: Record<string, string>,
+    crime: Crimes
   ): number => {
     const eventModifiers = this.GetModifierFromEvents(modifier, modifiers);
     const focusModifiers = this.GetModifierFromNationalFocus(
@@ -159,8 +177,9 @@ class Province {
       regions,
       countryFocuses
     );
+    const crimeModifiers = this.GetModifierFromCrime(modifier, crime);
 
-    return eventModifiers + focusModifiers;
+    return eventModifiers + focusModifiers + crimeModifiers;
   };
 
   GetPop = (popType: string): Pop[] | undefined => {

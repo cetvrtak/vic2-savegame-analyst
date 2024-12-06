@@ -15,6 +15,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
   useEffect(() => {
     (async () => {
       await loadJsonFiles([
+        'common/crime.json',
         'common/issues.json',
         'common/modifiers.json',
         'common/national_focus.json',
@@ -114,7 +115,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.modifiers,
             data.national_focus,
             data.region,
-            owner.data.national_focus
+            owner.data.national_focus,
+            data.crime
           );
 
           const isOverseas = owner.isOverseas(
@@ -143,7 +145,14 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.inventions,
             goodsType
           );
-          const localRgoOutput = 0;
+          const localRgoOutput = province.GetModifier(
+            'local_rgo_output',
+            data.modifiers,
+            data.national_focus,
+            data.region,
+            owner.data.national_focus,
+            data.crime
+          );
           const rgoEfficiency = 0;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
