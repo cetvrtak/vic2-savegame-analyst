@@ -2,26 +2,21 @@
 // from other country properties
 // and game data
 import { Issues } from '../production/types';
-import {
-  Connection,
-  Inventions,
-  Modifier,
-  Pop,
-  Straits,
-  Technologies,
-} from './types';
+import { Connection, Inventions, Pop, Straits } from './types';
 import Province from './Province';
 import State from './State';
 
 class Country {
+  static blob: Record<string, any>; // cache imported assets files
+
   tag: string;
   data: Record<string, any>;
 
   states: Record<string, State> = {};
 
-  farm_rgo_size: number = 0;
-  mine_rgo_size: number = 0;
-  rgo_throughput_eff: number = 0;
+  farm_rgo_size: number;
+  mine_rgo_size: number;
+  rgo_throughput_eff: number;
   ownedProvinces: Record<string, Province> = {};
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
@@ -32,10 +27,16 @@ class Country {
     this.tag = tag;
     this.data = data;
 
+    this.farm_rgo_size = this.GetModifierFromIssues('farm_rgo_size');
+    this.mine_rgo_size = this.GetModifierFromIssues('mine_rgo_size');
+    this.rgo_throughput_eff = this.GetRgoThroughputEff();
+
+    this.SetControlledProvinceNeighbors();
     this.CreateStates();
   }
 
-  GetModifierFromIssues = (issues: Issues, modifier: string): number => {
+  GetModifierFromIssues = (modifier: string): number => {
+    const issues: Issues = Country.blob.issues;
     return Object.values(issues).reduce((acc, category) => {
       Object.entries(category as Issues).forEach(([reformName, reform]) => {
         Object.entries(reform as Issues).forEach(([stanceName, stance]) => {
@@ -51,10 +52,7 @@ class Country {
     }, 0);
   };
 
-  GetModifierFromEvents = (
-    modifiers: Record<string, Modifier>,
-    modifier: string
-  ): number => {
+  GetModifierFromEvents = (modifier: string): number => {
     const countryModifiers: { modifier: string }[] = this.data.modifier;
     if (!countryModifiers) {
       return 0;
@@ -64,48 +62,36 @@ class Country {
       (acc: number, countryModifier: { modifier: string }) => {
         const countryModifierName: string = countryModifier.modifier;
 
-        return (acc += Number(modifiers[countryModifierName][modifier] || 0));
+        return (acc += Number(
+          Country.blob.modifiers[countryModifierName][modifier] || 0
+        ));
       },
       0
     );
   };
 
-  GetModifierFromNationalValue = (
-    nationalValues: Record<string, Modifier>,
-    modifier: string
-  ): number => {
-    return Number(nationalValues[this.data.nationalvalue][modifier] || 0);
+  GetModifierFromNationalValue = (modifier: string): number => {
+    return Number(
+      Country.blob.nationalvalues[this.data.nationalvalue][modifier] || 0
+    );
   };
 
-  GetRgoThrouputEffFromWarExhaustion = (
-    modifiers: Record<string, Modifier>
-  ): number => {
+  GetRgoThrouputEffFromWarExhaustion = (): number => {
     const warExhaustionModifier = Number(
-      modifiers.war_exhaustion.RGO_throughput
+      Country.blob.modifiers.war_exhaustion.RGO_throughput
     );
     const warExhaustion = Number(this.data.war_exhaustion) || 0;
 
     return warExhaustion * warExhaustionModifier;
   };
 
-  GetRgoThroughputEff = (
-    modifiers: Record<string, Modifier>,
-    issues: Issues,
-    nationalValues: Record<string, Modifier>
-  ): number => {
-    const effFromWarExhaustion =
-      this.GetRgoThrouputEffFromWarExhaustion(modifiers);
+  GetRgoThroughputEff = (): number => {
+    const effFromWarExhaustion = this.GetRgoThrouputEffFromWarExhaustion();
 
-    const effFromModifiers = this.GetModifierFromEvents(
-      modifiers,
-      'RGO_throughput'
-    );
+    const effFromModifiers = this.GetModifierFromEvents('RGO_throughput');
 
-    const effFromIssues = this.GetModifierFromIssues(issues, 'RGO_throughput');
-    const effFromNV = this.GetModifierFromNationalValue(
-      nationalValues,
-      'RGO_throughput'
-    );
+    const effFromIssues = this.GetModifierFromIssues('RGO_throughput');
+    const effFromNV = this.GetModifierFromNationalValue('RGO_throughput');
 
     return effFromModifiers + effFromIssues + effFromNV + effFromWarExhaustion;
   };
@@ -116,15 +102,11 @@ class Country {
       : this.mine_rgo_size;
   };
 
-  GetModifierFromTech = (
-    modifier: string,
-    techs: Technologies,
-    goods: string = ''
-  ): number => {
+  GetModifierFromTech = (modifier: string, goods: string = ''): number => {
     const countryTechs = Object.keys(this.data.technology);
 
     return countryTechs.reduce((effect, tech) => {
-      const techModifiers = techs[tech][modifier];
+      const techModifiers = Country.blob.technologies[tech][modifier];
       if (!techModifiers) return effect;
 
       if (!goods) {
@@ -147,11 +129,10 @@ class Country {
 
   GetModifierFromInventions = (
     modifier: string,
-    inventions: Inventions,
     goods: string = ''
   ): number => {
     const countryInventions: Inventions = this.data.active_inventions.key.map(
-      (id: string) => Object.values(inventions)[parseInt(id)]
+      (id: string) => Object.values(Country.blob.inventions)[parseInt(id)]
     );
 
     return countryInventions.reduce(
@@ -223,9 +204,9 @@ class Country {
     }
   };
 
-  SetControlledProvinceNeighbors = (adjacencyMap: Record<string, string[]>) => {
+  SetControlledProvinceNeighbors = () => {
     for (const [id, province] of Object.entries(this.controlledProvinces)) {
-      province.neighbors = adjacencyMap[id];
+      province.neighbors = Country.blob.adjacencyMap[id];
     }
   };
 
@@ -324,11 +305,7 @@ class Country {
     return state?.data.id.id;
   };
 
-  GetPopsPercentageInState = (
-    pop: string,
-    stateId: string,
-    popTypes: string[]
-  ): number => {
+  GetPopsPercentageInState = (pop: string, stateId: string): number => {
     let count: number = 0;
     let total: number = 0;
 
@@ -337,7 +314,7 @@ class Country {
     for (const provId of state.data.provinces.key) {
       const province: Province = this.ownedProvinces[provId];
 
-      for (const popType of popTypes) {
+      for (const popType of Object.keys(Country.blob.poptypes)) {
         const provincePop: Pop[] | undefined = province.GetPop(popType);
         if (!provincePop) {
           continue;
@@ -358,34 +335,19 @@ class Country {
     return count / total;
   };
 
-  GetModifier = (
-    modifier: string,
-    modifiers: Record<string, any>,
-    issues: Record<string, any>,
-    technologies: Record<string, any>,
-    inventions: Record<string, any>,
-    goodsType: string = ''
-  ): number => {
-    const eventsModifier = this.GetModifierFromEvents(modifiers, modifier);
-    const issuesModifier = this.GetModifierFromIssues(issues, modifier);
+  GetModifier = (modifier: string, goodsType: string = ''): number => {
+    const eventsModifier = this.GetModifierFromEvents(modifier);
+    const issuesModifier = this.GetModifierFromIssues(modifier);
 
-    let techModifier = this.GetModifierFromTech(modifier, technologies);
+    let techModifier = this.GetModifierFromTech(modifier);
     if (modifier === 'rgo_output') {
-      techModifier += this.GetModifierFromTech(
-        'rgo_goods_output',
-        technologies,
-        goodsType
-      );
+      techModifier += this.GetModifierFromTech('rgo_goods_output', goodsType);
     }
 
-    let inventionsModifier = this.GetModifierFromInventions(
-      modifier,
-      inventions
-    );
+    let inventionsModifier = this.GetModifierFromInventions(modifier);
     if (modifier === 'rgo_output') {
       inventionsModifier += this.GetModifierFromInventions(
         'rgo_goods_output',
-        inventions,
         goodsType
       );
     }

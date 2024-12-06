@@ -140,28 +140,16 @@ class World {
   };
 
   CreateCountries = (tags: string[]) => {
+    Country.blob = this.filesData;
+
     for (const tag of tags) {
       const country = new Country(tag, this.saveData[tag]);
-      country.farm_rgo_size = country.GetModifierFromIssues(
-        this.filesData.issues,
-        'farm_rgo_size'
-      );
-      country.mine_rgo_size = country.GetModifierFromIssues(
-        this.filesData.issues,
-        'mine_rgo_size'
-      );
-      country.rgo_throughput_eff = country.GetRgoThroughputEff(
-        this.filesData.modifiers,
-        this.filesData.issues,
-        this.filesData.nationalvalues
-      );
 
       const controlledProvinces = Object.entries(this.saveData).filter(
         ([_, provinceData]) => provinceData.controller === tag
       );
       country.SetControlledProvinces(controlledProvinces);
       country.SetStraitsConnections(this.straits);
-      country.SetControlledProvinceNeighbors(this.filesData.adjacencyMap);
 
       const ownedProvinces = Object.entries(this.saveData).filter(
         ([_, provinceData]) => provinceData.owner === tag

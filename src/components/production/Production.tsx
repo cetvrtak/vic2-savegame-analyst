@@ -89,24 +89,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Due to inconsistency in modifier naming in Vic2 files
           // we need to get both versions of a modifier
           const rgoSizeFromTech =
-            owner.GetModifierFromTech(
-              'rgo_size',
-              data.technologies,
-              goodsType
-            ) +
-            owner.GetModifierFromTech('RGO_size', data.technologies, goodsType);
+            owner.GetModifierFromTech('rgo_size', goodsType) +
+            owner.GetModifierFromTech('RGO_size', goodsType);
 
           const rgoSizeFromInventions =
-            owner.GetModifierFromInventions(
-              'rgo_size',
-              data.inventions,
-              goodsType
-            ) +
-            owner.GetModifierFromInventions(
-              'RGO_size',
-              data.inventions,
-              goodsType
-            );
+            owner.GetModifierFromInventions('rgo_size', goodsType) +
+            owner.GetModifierFromInventions('RGO_size', goodsType);
           const rgoSizeFromTechnologies =
             rgoSizeFromTech + rgoSizeFromInventions;
           const rgoSizeModifier =
@@ -146,17 +134,9 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           const aristocratsPercentage = owner.GetPopsPercentageInState(
             'aristocrats',
-            owner.GetStateId(province.id),
-            Object.keys(data.poptypes)
+            owner.GetStateId(province.id)
           );
-          const countryRgoOutput = owner.GetModifier(
-            'rgo_output',
-            data.modifiers,
-            data.issues,
-            data.technologies,
-            data.inventions,
-            goodsType
-          );
+          const countryRgoOutput = owner.GetModifier('rgo_output', goodsType);
           const localRgoOutput =
             province.GetModifier(
               'local_rgo_output',
@@ -175,20 +155,8 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
               data.crime
             );
           const countryRgoEff =
-            owner.GetModifier(
-              `${province.rgoType}_rgo_eff`,
-              data.modifiers,
-              data.issues,
-              data.technologies,
-              data.inventions
-            ) +
-            owner.GetModifier(
-              `${province.rgoType}_RGO_eff`,
-              data.modifiers,
-              data.issues,
-              data.technologies,
-              data.inventions
-            );
+            owner.GetModifier(`${province.rgoType}_rgo_eff`) +
+            owner.GetModifier(`${province.rgoType}_RGO_eff`);
           const localRgoEff =
             province.GetModifier(
               `${province.rgoType}_rgo_eff`,
