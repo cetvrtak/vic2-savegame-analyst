@@ -122,24 +122,27 @@ class Country {
     goods: string = ''
   ): number => {
     const countryTechs = Object.keys(this.data.technology);
-    let effect = 0;
 
-    for (const tech of countryTechs) {
-      if (!techs[tech][modifier]) {
-        continue;
-      }
-
+    return countryTechs.reduce((effect, tech) => {
       const techModifiers = techs[tech][modifier];
-      if (Array.isArray(techModifiers)) {
-        for (const modifier of techModifiers) {
-          effect += Number(modifier[goods]) || 0;
-        }
-      } else {
-        effect += Number(techs[tech][modifier][goods] || 0);
-      }
-    }
+      if (!techModifiers) return effect;
 
-    return effect;
+      if (!goods) {
+        return effect + (Number(techModifiers) || 0);
+      }
+
+      if (Array.isArray(techModifiers)) {
+        return (
+          effect +
+          techModifiers.reduce(
+            (sum, techModifier) => sum + (Number(techModifier[goods]) || 0),
+            0
+          )
+        );
+      }
+
+      return effect + (Number(techModifiers[goods]) || 0);
+    }, 0);
   };
 
   GetModifierFromInventions = (
@@ -147,25 +150,31 @@ class Country {
     inventions: Inventions,
     goods: string = ''
   ): number => {
-    const countryInventions: string[] = this.data.active_inventions.key;
-    let effect = 0;
+    const countryInventions: Inventions = this.data.active_inventions.key.map(
+      (id: string) => Object.values(inventions)[parseInt(id)]
+    );
 
-    for (const inventionId of countryInventions) {
-      const inventionIndex = parseInt(inventionId);
-      const invention = Object.values(inventions)[inventionIndex];
+    return countryInventions.reduce(
+      (effect: number, invention: Record<string, any>) => {
+        const directModifier = invention[modifier];
+        const effectModifier = invention.effect?.[modifier];
 
-      if (invention[modifier]) {
-        // effects defined directly under invention
-        effect = Number(invention[modifier][goods]) || 0;
-      }
+        if (!goods) {
+          return (
+            effect +
+            (Number(directModifier) || 0) +
+            (Number(effectModifier) || 0)
+          );
+        }
 
-      const effects = invention.effect;
-      if (effects && effects[modifier]) {
-        effect += Number(effects[modifier][goods]) || 0;
-      }
-    }
-
-    return effect;
+        return (
+          effect +
+          (Number(directModifier?.[goods]) || 0) +
+          (Number(effectModifier?.[goods]) || 0)
+        );
+      },
+      0
+    );
   };
 
   SetControlledProvinces = (provinces: Record<string, any>[]) => {
