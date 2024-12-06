@@ -1,16 +1,12 @@
 // Use Province class to derive province data
 // Either from other province object properties
 // Or combined with game data
-import { TerrainType, Employees } from '../production/types';
-import {
-  Crimes,
-  Modifier,
-  NationalFocusGroup,
-  Pop,
-  RegionDefinition,
-} from './types';
+import { Employees } from '../production/types';
+import { Crimes, NationalFocusGroup, Pop, RegionDefinition } from './types';
 
 class Province {
+  static blob: Record<string, any>;
+
   id: string;
   data: Record<string, any>;
 
@@ -25,11 +21,10 @@ class Province {
   }
 
   private AggregateWorkers = (
-    pops: Record<string, any>,
     workerTypes: string[]
   ): { type: string; size: number }[] => {
     return workerTypes.map((type) => {
-      const poptype = pops[type];
+      const poptype = Province.blob.pops[this.id][type];
 
       const size = Array.isArray(poptype)
         ? poptype.reduce(
@@ -42,25 +37,20 @@ class Province {
     });
   };
 
-  GetProvinceSize = (
-    terrain: TerrainType,
-    provinceTerrainMapping: Record<string, string>,
-    pops: Record<string, any>,
-    workerTypes: string[]
-  ): number => {
+  GetProvinceSize = (workerTypes: string[]): number => {
     /*** Vic2 considers only the largest rgo pop type for province size ***/
     /*** Usually it's farmers, if there are any ***/
     /*** otherwise it's serfs or slaves ***/
 
     const baseWorkplaces = 40000;
 
-    let aggregatedWorkers = this.AggregateWorkers(pops, workerTypes);
+    let aggregatedWorkers = this.AggregateWorkers(workerTypes);
     aggregatedWorkers.sort((a, b) => b.size - a.size);
     const numFarmers = aggregatedWorkers[0].size;
 
-    const terrainType = provinceTerrainMapping[this.id];
+    const terrainType = Province.blob.terrainMap[this.id];
     const terrainModifier = Number(
-      terrain[terrainType][`${this.rgoType}_rgo_size`]
+      Province.blob.terrain.categories[terrainType][`${this.rgoType}_rgo_size`]
     );
 
     return Math.floor(
@@ -68,15 +58,17 @@ class Province {
     );
   };
 
-  GetModifierFromEvents = (modifier: string, modifiers: Record<string, any>) =>
+  GetModifierFromEvents = (modifier: string) =>
     Array.isArray(this.data.modifier)
       ? this.data.modifier.reduce(
-          (acc, m) => (acc += +modifiers[m.modifier][modifier] || 0),
+          (acc, m) =>
+            (acc += +Province.blob.modifiers[m.modifier][modifier] || 0),
           0
         )
       : 0;
 
-  GetRgoSizeFromContinent = (continents: Record<string, any>): number => {
+  GetRgoSizeFromContinent = (): number => {
+    const continents: Record<string, any> = Province.blob.continents;
     return Object.values(continents).reduce(
       (modifier: number, continent: Record<string, any>) =>
         (modifier = continent.provinces.key.includes(this.id)
@@ -86,13 +78,10 @@ class Province {
     );
   };
 
-  GetRgoSize = (
-    modifiers: Record<string, any>,
-    continents: Record<string, any>
-  ): number => {
+  GetRgoSize = (): number => {
     return (
-      this.GetModifierFromEvents(`${this.rgoType}_rgo_size`, modifiers) +
-      this.GetRgoSizeFromContinent(continents)
+      this.GetModifierFromEvents(`${this.rgoType}_rgo_size`) +
+      this.GetRgoSizeFromContinent()
     );
   };
 
@@ -111,8 +100,6 @@ class Province {
 
   GetModifierFromNationalFocus = (
     modifier: string,
-    nationalFocuses: Record<string, NationalFocusGroup>,
-    regions: Record<string, RegionDefinition>,
     countryFocuses: Record<string, string>
   ): number => {
     // Clean up countryFocuses keys by removing quotes
@@ -124,6 +111,7 @@ class Province {
     );
 
     // Find the state ID for the current province
+    const regions: Record<string, RegionDefinition> = Province.blob.region;
     const stateID = Object.entries(regions).findIndex(([_, region]) =>
       region.key.includes(this.id)
     );
@@ -140,6 +128,8 @@ class Province {
     }
 
     // Find the focus group containing the focus name
+    const nationalFocuses: Record<string, NationalFocusGroup> =
+      Province.blob.national_focus;
     for (const focusGroup of Object.values(nationalFocuses)) {
       if (focusName in focusGroup) {
         // Return the requested modifier, defaulting to 0 if not found
@@ -151,12 +141,13 @@ class Province {
     return 0;
   };
 
-  GetModifierFromCrime = (modifier: string, crimes: Crimes): number => {
+  GetModifierFromCrime = (modifier: string): number => {
     const crimeIndex = this.data.crime;
     if (!crimeIndex) {
       return 0;
     }
 
+    const crimes: Crimes = Province.blob.crime;
     const [_, crime] = Object.entries(crimes)[crimeIndex];
 
     return Number(crime[modifier]) || 0;
@@ -164,20 +155,14 @@ class Province {
 
   GetModifier = (
     modifier: string,
-    modifiers: Record<string, Modifier>,
-    nationalFocuses: Record<string, NationalFocusGroup>,
-    regions: Record<string, RegionDefinition>,
-    countryFocuses: Record<string, string>,
-    crime: Crimes
+    countryFocuses: Record<string, string>
   ): number => {
-    const eventModifiers = this.GetModifierFromEvents(modifier, modifiers);
+    const eventModifiers = this.GetModifierFromEvents(modifier);
     const focusModifiers = this.GetModifierFromNationalFocus(
       modifier,
-      nationalFocuses,
-      regions,
       countryFocuses
     );
-    const crimeModifiers = this.GetModifierFromCrime(modifier, crime);
+    const crimeModifiers = this.GetModifierFromCrime(modifier);
 
     return eventModifiers + focusModifiers + crimeModifiers;
   };

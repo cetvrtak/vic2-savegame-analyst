@@ -3,6 +3,7 @@
 //  * Save game data - retrieved directly AppState
 
 import Country from './Country';
+import Province from './Province';
 import { Continents, Straits, Connection } from './types';
 
 //  * Game files data - retrieved from DataContext
@@ -26,6 +27,7 @@ class World {
     this.saveData = saveData;
 
     this.filesData = filesData;
+    Province.blob = this.filesData;
     this.production = filesData.production;
 
     this.goodsOutput = this.CreateGoodOutputMap();

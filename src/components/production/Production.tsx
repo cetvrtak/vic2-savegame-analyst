@@ -66,12 +66,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Production = Base Production * Throughput * Output Efficiency
 
           // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          const provinceSize = province.GetProvinceSize(
-            data.terrain.categories,
-            data.terrainMap,
-            data.pops[key], // history pops
-            world.rgoWorkers
-          );
+          const provinceSize = province.GetProvinceSize(world.rgoWorkers);
 
           const terrainType = data.terrainMap[key];
           const rgoSizeKey = `${province.rgoType}_rgo_size`;
@@ -79,10 +74,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.terrain.categories[terrainType][rgoSizeKey]
           );
 
-          const provinceRgoSize = province.GetRgoSize(
-            data.modifiers,
-            data.continents
-          );
+          const provinceRgoSize = province.GetRgoSize();
           const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
           const rgoSizeFromModifiers = provinceRgoSize + countryRgoSize;
 
@@ -112,11 +104,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const rgoThroughputEff = owner.rgo_throughput_eff;
           const localRgoThroughputEff = province.GetModifier(
             'local_RGO_throughput',
-            data.modifiers,
-            data.national_focus,
-            data.region,
-            owner.data.national_focus,
-            data.crime
+            owner.data.national_focus
           );
 
           const isOverseas = owner.isOverseas(
@@ -140,39 +128,20 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const localRgoOutput =
             province.GetModifier(
               'local_rgo_output',
-              data.modifiers,
-              data.national_focus,
-              data.region,
-              owner.data.national_focus,
-              data.crime
+              owner.data.national_focus
             ) +
-            province.GetModifier(
-              'local_RGO_output',
-              data.modifiers,
-              data.national_focus,
-              data.region,
-              owner.data.national_focus,
-              data.crime
-            );
+            province.GetModifier('local_RGO_output', owner.data.national_focus);
           const countryRgoEff =
             owner.GetModifier(`${province.rgoType}_rgo_eff`) +
             owner.GetModifier(`${province.rgoType}_RGO_eff`);
           const localRgoEff =
             province.GetModifier(
               `${province.rgoType}_rgo_eff`,
-              data.modifiers,
-              data.national_focus,
-              data.region,
-              owner.data.national_focus,
-              data.crime
+              owner.data.national_focus
             ) +
             province.GetModifier(
               `${province.rgoType}_RGO_eff`,
-              data.modifiers,
-              data.national_focus,
-              data.region,
-              owner.data.national_focus,
-              data.crime
+              owner.data.national_focus
             );
           const isUnderSiege = world.IsUnderSiege(province.id);
           const siegeRgoEff =
