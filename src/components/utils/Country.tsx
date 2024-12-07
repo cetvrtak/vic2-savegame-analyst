@@ -31,7 +31,6 @@ class Country {
     this.mine_rgo_size = this.GetModifierFromIssues('mine_rgo_size');
     this.rgo_throughput_eff = this.GetRgoThroughputEff();
 
-    this.SetControlledProvinceNeighbors();
     this.CreateStates();
   }
 
