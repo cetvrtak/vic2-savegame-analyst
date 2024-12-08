@@ -147,16 +147,16 @@ class World {
     for (const tag of tags) {
       const country = new Country(tag, this.saveData[tag]);
 
+      const ownedProvinces = Object.entries(this.saveData).filter(
+        ([_, provinceData]) => provinceData.owner === tag
+      );
+      country.SetOwnedProvinces(ownedProvinces);
+
       const controlledProvinces = Object.entries(this.saveData).filter(
         ([_, provinceData]) => provinceData.controller === tag
       );
       country.SetControlledProvinces(controlledProvinces);
       country.SetStraitsConnections(this.straits);
-
-      const ownedProvinces = Object.entries(this.saveData).filter(
-        ([_, provinceData]) => provinceData.owner === tag
-      );
-      country.SetOwnedProvinces(ownedProvinces);
 
       this.countries[tag] = country;
     }
