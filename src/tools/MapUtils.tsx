@@ -1,8 +1,24 @@
+import { parseFileStream } from '../components/parser';
+
 export interface ProvinceDefinition {
   id: string;
   color: [number, number, number];
   name: string;
 }
+
+interface Seazones {
+  [key: string]: string[];
+}
+interface DefaultMap {
+  [sea_starts: string]: Seazones;
+}
+export interface Position {
+  x: string;
+  y: string;
+}
+export type BuildingsPosition = Record<string, Position>;
+type PositionEntry = Record<string, BuildingsPosition>;
+type Positions = Record<string, PositionEntry>;
 
 const parseDefinitionCSV = (data: string): ProvinceDefinition[] => {
   return data.split('\n').map((line) => {
@@ -86,6 +102,20 @@ export const getProvinceDefinitions = async (
   const definitionCSVData = await definitionCSV.text();
 
   return parseDefinitionCSV(definitionCSVData);
+};
+
+export const getDefaultMap = async (files: FileList): Promise<DefaultMap> => {
+  const defaultMap = GetFile('default.map', files);
+  const defaultMapData = await parseFileStream(defaultMap.stream(), () => {});
+
+  return defaultMapData;
+};
+
+export const getPositions = async (files: FileList): Promise<Positions> => {
+  const positions = GetFile('positions.txt', files);
+  const positionsData = await parseFileStream(positions.stream(), () => {});
+
+  return positionsData;
 };
 
 export const getProvincesBmp = async (files: FileList): Promise<ImageData> => {

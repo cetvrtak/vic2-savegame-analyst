@@ -4,6 +4,7 @@ import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
 import AdjacencyMapper from '../tools/AdjacencyMapper';
 import ToolsMenuItem from './ToolsMenuItem';
+import PortMapper from '../tools/PortMapper';
 
 const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
   dispatch,
@@ -84,6 +85,14 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
           menuHovered={showToolsMenu}
         >
           <AdjacencyMapper />
+        </ToolsMenuItem>
+
+        <ToolsMenuItem
+          title="Port Mapper"
+          icon="port.svg"
+          menuHovered={showToolsMenu}
+        >
+          <PortMapper />
         </ToolsMenuItem>
       </div>
     </header>
