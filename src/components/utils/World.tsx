@@ -152,7 +152,6 @@ class World {
       );
       country.SetControlledProvinces(controlledProvinces);
       country.SetStraitsConnections(this.straits);
-      country.SetControlledProvinceNeighbors();
 
       const ownedProvinces = Object.entries(this.saveData).filter(
         ([_, provinceData]) => provinceData.owner === tag

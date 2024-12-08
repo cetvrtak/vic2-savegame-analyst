@@ -18,6 +18,7 @@ class Province {
     this.data = data;
 
     this.rgoType = this.data.hasOwnProperty('farmers') ? 'farm' : 'mine';
+    this.neighbors = Province.blob.adjacencyMap[id];
   }
 
   private AggregateWorkers = (

@@ -203,12 +203,6 @@ class Country {
     }
   };
 
-  SetControlledProvinceNeighbors = () => {
-    for (const [id, province] of Object.entries(this.controlledProvinces)) {
-      province.neighbors = Country.blob.adjacencyMap[id];
-    }
-  };
-
   /**
    * Computes all provinces connected to the capital via controlled provinces and straits.
    * Utilizes BFS for traversal.
