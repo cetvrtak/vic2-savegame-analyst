@@ -282,7 +282,14 @@ class Country {
   }
 
   CreateStates = () => {
-    for (const state of this.data.state) {
+    if (!this.data.state) return;
+
+    // Convert to array if single state
+    const states = Array.isArray(this.data.state)
+      ? this.data.state
+      : [this.data.state];
+
+    for (const state of states) {
       this.states[state.id.id] = new State(state);
     }
   };
