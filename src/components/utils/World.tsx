@@ -164,6 +164,10 @@ class World {
   };
 
   GetCountry = (tag: string): Country => {
+    if (!this.countries[tag]) {
+      this.CreateCountries([tag]);
+    }
+
     return this.countries[tag];
   };
 

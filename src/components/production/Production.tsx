@@ -56,12 +56,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         const province = new Province(key, saveData[key]);
         const goodsType = province.data.rgo?.goods_type || '';
         const ownerTag = province.data.owner || '';
-        const owner = world.GetCountry(ownerTag);
 
         if (
           selectedTags.includes(ownerTag) &&
           selectedGoods.includes(goodsType)
         ) {
+          const owner = world.GetCountry(ownerTag);
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
