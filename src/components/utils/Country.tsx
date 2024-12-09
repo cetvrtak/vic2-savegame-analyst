@@ -20,6 +20,7 @@ class Country {
   ownedProvinces: Record<string, Province> = {};
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
+  sameContinentProvinces: Set<string> = new Set<string>();
 
   private connectedProvinces: Set<string> | null = null;
 
@@ -267,15 +268,9 @@ class Country {
    * @param provinceToContinentMap - A mapping from province IDs to their respective continents.
    * @returns `true` if the province is overseas, `false` otherwise.
    */
-  public isOverseas(
-    provinceId: string,
-    provinceToContinentMap: Record<string, string>
-  ): boolean {
-    const provinceContinent = provinceToContinentMap[provinceId];
-    const capitalContinent = provinceToContinentMap[this.data.capital];
-
+  public isOverseas(provinceId: string): boolean {
     // If on the same continent, it's not overseas
-    if (provinceContinent === capitalContinent) {
+    if (this.sameContinentProvinces.has(provinceId)) {
       return false;
     }
 
@@ -348,6 +343,18 @@ class Country {
     }
 
     return eventsModifier + issuesModifier + techModifier + inventionsModifier;
+  };
+
+  DetermineSameContinentProvinces = (
+    provinceToContinentMap: Record<string, string>
+  ) => {
+    const capitalContinent = provinceToContinentMap[this.data.capital];
+    for (const province of Object.values(this.ownedProvinces)) {
+      const provinceContinent = provinceToContinentMap[province.id];
+      if (provinceContinent === capitalContinent) {
+        this.sameContinentProvinces.add(province.id);
+      }
+    }
   };
 }
 

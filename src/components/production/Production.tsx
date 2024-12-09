@@ -107,10 +107,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             owner.data.national_focus
           );
 
-          const isOverseas = owner.isOverseas(
-            province.id,
-            world.provinceToContinentMap
-          );
+          const isOverseas = owner.isOverseas(province.id);
           const overseasPenalty =
             Number(isOverseas) * owner.data.overseas_penalty;
 
