@@ -207,9 +207,11 @@ class Country {
    * Computes all provinces connected to the capital via controlled provinces and straits.
    * Utilizes BFS for traversal.
    */
-  private computeConnectedProvinces(): Set<string> {
+  private computeConnectedProvinces(
+    provinceId: string = this.data.capital
+  ): Set<string> {
     const visited = new Set<string>();
-    const queue: string[] = [this.data.capital];
+    const queue: string[] = [provinceId];
 
     while (queue.length > 0) {
       const current = queue.shift()!;
