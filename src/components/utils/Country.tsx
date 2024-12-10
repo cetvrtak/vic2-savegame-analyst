@@ -363,6 +363,20 @@ class Country {
       }
     }
   };
+
+  GetConnectedPort = (provinceId: string): Province | null => {
+    const controlledPorts = Object.keys(this.controlledProvinces).filter(
+      (id) => Country.blob?.portMap[id]
+    );
+
+    for (const controlledPort of controlledPorts) {
+      const connectedProvinces = this.computeConnectedProvinces(controlledPort);
+      if (connectedProvinces.has(provinceId)) {
+        return this.controlledProvinces[controlledPort];
+      }
+    }
+    return null;
+  };
 }
 
 export default Country;

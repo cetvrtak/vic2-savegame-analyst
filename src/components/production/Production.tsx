@@ -25,6 +25,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'inventions.json',
         'map/adjacencyMap.json',
         'map/continents.json',
+        'map/portMap.json',
         'map/region.json',
         'map/terrainMap.json',
         'map/terrain.json',
@@ -63,6 +64,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         ) {
           const province = new Province(key, provinceData);
           const owner = world.GetCountry(ownerTag);
+          const controller = world.GetCountry(province.data.controller);
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
@@ -141,11 +143,24 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
               `${province.rgoType}_RGO_eff`,
               owner.data.national_focus
             );
+
           const isUnderSiege = world.IsUnderSiege(province.id);
           const siegeRgoEff =
             Number(isUnderSiege) * world.GetRgoEffFromSiege(province.rgoType);
 
-          const rgoEfficiency = countryRgoEff + localRgoEff + siegeRgoEff;
+          // Province is blockaded by land when
+          // * on another continent &&
+          // * under siege || controller doesn't have port access to it
+          const sameContinent = owner.sameContinentProvinces.has(province.id);
+          const connectedPort = controller.GetConnectedPort(province.id);
+          const landBlockade =
+            !sameContinent && (isUnderSiege || !connectedPort);
+          const blockadeRgoEff =
+            Number(landBlockade) *
+            data.modifiers.blockaded[`${province.rgoType}_rgo_eff`];
+
+          const rgoEfficiency =
+            countryRgoEff + localRgoEff + siegeRgoEff + blockadeRgoEff;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
