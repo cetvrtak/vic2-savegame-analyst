@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useData } from '../DataContext';
-import { ProductionData, ProductionProps } from './types';
+import { ProductionData, ProductionProps, ProvinceData } from './types';
 import World from '../utils/World';
 import Province from '../utils/Province';
 
@@ -53,14 +53,15 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       }
 
       for (const key in saveData) {
-        const province = new Province(key, saveData[key]);
-        const goodsType = province.data.rgo?.goods_type || '';
-        const ownerTag = province.data.owner || '';
+        const provinceData = saveData[key] as ProvinceData;
+        const goodsType = provinceData.rgo?.goods_type || '';
+        const ownerTag = provinceData.owner || '';
 
         if (
           selectedTags.includes(ownerTag) &&
           selectedGoods.includes(goodsType)
         ) {
+          const province = new Province(key, provinceData);
           const owner = world.GetCountry(ownerTag);
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
