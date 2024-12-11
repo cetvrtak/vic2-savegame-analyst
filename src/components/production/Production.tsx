@@ -148,6 +148,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const siegeRgoEff =
             Number(isUnderSiege) * world.GetRgoEffFromSiege(province.rgoType);
 
+          /* NOTE: Blockades don't refresh every tick */
           // Province is blockaded by land when
           // * on another continent &&
           // * under siege || controller doesn't have port access to it
@@ -155,8 +156,13 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const connectedPort = controller.GetConnectedPort(province.id);
           const landBlockade =
             !sameContinent && (isUnderSiege || !connectedPort);
+
+          const enemies = Array.from(owner.enemies).map((tag) =>
+            world.GetCountry(tag)
+          );
+          const navalBlockade = province.hasNavalBlockade(owner, enemies);
           const blockadeRgoEff =
-            Number(landBlockade) *
+            Number(landBlockade || navalBlockade) *
             data.modifiers.blockaded[`${province.rgoType}_rgo_eff`];
 
           const rgoEfficiency =

@@ -2,7 +2,7 @@
 // from other country properties
 // and game data
 import { Issues } from '../production/types';
-import { Connection, Inventions, Pop, Straits } from './types';
+import { Connection, Inventions, Pop, Straits, War } from './types';
 import Province from './Province';
 import State from './State';
 
@@ -21,6 +21,7 @@ class Country {
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
   sameContinentProvinces: Set<string> = new Set<string>();
+  enemies: Set<string> = new Set<string>();
 
   private connectedProvinces: Set<string> | null = null;
 
@@ -376,6 +377,57 @@ class Country {
       }
     }
     return null;
+  };
+
+  DetermineWarEnemies = (wars: War[]) => {
+    for (const war of wars) {
+      const attacker = new Set<string>().add(war.attacker);
+      const defender = new Set<string>().add(war.defender);
+
+      for (const date of Object.values(war.history)) {
+        const entries: any[] = Array.isArray(date) ? date : [date];
+
+        for (const entry of entries) {
+          switch (Object.keys(entry)[0]) {
+            case 'add_attacker':
+              attacker.add(entry.add_attacker);
+              break;
+            case 'add_defender':
+              defender.add(entry.add_defender);
+              break;
+            case 'rem_attacker':
+              attacker.delete(entry.rem_attacker);
+              break;
+            case 'rem_defender':
+              defender.delete(entry.rem_defender);
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
+      if (attacker.has(this.tag)) this.enemies = this.enemies.union(defender);
+      if (defender.has(this.tag)) this.enemies = this.enemies.union(attacker);
+    }
+  };
+
+  HasNavyInSeaZone = (seaZone: string): boolean => {
+    if (!this.data.navy) {
+      return false;
+    }
+
+    const navies = Array.isArray(this.data.navy)
+      ? this.data.navy
+      : [this.data.navy];
+
+    for (const navy of navies) {
+      if (navy.location === seaZone) {
+        return true;
+      }
+    }
+
+    return false;
   };
 }
 

@@ -158,6 +158,7 @@ class World {
       country.SetControlledProvinces(controlledProvinces);
       country.SetStraitsConnections(this.straits);
       country.DetermineSameContinentProvinces(this.provinceToContinentMap);
+      country.DetermineWarEnemies(this.saveData.active_war);
 
       this.countries[tag] = country;
     }

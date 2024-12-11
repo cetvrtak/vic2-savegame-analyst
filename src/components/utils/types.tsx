@@ -24,3 +24,9 @@ export type Pop = {
 };
 
 export type Crimes = Record<string, Modifier>;
+
+export type War = {
+  attacker: string;
+  defender: string;
+  history: Record<string, any>;
+};

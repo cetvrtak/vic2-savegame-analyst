@@ -2,6 +2,7 @@
 // Either from other province object properties
 // Or combined with game data
 import { Employees } from '../production/types';
+import Country from './Country';
 import { Crimes, NationalFocusGroup, Pop, RegionDefinition } from './types';
 
 class Province {
@@ -10,15 +11,17 @@ class Province {
   id: string;
   data: Record<string, any>;
 
-  rgoType: string = '';
-  neighbors: string[] = [];
+  rgoType: string;
+  neighbors: string[];
+  seaZone: string;
 
   constructor(id: string, data: Record<string, any>) {
     this.id = id;
     this.data = data;
 
     this.rgoType = this.data.hasOwnProperty('farmers') ? 'farm' : 'mine';
-    this.neighbors = Province.blob.adjacencyMap[id];
+    this.neighbors = Province.blob?.adjacencyMap[id] || [];
+    this.seaZone = Province.blob?.portMap[id] || null;
   }
 
   private AggregateWorkers = (
@@ -174,6 +177,22 @@ class Province {
       : this.data[popType]
       ? [this.data[popType]]
       : undefined;
+  };
+
+  hasNavalBlockade = (owner: Country, enemies: Country[]): boolean => {
+    if (!enemies) return false;
+
+    if (owner.HasNavyInSeaZone(this.seaZone)) {
+      return false;
+    }
+
+    for (const enemy of enemies) {
+      if (enemy.HasNavyInSeaZone(this.seaZone)) {
+        return true;
+      }
+    }
+
+    return false;
   };
 }
 
