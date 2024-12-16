@@ -12,8 +12,8 @@ const ModSelector: React.FC = () => {
   return (
     <div className='btn-wrapper file-input-wrapper mod-selector-wrapper'>
       <h2 className='mod-selector-title'>Select mod</h2>
-      <button className='btn mod-selector-btn' onClick={() => handleModSelection('/')}>Vanilla</button>
-      <button className='btn mod-selector-btn' onClick={() => handleModSelection('/HPM')}>HPM</button>
+      <button className='btn mod-selector-btn' onClick={() => handleModSelection('')}>Vanilla</button>
+      <button className='btn mod-selector-btn' onClick={() => handleModSelection('HPM')}>HPM</button>
     </div>
   );
 };
