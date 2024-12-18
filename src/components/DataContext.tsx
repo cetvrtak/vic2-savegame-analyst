@@ -13,7 +13,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [mod, setMod] = useState<string>('');
+  const [mod, setMod] = useState<string>('HPM');
   const [data, setData] = useState<any>(null);
 
   const loadJsonFiles = async (files: string[]) => {
