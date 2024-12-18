@@ -1,9 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import PopTypes from '../assets/poptypes.json';
-import Defines from '../assets/defines.json';
-
-const popTypes: any = PopTypes;
-const defines: any = Defines;
+import { useData } from './DataContext';
 
 type Pops = {
   [key: string]: number;
@@ -40,7 +36,19 @@ const PopsNeeds: React.FC<PopsNeedsProps> = ({
     soldiers: 0,
   });
 
+  const [jsonFilesLoaded, setJsonFilesLoaded] = useState<Boolean>(false);
+  const { data, loadJsonFiles } = useData();
+
   useEffect(() => {
+    (async () => {
+      await loadJsonFiles(['poptypes.json', 'defines.json']);
+      setJsonFilesLoaded(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!jsonFilesLoaded) return;
+
     const calculateNeeds = () => {
       const popsNeeds: Pops = {
         aristocrats: 0,
@@ -60,25 +68,27 @@ const PopsNeeds: React.FC<PopsNeedsProps> = ({
 
       // Needs = (1 + Plurality) * (1 + 2 * CON / PDEF_BASE_CON[Defines.lua) * (1 + inventions * INVENTION_IMPACT_ON_DEMAND[Defines.lua]) * base[pop file] * BASE_GOODS_DEMAND[Defines.lua] * pop size / 200000
       const pluralityModifier: number = 1 + plurality / 100;
-      const PDEF_BASE_CON = Number(defines.pops.PDEF_BASE_CON);
+      const PDEF_BASE_CON = Number(data.defines.pops.PDEF_BASE_CON);
 
       const numInventions = inventions.length;
       const INVENTION_IMPACT_ON_DEMAND = Number(
-        defines.pops.INVENTION_IMPACT_ON_DEMAND
+        data.defines.pops.INVENTION_IMPACT_ON_DEMAND
       );
       const inventionsModifier = 1 + numInventions * INVENTION_IMPACT_ON_DEMAND;
 
-      const BASE_GOODS_DEMAND: number = Number(defines.pops.BASE_GOODS_DEMAND);
+      const BASE_GOODS_DEMAND: number = Number(
+        data.defines.pops.BASE_GOODS_DEMAND
+      );
 
       provinces.forEach((province) => {
         for (const key in province) {
           if (popsNeeds.hasOwnProperty(key)) {
             const baseLife: number =
-              Number(popTypes[key].life_needs?.cattle) || 0;
+              Number(data.poptypes[key].life_needs?.cattle) || 0;
             const baseEveryday: number =
-              Number(popTypes[key].everyday_needs?.cattle) || 0;
+              Number(data.poptypes[key].everyday_needs?.cattle) || 0;
             const baseLuxury: number =
-              Number(popTypes[key].luxury_needs?.cattle) || 0;
+              Number(data.poptypes[key].luxury_needs?.cattle) || 0;
 
             const popType = Array.isArray(province[key])
               ? province[key]
@@ -110,7 +120,7 @@ const PopsNeeds: React.FC<PopsNeedsProps> = ({
     };
 
     calculateNeeds();
-  }, []);
+  }, [jsonFilesLoaded]);
 
   return (
     <div className="table-container">
