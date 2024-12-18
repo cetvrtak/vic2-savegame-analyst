@@ -19,11 +19,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   const loadJsonFiles = async (files: string[]) => {
     try {
       const jsonPromises = files.map(async (file) => {
-        const path = `../assets/${mod}/${file}`;
+        const path = `/assets/${mod}/${file}`;
         const key = file.split('/').slice(-1)[0].split('.')[0];
-        const module = await import(path);
-        const jsonData = module.default || module;
 
+        const response = await fetch(path); // Fetch file
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${path}: ${response.statusText}`);
+        }
+
+        const jsonData = await response.json(); // Parse JSON
         return { key, jsonData };
       });
 
@@ -42,6 +46,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
       );
     } catch (error) {
       console.error('Failed to load JSON files:', error);
+      throw error; // Optional: Re-throw the error to handle it elsewhere
     }
   };
 
