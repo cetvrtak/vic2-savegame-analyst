@@ -1,4 +1,4 @@
-﻿import React, { useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { parseFileStream } from './parser';
 import { Action } from './actions';
 import { AppState } from './types';
@@ -7,7 +7,7 @@ import { useData } from './DataContext';
 type LoadSaveProps = { dispatch: React.Dispatch<Action>; state: AppState };
 
 const LoadSave: React.FC<LoadSaveProps> = ({ dispatch, state }) => {
-  const [fileSelected, setFileSelected] = useState(false);
+  const [fileSelected, setFileSelected] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mod } = useData();
@@ -18,6 +18,15 @@ const LoadSave: React.FC<LoadSaveProps> = ({ dispatch, state }) => {
       fileInputRef.current.click();
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const module = await fetch('/assets/HPM/save.json');
+      const parsedData = await module.json();
+
+      dispatch({ type: 'SET_WORLD', payload: parsedData });
+    })();
+  }, []);
 
   const handleFile = async (file: File) => {
     const stream = file.stream();
