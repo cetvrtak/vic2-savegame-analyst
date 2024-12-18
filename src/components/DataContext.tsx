@@ -53,7 +53,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   const loadCsvFiles = async (files: string[]) => {
     try {
       const csvPromises = files.map(async (file) => {
-        const path = `${mod}/${file}`;
+        const path = `/assets/${mod}/${file}`;
         const key = file.split('/').slice(-1)[0].split('.')[0];
         const response = await fetch(path);
         const csvContent = await response.text();
