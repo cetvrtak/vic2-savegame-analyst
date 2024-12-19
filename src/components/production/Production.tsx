@@ -169,10 +169,17 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             countryRgoEff + localRgoEff + siegeRgoEff + blockadeRgoEff;
           const rgoOutputEff =
             countryRgoOutput + localRgoOutput + rgoEfficiency;
+
+          const terrainRgoEff = Number(
+            data.terrain.categories[terrainType][`${province.rgoType}_rgo_eff`]
+          );
+
+          const infraPct = province.data.infrastructure || 0;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
-          const outputEfficiency = 1 + aristocratsPercentage + rgoOutputEff;
+          const outputEfficiency =
+            1 + aristocratsPercentage + rgoOutputEff + terrainRgoEff + infraPct;
 
           const production = baseProduction * throughput * outputEfficiency;
 
