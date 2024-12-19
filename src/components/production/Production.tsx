@@ -176,7 +176,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             data.terrain.categories[terrainType][`${province.rgoType}_rgo_eff`]
           );
 
-          const infraPct = province.data.infrastructure || 0;
+          const infraPct = Number(province.data.infrastructure) || 0;
           // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
           // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
