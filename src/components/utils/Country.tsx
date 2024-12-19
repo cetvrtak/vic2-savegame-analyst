@@ -22,6 +22,7 @@ class Country {
   straitsConnections: Record<string, Connection[]> = {};
   sameContinentProvinces: Set<string> = new Set<string>();
   enemies: Set<string> = new Set<string>();
+  mobilizedPenalty: number = 0;
 
   private connectedProvinces: Set<string> | null = null;
 
@@ -32,6 +33,7 @@ class Country {
     this.farm_rgo_size = this.GetModifierFromIssues('farm_rgo_size');
     this.mine_rgo_size = this.GetModifierFromIssues('mine_rgo_size');
     this.rgo_throughput_eff = this.GetRgoThroughputEff();
+    this.mobilizedPenalty = this.CalculateMobilizedPenalty();
 
     this.CreateStates();
   }
@@ -428,6 +430,30 @@ class Country {
     }
 
     return false;
+  };
+
+  CalculateMobilizedPenalty = (): number => {
+    if (!this.data.mobilize) {
+      return 0;
+    }
+
+    // throughput = -1 x mobilization_size x mobilization_economic_impact
+    const mobSizeFromModifiers = this.GetModifier('mobilisation_size');
+
+    const isUncivilized = this.data.civilized === 'no';
+    const uncivMobSizeModifier =
+      Country.blob.modifiers.unciv_nation['mobilisation_size'];
+    const mobSizeFromUnciv = Number(isUncivilized) * uncivMobSizeModifier;
+
+    const mobilizationSize = mobSizeFromModifiers + mobSizeFromUnciv;
+
+    if (mobilizationSize < 0) {
+      return 0;
+    }
+
+    const mobilizationImpact = this.GetModifier('mobilisation_economy_impact');
+
+    return -1 * mobilizationSize * mobilizationImpact;
   };
 }
 

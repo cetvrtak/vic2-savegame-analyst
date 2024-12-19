@@ -114,10 +114,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const overseasPenalty =
             Number(isOverseas) * owner.data.overseas_penalty;
 
+          // Mobilization impacts throughput, Wiki is wrong
           const throughput =
             (numWorkers / maxWorkers) *
             (1 + rgoThroughputEff + localRgoThroughputEff) *
-            (1 - overseasPenalty);
+            (1 - overseasPenalty) *
+            (1 + owner.mobilizedPenalty);
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           const aristocratsPercentage = owner.GetPopsPercentageInState(
