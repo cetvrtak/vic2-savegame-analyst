@@ -352,7 +352,15 @@ class Country {
       );
     }
 
-    return eventsModifier + issuesModifier + techModifier + inventionsModifier;
+    const nvModifier = this.GetModifierFromNationalValue(modifier);
+
+    return (
+      eventsModifier +
+      issuesModifier +
+      techModifier +
+      inventionsModifier +
+      nvModifier
+    );
   };
 
   DetermineSameContinentProvinces = (
