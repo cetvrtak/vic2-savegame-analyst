@@ -52,13 +52,10 @@ class Province {
     aggregatedWorkers.sort((a, b) => b.size - a.size);
     const numFarmers = aggregatedWorkers[0].size;
 
-    const terrainType = Province.blob.terrainMap[this.id];
-    const terrainModifier = Number(
-      Province.blob.terrain.categories[terrainType][`${this.rgoType}_rgo_size`]
-    );
+    const continentModifier = this.GetRgoSizeFromContinent();
 
     return Math.floor(
-      1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + terrainModifier))
+      1.5 * Math.ceil(numFarmers / baseWorkplaces / (1 + continentModifier))
     );
   };
 
