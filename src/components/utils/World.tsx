@@ -30,7 +30,7 @@ class World {
     Province.blob = this.filesData;
     this.production = filesData.production;
 
-    this.goodsOutput = this.CreateGoodOutputMap();
+    this.goodsOutput = this.CreateGoodsOutputMap();
     this.goodsWorkerTypes = this.CreateGoodsWorkerTypesMap();
     this.rgoWorkers = this.DetermineRgoWorkers();
     this.provinceToContinentMap = this.mapProvinceToContinent(
@@ -39,7 +39,7 @@ class World {
     this.straits = this.GetStraitsFromCSV(filesData.adjacencies);
   }
 
-  private CreateGoodOutputMap = (): Record<string, number> => {
+  private CreateGoodsOutputMap = (): Record<string, number> => {
     return Object.values(this.production).reduce(
       (map: Record<string, number>, type: Record<string, any>) =>
         type.output_goods && {

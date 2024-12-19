@@ -19,7 +19,7 @@ class Province {
     this.id = id;
     this.data = data;
 
-    this.rgoType = this.data.hasOwnProperty('farmers') ? 'farm' : 'mine';
+    this.rgoType = this.GetRgoType();
     this.neighbors = Province.blob?.adjacencyMap[id] || [];
     this.seaZone = Province.blob?.portMap[id] || null;
   }
@@ -193,6 +193,15 @@ class Province {
     }
 
     return false;
+  };
+
+  private GetRgoType = (): string => {
+    for (const type of Object.values(Province.blob.production) as any) {
+      if (type.output_goods === this.data.rgo?.goods_type) {
+        return type.farm === 'yes' ? 'farm' : 'mine';
+      }
+    }
+    return '';
   };
 }
 
