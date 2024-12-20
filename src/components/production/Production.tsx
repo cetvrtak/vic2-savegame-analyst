@@ -104,11 +104,22 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const numWorkers = province.GetNumWorkers();
           const maxWorkers =
             40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
+
+          const rgoEffFromTech =
+            owner.GetModifierFromTech(`${province.rgoType}_rgo_eff`) +
+            owner.GetModifierFromTech(`${province.rgoType}_RGO_eff`);
+          const rgoEffFromInventions =
+            owner.GetModifierFromInventions(`${province.rgoType}_rgo_eff`) +
+            owner.GetModifierFromInventions(`${province.rgoType}_RGO_eff`);
+          const rgoThroughputEffTech = rgoEffFromTech + rgoEffFromInventions;
+
           const rgoThroughputEff = owner.rgo_throughput_eff;
           const localRgoThroughputEff = province.GetModifier(
             'local_RGO_throughput',
             owner.data.national_focus
           );
+          const rgoThroughputEffModifier =
+            rgoThroughputEffTech + rgoThroughputEff + localRgoThroughputEff;
 
           const isOverseas = owner.isOverseas(province.id);
           const overseasPenalty =
@@ -117,7 +128,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           // Mobilization impacts throughput, Wiki is wrong
           const throughput =
             (numWorkers / maxWorkers) *
-            (1 + rgoThroughputEff + localRgoThroughputEff) *
+            (1 + rgoThroughputEffModifier) *
             (1 - overseasPenalty) *
             (1 + owner.mobilizedPenalty);
 
