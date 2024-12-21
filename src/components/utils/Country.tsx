@@ -38,6 +38,38 @@ class Country {
     this.CreateStates();
   }
 
+  GetModifiersValue = (modifiers: Record<string, number>[]): number => {
+    return modifiers.reduce(
+      (acc: number, modifier: Record<string, number>) =>
+        (acc += Object.values(modifier)[0]),
+      0
+    );
+  };
+
+  GetIssuesModifiers = (modifier: string): Record<string, number>[] => {
+    let modifiers: Record<string, number>[] = [];
+
+    const issues: Issues = Country.blob.issues;
+
+    for (const category of Object.values(issues)) {
+      for (const [reformName, reform] of Object.entries(category as Issues)) {
+        if (!this.data.hasOwnProperty(reformName)) {
+          continue;
+        }
+        for (const [stanceName, stance] of Object.entries(reform as Issues)) {
+          if (
+            stance.hasOwnProperty(modifier) &&
+            this.data[reformName] === stanceName
+          ) {
+            modifiers.push({ [reformName]: Number(stance[modifier]) });
+          }
+        }
+      }
+    }
+
+    return modifiers;
+  };
+
   GetModifierFromIssues = (modifier: string): number => {
     const issues: Issues = Country.blob.issues;
     return Object.values(issues).reduce((acc, category) => {
@@ -53,6 +85,23 @@ class Country {
       });
       return acc;
     }, 0);
+  };
+
+  GetEventModifiers = (modifier: string): Record<string, number>[] => {
+    let modifiers: Record<string, number>[] = [];
+
+    const eventModifiers: string[] = Object.values(this.data.modifier).map(
+      (m: any) => m.modifier
+    );
+    for (const name of eventModifiers) {
+      const definition = Country.blob.modifiers[name];
+      if (definition.hasOwnProperty(modifier)) {
+        const value: string = definition[modifier];
+        modifiers.push({ [name]: Number(value) });
+      }
+    }
+
+    return modifiers;
   };
 
   GetModifierFromEvents = (modifier: string): number => {
@@ -71,6 +120,18 @@ class Country {
       },
       0
     );
+  };
+
+  GetNationlValueModifiers = (modifier: string): Record<string, number>[] => {
+    let modifiers: Record<string, number>[] = [];
+
+    const nationalValue = this.data.nationalvalue;
+    const definition = Country.blob.nationalvalues[nationalValue];
+    if (definition.hasOwnProperty(modifier)) {
+      modifiers.push({ [nationalValue]: Number(definition[modifier]) });
+    }
+
+    return modifiers;
   };
 
   GetModifierFromNationalValue = (modifier: string): number => {
@@ -105,6 +166,37 @@ class Country {
       : this.mine_rgo_size;
   };
 
+  GetTechModifiers = (
+    modifier: string,
+    goods: string = ''
+  ): Record<string, number>[] => {
+    let modifiers: Record<string, number>[] = [];
+
+    for (const tech of Object.keys(this.data.technology)) {
+      const techDefinition = Country.blob.technologies[tech];
+      if (!techDefinition.hasOwnProperty(modifier)) {
+        continue;
+      }
+      const techModifier = techDefinition[modifier];
+
+      if (!goods) {
+        modifiers.push({ [tech]: Number(techModifier) });
+      } else if (Array.isArray(techModifier)) {
+        for (const goodsModifier of techModifier) {
+          if (goodsModifier.hasOwnProperty(goods)) {
+            modifiers.push({ [tech]: Number(goodsModifier[goods]) });
+          }
+        }
+      } else {
+        if (techModifier.hasOwnProperty(goods)) {
+          modifiers.push({ [tech]: Number(techModifier[goods]) });
+        }
+      }
+    }
+
+    return modifiers;
+  };
+
   GetModifierFromTech = (modifier: string, goods: string = ''): number => {
     const countryTechs = Object.keys(this.data.technology);
 
@@ -128,6 +220,46 @@ class Country {
 
       return effect + (Number(techModifiers[goods]) || 0);
     }, 0);
+  };
+
+  GetInventionsModifiers = (
+    modifier: string,
+    goods: string = ''
+  ): Record<string, number>[] => {
+    let modifiers: Record<string, number>[] = [];
+
+    const inventions = Country.blob.inventions;
+    const countryInventions = this.data.active_inventions.key;
+
+    for (const id of countryInventions) {
+      const index = parseInt(id) - 1;
+      let [invention, effects]: [string, any] =
+        Object.entries(inventions)[index];
+
+      // Inventions can have modifiers in a list or inside an `effect` block
+      effects = effects.effect || effects;
+
+      if (!effects.hasOwnProperty(modifier)) {
+        continue;
+      }
+      const inventionModifier = effects[modifier];
+
+      if (!goods) {
+        modifiers.push({ [invention]: Number(inventionModifier) });
+      } else if (Array.isArray(inventionModifier)) {
+        for (const goodsModifier of inventionModifier) {
+          if (goodsModifier.hasOwnProperty(goods)) {
+            modifiers.push({ [invention]: Number(goodsModifier[goods]) });
+          }
+        }
+      } else {
+        if (inventionModifier.hasOwnProperty(goods)) {
+          modifiers.push({ [invention]: Number(inventionModifier[goods]) });
+        }
+      }
+    }
+
+    return modifiers;
   };
 
   GetModifierFromInventions = (
@@ -361,6 +493,40 @@ class Country {
       inventionsModifier +
       nvModifier
     );
+  };
+
+  GetModifiers = (
+    modifier: string,
+    goodsType: string = ''
+  ): Record<string, number>[] => {
+    const eventModifiers = this.GetEventModifiers(modifier);
+    const issuesModifiers = this.GetIssuesModifiers(modifier);
+
+    let techModifiers = this.GetTechModifiers(modifier, goodsType);
+    if (modifier === 'rgo_output') {
+      techModifiers = [
+        ...techModifiers,
+        ...this.GetTechModifiers('rgo_goods_output', goodsType),
+      ];
+    }
+
+    let inventionModifiers = this.GetInventionsModifiers(modifier, goodsType);
+    if (modifier === 'rgo_output') {
+      inventionModifiers = [
+        ...inventionModifiers,
+        ...this.GetInventionsModifiers('rgo_goods_output', goodsType),
+      ];
+    }
+
+    const nvModifiers = this.GetNationlValueModifiers(modifier);
+
+    return [
+      ...eventModifiers,
+      ...issuesModifiers,
+      ...techModifiers,
+      ...inventionModifiers,
+      ...nvModifiers,
+    ];
   };
 
   DetermineSameContinentProvinces = (
