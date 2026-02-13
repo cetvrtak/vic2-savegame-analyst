@@ -13,6 +13,22 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
 
   const { data, loadJsonFiles, loadCsvFiles } = useData();
 
+  const calculateBaseProduction = (
+    province: Province,
+    owner: Country,
+    rgoWorkers: string[],
+    baseOutput: number
+  ): number => {
+    // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
+    return (
+      province.GetProvinceSize(rgoWorkers) *
+      (1 +
+        province.rgoSize +
+        owner.GetRgoSize(province.rgoType, province.goodsType)) *
+      baseOutput
+    );
+  };
+
   const calculateThroughput = (
     province: Province,
     owner: Country,
@@ -99,18 +115,12 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
-          // Base Production = Province Size * ( 1 + Terrain + RGO Size Modifiers ) * Output Amount (in table below)
-          const provinceSize = province.GetProvinceSize(world.rgoWorkers);
-
-          const terrainType = data.terrainMap[key];
-          const baseOutput = world.goodsOutput[goodsType];
-
-          const baseProduction =
-            provinceSize *
-            (1 +
-              province.rgoSize +
-              owner.GetRgoSize(province.rgoType, goodsType)) *
-            baseOutput;
+          const baseProduction = calculateBaseProduction(
+            province,
+            owner,
+            world.rgoWorkers,
+            world.goodsOutput[goodsType]
+          );
 
           const throughput = calculateThroughput(
             province,
