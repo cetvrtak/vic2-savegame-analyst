@@ -11,7 +11,9 @@ class Province {
   id: string;
   data: Record<string, any>;
 
+  goodsType: string;
   rgoType: string;
+  rgoSize: number;
   neighbors: string[];
   seaZone: string;
 
@@ -19,7 +21,9 @@ class Province {
     this.id = id;
     this.data = data;
 
+    this.goodsType = data.rgo?.goods_type || '';
     this.rgoType = this.GetRgoType();
+    this.rgoSize = this.GetRgoSize();
     this.neighbors = Province.blob?.adjacencyMap[id] || [];
     this.seaZone = Province.blob?.portMap[id] || null;
   }
@@ -81,6 +85,7 @@ class Province {
 
   GetRgoSize = (): number => {
     return (
+      this.GetRgoSizeFromTerrain() +
       this.GetModifierFromEvents(`${this.rgoType}_rgo_size`) +
       this.GetRgoSizeFromContinent()
     );
@@ -200,6 +205,15 @@ class Province {
     }
     return '';
   };
+
+  private GetRgoSizeFromTerrain = (): number => {
+    const terrainType = Province.blob.terrainMap[this.id];
+    const rgoSizeKey = `${this.rgoType}_rgo_size`;
+    
+    return Number(
+      Province.blob.terrain.categories[terrainType][rgoSizeKey]
+    );
+  }
 }
 
 export default Province;

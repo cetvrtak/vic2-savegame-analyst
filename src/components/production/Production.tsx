@@ -3,6 +3,7 @@ import { useData } from '../DataContext';
 import { ProductionData, ProductionProps, ProvinceData } from './types';
 import World from '../utils/World';
 import Province from '../utils/Province';
+import Country from '../utils/Country';
 
 const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const selectedTags = ['RUS', 'ARA', 'GRE'];
@@ -11,6 +12,36 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
   const [jsonFilesLoaded, setJsonFilesLoaded] = useState<Boolean>(false);
 
   const { data, loadJsonFiles, loadCsvFiles } = useData();
+
+  const calculateThroughput = (
+    province: Province,
+    owner: Country,
+    rgoWorkers: string[]
+  ): number => {
+    // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
+    const numWorkers = province.GetNumWorkers();
+    const maxWorkers =
+      40000 *
+      province.GetProvinceSize(rgoWorkers) *
+      (1 +
+        province.rgoSize +
+        owner.GetRgoSize(province.rgoType, province.goodsType));
+
+    const rgoThroughputEffModifier =
+      province.GetModifier('local_RGO_throughput', owner.data.national_focus) +
+      owner.GetRgoThroughputEff(province.rgoType);
+
+    const isOverseas = owner.isOverseas(province.id);
+    const overseasPenalty = Number(isOverseas) * owner.data.overseas_penalty;
+
+    // Mobilization impacts throughput, Wiki is wrong
+    return (
+      (numWorkers / maxWorkers) *
+      (1 + rgoThroughputEffModifier) *
+      (1 - overseasPenalty) *
+      (1 + owner.mobilizedPenalty)
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -30,7 +61,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         'map/terrainMap.json',
         'map/terrain.json',
         'poptypes.json',
-        'technologies.json',
+        'technologies.json'
       ]);
       await loadCsvFiles(['map/adjacencies.csv']);
       setJsonFilesLoaded(true);
@@ -72,65 +103,20 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
           const provinceSize = province.GetProvinceSize(world.rgoWorkers);
 
           const terrainType = data.terrainMap[key];
-          const rgoSizeKey = `${province.rgoType}_rgo_size`;
-          const terrainModifier = Number(
-            data.terrain.categories[terrainType][rgoSizeKey]
-          );
-
-          const provinceRgoSize = province.GetRgoSize();
-          const countryRgoSize = owner.GetRgoSize(rgoSizeKey);
-          const rgoSizeFromModifiers = provinceRgoSize + countryRgoSize;
-
-          // Due to inconsistency in modifier naming in Vic2 files
-          // we need to get both versions of a modifier
-          const rgoSizeFromTech =
-            owner.GetModifierFromTech('rgo_size', goodsType) +
-            owner.GetModifierFromTech('RGO_size', goodsType);
-
-          const rgoSizeFromInventions =
-            owner.GetModifierFromInventions('rgo_size', goodsType) +
-            owner.GetModifierFromInventions('RGO_size', goodsType);
-          const rgoSizeFromTechnologies =
-            rgoSizeFromTech + rgoSizeFromInventions;
-          const rgoSizeModifier =
-            rgoSizeFromModifiers + rgoSizeFromTechnologies;
-
           const baseOutput = world.goodsOutput[goodsType];
 
           const baseProduction =
-            provinceSize * (1 + terrainModifier + rgoSizeModifier) * baseOutput;
+            provinceSize *
+            (1 +
+              province.rgoSize +
+              owner.GetRgoSize(province.rgoType, goodsType)) *
+            baseOutput;
 
-          // Throughput = (Number of workers / Max Workers) * ( 1 + RGO Throughput Efficiency Modifiers - War Exhaustion ) * oversea penalty
-          const numWorkers = province.GetNumWorkers();
-          const maxWorkers =
-            40000 * provinceSize * (1 + terrainModifier + rgoSizeModifier);
-
-          const rgoEffFromTech =
-            owner.GetModifierFromTech(`${province.rgoType}_rgo_eff`) +
-            owner.GetModifierFromTech(`${province.rgoType}_RGO_eff`);
-          const rgoEffFromInventions =
-            owner.GetModifierFromInventions(`${province.rgoType}_rgo_eff`) +
-            owner.GetModifierFromInventions(`${province.rgoType}_RGO_eff`);
-          const rgoThroughputEffTech = rgoEffFromTech + rgoEffFromInventions;
-
-          const rgoThroughputEff = owner.rgo_throughput_eff;
-          const localRgoThroughputEff = province.GetModifier(
-            'local_RGO_throughput',
-            owner.data.national_focus
+          const throughput = calculateThroughput(
+            province,
+            owner,
+            world.rgoWorkers
           );
-          const rgoThroughputEffModifier =
-            rgoThroughputEffTech + rgoThroughputEff + localRgoThroughputEff;
-
-          const isOverseas = owner.isOverseas(province.id);
-          const overseasPenalty =
-            Number(isOverseas) * owner.data.overseas_penalty;
-
-          // Mobilization impacts throughput, Wiki is wrong
-          const throughput =
-            (numWorkers / maxWorkers) *
-            (1 + rgoThroughputEffModifier) *
-            (1 - overseasPenalty) *
-            (1 + owner.mobilizedPenalty);
 
           // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
           const aristocratsPercentage = owner.GetPopsPercentageInState(

@@ -16,7 +16,6 @@ class Country {
 
   farm_rgo_size: number;
   mine_rgo_size: number;
-  rgo_throughput_eff: number;
   ownedProvinces: Record<string, Province> = {};
   controlledProvinces: Record<string, Province> = {};
   straitsConnections: Record<string, Connection[]> = {};
@@ -32,7 +31,6 @@ class Country {
 
     this.farm_rgo_size = this.GetModifierFromIssues('farm_rgo_size');
     this.mine_rgo_size = this.GetModifierFromIssues('mine_rgo_size');
-    this.rgo_throughput_eff = this.GetRgoThroughputEff();
     this.mobilizedPenalty = this.CalculateMobilizedPenalty();
 
     this.CreateStates();
@@ -149,7 +147,7 @@ class Country {
     return warExhaustion * warExhaustionModifier;
   };
 
-  GetRgoThroughputEff = (): number => {
+  GetRgoThroughputEff = (rgoType: string): number => {
     const effFromWarExhaustion = this.GetRgoThrouputEffFromWarExhaustion();
 
     const effFromModifiers = this.GetModifierFromEvents('RGO_throughput');
@@ -157,13 +155,36 @@ class Country {
     const effFromIssues = this.GetModifierFromIssues('RGO_throughput');
     const effFromNV = this.GetModifierFromNationalValue('RGO_throughput');
 
-    return effFromModifiers + effFromIssues + effFromNV + effFromWarExhaustion;
+    const rgoThroughputEffTech =
+      this.GetModifierFromTech(`${rgoType}_rgo_eff`) +
+      this.GetModifierFromTech(`${rgoType}_RGO_eff`) +
+      this.GetModifierFromInventions(`${rgoType}_rgo_eff`) +
+      this.GetModifierFromInventions(`${rgoType}_RGO_eff`);
+
+    return (
+      effFromModifiers +
+      effFromIssues +
+      effFromNV +
+      effFromWarExhaustion +
+      rgoThroughputEffTech
+    );
   };
 
-  GetRgoSize = (rgoSizeKey: string): number => {
-    return rgoSizeKey === 'farm_rgo_size'
-      ? this.farm_rgo_size
-      : this.mine_rgo_size;
+  GetRgoSize = (rgoType: string, goodsType: string): number => {
+    const rgoSize =
+      rgoType === 'farm' ? this.farm_rgo_size : this.mine_rgo_size;
+
+    // Due to inconsistency in modifier naming in Vic2 files
+    // we need to get both versions of a modifier
+    const rgoSizeFromTech =
+      this.GetModifierFromTech('rgo_size', goodsType) +
+      this.GetModifierFromTech('RGO_size', goodsType);
+
+    const rgoSizeFromInventions =
+      this.GetModifierFromInventions('rgo_size', goodsType) +
+      this.GetModifierFromInventions('RGO_size', goodsType);
+
+    return rgoSize + rgoSizeFromTech + rgoSizeFromInventions;
   };
 
   GetTechModifiers = (
@@ -297,7 +318,7 @@ class Country {
     this.controlledProvinces = provinces.reduce(
       (acc: Record<string, Province>, prov: Record<string, any>) => ({
         ...acc,
-        [prov[0]]: new Province(prov[0], prov[1]),
+        [prov[0]]: new Province(prov[0], prov[1])
       }),
       {}
     );
@@ -307,7 +328,7 @@ class Country {
     this.ownedProvinces = provinces.reduce(
       (acc: Record<string, Province>, prov: Record<string, any>) => ({
         ...acc,
-        [prov[0]]: new Province(prov[0], prov[1]),
+        [prov[0]]: new Province(prov[0], prov[1])
       }),
       {}
     );
@@ -506,7 +527,7 @@ class Country {
     if (modifier === 'rgo_output') {
       techModifiers = [
         ...techModifiers,
-        ...this.GetTechModifiers('rgo_goods_output', goodsType),
+        ...this.GetTechModifiers('rgo_goods_output', goodsType)
       ];
     }
 
@@ -514,7 +535,7 @@ class Country {
     if (modifier === 'rgo_output') {
       inventionModifiers = [
         ...inventionModifiers,
-        ...this.GetInventionsModifiers('rgo_goods_output', goodsType),
+        ...this.GetInventionsModifiers('rgo_goods_output', goodsType)
       ];
     }
 
@@ -525,7 +546,7 @@ class Country {
       ...issuesModifiers,
       ...techModifiers,
       ...inventionModifiers,
-      ...nvModifiers,
+      ...nvModifiers
     ];
   };
 
