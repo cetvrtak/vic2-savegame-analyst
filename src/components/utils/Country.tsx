@@ -577,6 +577,8 @@ class Country {
   };
 
   DetermineWarEnemies = (wars: War[]) => {
+    if (!Array.isArray(wars)) return;
+
     for (const war of wars) {
       const attacker = new Set<string>().add(war.attacker);
       const defender = new Set<string>().add(war.defender);
