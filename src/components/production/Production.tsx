@@ -59,6 +59,38 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     );
   };
 
+  const calculateOutputEff = (
+    province: Province,
+    owner: Country,
+    controller: Country,
+    enemies: Country[],
+    isUnderSiege: boolean
+  ): number => {
+    // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
+    const aristocratsPercentage = owner.GetPopsPercentageInState(
+      'aristocrats',
+      owner.GetStateId(province.id)
+    );
+
+    const rgoOutputEff =
+      province.GetRgoEff(owner, controller, enemies, isUnderSiege) +
+      owner.GetRgoEff(province.rgoType, province.goodsType);
+
+    const terrainRgoEff = province.GetRgoEffFromTerrain();
+
+    const infraPct = Number(province.data.infrastructure) || 0;
+    // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
+
+    // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
+    console.log({
+      aristocratsPercentage,
+      rgoOutputEff,
+      terrainRgoEff,
+      infraPct
+    });
+    return 1 + aristocratsPercentage + rgoOutputEff + terrainRgoEff + infraPct;
+  };
+
   useEffect(() => {
     (async () => {
       await loadJsonFiles([
@@ -111,7 +143,6 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
         ) {
           const province = new Province(key, provinceData);
           const owner = world.GetCountry(ownerTag);
-          const controller = world.GetCountry(province.data.controller);
           //       Output
           // Production = Base Production * Throughput * Output Efficiency
 
@@ -128,69 +159,20 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             world.rgoWorkers
           );
 
-          // Output Efficiency = 1 + Aristocrat % in State + RGO Output Efficiency Modifiers + Terrain + Province Infrastructure * ( 1 + Mobilized Penalty)
-          const aristocratsPercentage = owner.GetPopsPercentageInState(
-            'aristocrats',
-            owner.GetStateId(province.id)
-          );
-          const countryRgoOutput = owner.GetModifier('rgo_output', goodsType);
-          const localRgoOutput =
-            province.GetModifier(
-              'local_rgo_output',
-              owner.data.national_focus
-            ) +
-            province.GetModifier('local_RGO_output', owner.data.national_focus);
-          const countryRgoEff =
-            owner.GetModifier(`${province.rgoType}_rgo_eff`) +
-            owner.GetModifier(`${province.rgoType}_RGO_eff`);
-          const localRgoEff =
-            province.GetModifier(
-              `${province.rgoType}_rgo_eff`,
-              owner.data.national_focus
-            ) +
-            province.GetModifier(
-              `${province.rgoType}_RGO_eff`,
-              owner.data.national_focus
-            );
-
-          const isUnderSiege = world.IsUnderSiege(province.id);
-          const siegeRgoEff =
-            Number(isUnderSiege) * world.GetRgoEffFromSiege(province.rgoType);
-
-          /* NOTE: Blockades don't refresh every tick */
-          // Province is blockaded by land when
-          // * on another continent &&
-          // * under siege || controller doesn't have port access to it
-          const sameContinent = owner.sameContinentProvinces.has(province.id);
-          const connectedPort = controller.GetConnectedPort(province.id);
-          const landBlockade =
-            !sameContinent && (isUnderSiege || !connectedPort);
-
-          const enemies = Array.from(owner.enemies).map((tag) =>
+          const enemies: Country[] = Array.from(owner.enemies).map((tag) =>
             world.GetCountry(tag)
           );
-          const navalBlockade = province.hasNavalBlockade(owner, enemies);
-          const blockadeRgoEff =
-            Number(landBlockade || navalBlockade) *
-            data.modifiers.blockaded[`${province.rgoType}_rgo_eff`];
-
-          const rgoEfficiency =
-            countryRgoEff + localRgoEff + siegeRgoEff + blockadeRgoEff;
-          const rgoOutputEff =
-            countryRgoOutput + localRgoOutput + rgoEfficiency;
-
-          const terrainRgoEff = Number(
-            data.terrain.categories[terrainType][`${province.rgoType}_rgo_eff`]
+          const outputEfficiency = calculateOutputEff(
+            province,
+            owner,
+            world.GetCountry(province.data.controller),
+            enemies,
+            world.IsUnderSiege(province.id)
           );
 
-          const infraPct = Number(province.data.infrastructure) || 0;
-          // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
-
-          // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
-          const outputEfficiency =
-            1 + aristocratsPercentage + rgoOutputEff + terrainRgoEff + infraPct;
-
+          console.log({ baseProduction, throughput, outputEfficiency });
           const production = baseProduction * throughput * outputEfficiency;
+          console.log(' :>> ', production);
 
           productionData[ownerTag][goodsType!] += production;
         }

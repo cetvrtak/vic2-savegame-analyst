@@ -187,6 +187,14 @@ class Country {
     return rgoSize + rgoSizeFromTech + rgoSizeFromInventions;
   };
 
+  GetRgoEff = (rgoType: string, goodsType: string) => {
+    return (
+      this.GetModifier('rgo_output', goodsType) +
+      this.GetModifier(`${rgoType}_rgo_eff`) +
+      this.GetModifier(`${rgoType}_RGO_eff`)
+    );
+  };
+
   GetTechModifiers = (
     modifier: string,
     goods: string = ''

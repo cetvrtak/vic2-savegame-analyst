@@ -112,7 +112,7 @@ class Province {
     const cleanedCountryFocuses = Object.fromEntries(
       Object.entries(countryFocuses).map(([key, value]) => [
         key.replace(/"/g, ''),
-        value,
+        value
       ])
     );
 
@@ -177,8 +177,8 @@ class Province {
     return Array.isArray(this.data[popType])
       ? this.data[popType]
       : this.data[popType]
-      ? [this.data[popType]]
-      : undefined;
+        ? [this.data[popType]]
+        : undefined;
   };
 
   hasNavalBlockade = (owner: Country, enemies: Country[]): boolean => {
@@ -209,11 +209,50 @@ class Province {
   private GetRgoSizeFromTerrain = (): number => {
     const terrainType = Province.blob.terrainMap[this.id];
     const rgoSizeKey = `${this.rgoType}_rgo_size`;
-    
-    return Number(
-      Province.blob.terrain.categories[terrainType][rgoSizeKey]
+
+    return Number(Province.blob.terrain.categories[terrainType][rgoSizeKey]);
+  };
+
+  GetRgoEff = (
+    owner: Country,
+    controller: Country,
+    enemies: Country[],
+    isUnderSiege: boolean
+  ): number => {
+    const siegeRgoEff =
+      Number(isUnderSiege) *
+      Province.blob.modifiers.has_siege[`${this.rgoType}_rgo_eff`];
+
+    /* NOTE: Blockades don't refresh every tick */
+    // Province is blockaded by land when
+    // * on another continent &&
+    // * under siege || controller doesn't have port access to it
+    const sameContinent = owner.sameContinentProvinces.has(this.id);
+    const connectedPort = controller.GetConnectedPort(this.id);
+    const landBlockade = !sameContinent && (isUnderSiege || !connectedPort);
+
+    const navalBlockade = this.hasNavalBlockade(owner, enemies);
+    const blockadeRgoEff =
+      Number(landBlockade || navalBlockade) *
+      Province.blob.modifiers.blockaded[`${this.rgoType}_rgo_eff`];
+
+    return (
+      this.GetModifier('local_rgo_output', owner.data.national_focus) +
+      this.GetModifier('local_RGO_output', owner.data.national_focus) +
+      this.GetModifier(`${this.rgoType}_rgo_eff`, owner.data.national_focus) +
+      this.GetModifier(`${this.rgoType}_RGO_eff`, owner.data.national_focus) +
+      siegeRgoEff +
+      blockadeRgoEff
     );
-  }
+  };
+
+  GetRgoEffFromTerrain = (): number => {
+    const terrainType = Province.blob.terrainMap[this.id];
+
+    return Number(
+      Province.blob.terrain.categories[terrainType][`${this.rgoType}_rgo_eff`]
+    );
+  };
 }
 
 export default Province;
