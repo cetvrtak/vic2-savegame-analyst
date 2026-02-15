@@ -195,6 +195,39 @@ class Country {
     );
   };
 
+  /** For a given modifier, e.g. rgo_goods_output, returns the source and value
+   *
+   * @param src - tech, invention, event name, eg. mechanical_saw
+   * @param val - 0.05 or { timber: 0.15 } or [{ timber: 0.05 }, { grain: 0.15 }]
+   * @return An object { mechanical_saw: 0.05 }
+   */
+  private GetModifier = (
+    src: string,
+    val: any,
+    goods: string = ''
+  ): Record<string, number> => {
+    if (typeof val === 'string') {
+      return { [src]: Number(val) };
+    } else if (val.hasOwnProperty(goods)) {
+      return { [src]: Number(val[goods]) };
+    } else if (Array.isArray(val)) {
+      for (const mod of val) {
+        if (mod.hasOwnProperty(goods)) {
+          return { [src]: Number(mod[goods]) };
+        }
+      }
+    }
+
+    return {};
+  };
+
+  /** Determines source technologies for the given modifier and goods (optional)
+   * with associated value
+   *
+   * @param modifier - e.g. rgo_goods_output
+   * @param goods - e.g. timber
+   * @returns Array of objects, e.g. [{ mechanical_saw: 0.5 }, { mechanical_precision_saw: 0.5 }]
+   */
   GetTechModifiers = (
     modifier: string,
     goods: string = ''
@@ -206,19 +239,7 @@ class Country {
       if (!techDefinition.hasOwnProperty(modifier)) {
         continue;
       }
-      const techModifier = techDefinition[modifier];
-
-      if (typeof techModifier === 'string') {
-        modifiers.push({ [tech]: Number(techModifier) });
-      } else if (Array.isArray(techModifier)) {
-        for (const goodsModifier of techModifier) {
-          if (goodsModifier.hasOwnProperty(goods)) {
-            modifiers.push({ [tech]: Number(goodsModifier[goods]) });
-          }
-        }
-      } else if (techModifier.hasOwnProperty(goods)) {
-        modifiers.push({ [tech]: Number(techModifier[goods]) });
-      }
+      modifiers.push(this.GetModifier(tech, techDefinition[modifier], goods));
     }
 
     if (modifier === 'rgo_output') {
@@ -246,13 +267,11 @@ class Country {
   ): Record<string, number>[] => {
     let modifiers: Record<string, number>[] = [];
 
-    const inventions = Country.blob.inventions;
-    const countryInventions = this.data.active_inventions.key;
-
-    for (const id of countryInventions) {
+    for (const id of this.data.active_inventions.key) {
       const index = parseInt(id) - 1;
-      let [invention, effects]: [string, any] =
-        Object.entries(inventions)[index];
+      let [invention, effects]: [string, any] = Object.entries(
+        Country.blob.inventions
+      )[index];
 
       // Inventions can have modifiers in a list or inside an `effect` block
       effects = effects.effect || effects;
@@ -260,19 +279,7 @@ class Country {
       if (!effects.hasOwnProperty(modifier)) {
         continue;
       }
-      const inventionModifier = effects[modifier];
-
-      if (typeof inventionModifier === 'string') {
-        modifiers.push({ [invention]: Number(inventionModifier) });
-      } else if (Array.isArray(inventionModifier)) {
-        for (const goodsModifier of inventionModifier) {
-          if (goodsModifier.hasOwnProperty(goods)) {
-            modifiers.push({ [invention]: Number(goodsModifier[goods]) });
-          }
-        }
-      } else if (inventionModifier.hasOwnProperty(goods)) {
-        modifiers.push({ [invention]: Number(inventionModifier[goods]) });
-      }
+      modifiers.push(this.GetModifier(invention, effects[modifier], goods));
     }
 
     if (modifier === 'rgo_output') {
