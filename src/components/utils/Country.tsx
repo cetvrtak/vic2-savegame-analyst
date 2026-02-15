@@ -221,6 +221,13 @@ class Country {
       }
     }
 
+    if (modifier === 'rgo_output') {
+      modifiers = [
+        ...modifiers,
+        ...this.GetTechModifiers('rgo_goods_output', goods)
+      ];
+    }
+
     return modifiers;
   };
 
@@ -282,6 +289,13 @@ class Country {
       } else if (inventionModifier.hasOwnProperty(goods)) {
         modifiers.push({ [invention]: Number(inventionModifier[goods]) });
       }
+    }
+
+    if (modifier === 'rgo_output') {
+      modifiers = [
+        ...modifiers,
+        ...this.GetInventionsModifiers('rgo_goods_output', goods)
+      ];
     }
 
     return modifiers;
@@ -495,20 +509,11 @@ class Country {
   GetModifier = (modifier: string, goodsType: string = ''): number => {
     const eventsModifier = this.GetModifierFromEvents(modifier);
     const issuesModifier = this.GetModifierFromIssues(modifier);
-
-    let techModifier = this.GetModifierFromTech(modifier);
-    if (modifier === 'rgo_output') {
-      techModifier += this.GetModifierFromTech('rgo_goods_output', goodsType);
-    }
-
-    let inventionsModifier = this.GetModifierFromInventions(modifier);
-    if (modifier === 'rgo_output') {
-      inventionsModifier += this.GetModifierFromInventions(
-        'rgo_goods_output',
-        goodsType
-      );
-    }
-
+    const techModifier = this.GetModifierFromTech(modifier, goodsType);
+    const inventionsModifier = this.GetModifierFromInventions(
+      modifier,
+      goodsType
+    );
     const nvModifier = this.GetModifierFromNationalValue(modifier);
 
     return (
@@ -526,23 +531,8 @@ class Country {
   ): Record<string, number>[] => {
     const eventModifiers = this.GetEventModifiers(modifier);
     const issuesModifiers = this.GetIssuesModifiers(modifier);
-
-    let techModifiers = this.GetTechModifiers(modifier, goodsType);
-    if (modifier === 'rgo_output') {
-      techModifiers = [
-        ...techModifiers,
-        ...this.GetTechModifiers('rgo_goods_output', goodsType)
-      ];
-    }
-
-    let inventionModifiers = this.GetInventionsModifiers(modifier, goodsType);
-    if (modifier === 'rgo_output') {
-      inventionModifiers = [
-        ...inventionModifiers,
-        ...this.GetInventionsModifiers('rgo_goods_output', goodsType)
-      ];
-    }
-
+    const techModifiers = this.GetTechModifiers(modifier, goodsType);
+    const inventionModifiers = this.GetInventionsModifiers(modifier, goodsType);
     const nvModifiers = this.GetNationlValueModifiers(modifier);
 
     return [
