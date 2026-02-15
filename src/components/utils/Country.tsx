@@ -208,7 +208,7 @@ class Country {
       }
       const techModifier = techDefinition[modifier];
 
-      if (!goods) {
+      if (typeof techModifier === 'string') {
         modifiers.push({ [tech]: Number(techModifier) });
       } else if (Array.isArray(techModifier)) {
         for (const goodsModifier of techModifier) {
@@ -216,10 +216,8 @@ class Country {
             modifiers.push({ [tech]: Number(goodsModifier[goods]) });
           }
         }
-      } else {
-        if (techModifier.hasOwnProperty(goods)) {
-          modifiers.push({ [tech]: Number(techModifier[goods]) });
-        }
+      } else if (techModifier.hasOwnProperty(goods)) {
+        modifiers.push({ [tech]: Number(techModifier[goods]) });
       }
     }
 
@@ -273,7 +271,7 @@ class Country {
       }
       const inventionModifier = effects[modifier];
 
-      if (!goods) {
+      if (typeof inventionModifier === 'string') {
         modifiers.push({ [invention]: Number(inventionModifier) });
       } else if (Array.isArray(inventionModifier)) {
         for (const goodsModifier of inventionModifier) {
@@ -281,10 +279,8 @@ class Country {
             modifiers.push({ [invention]: Number(goodsModifier[goods]) });
           }
         }
-      } else {
-        if (inventionModifier.hasOwnProperty(goods)) {
-          modifiers.push({ [invention]: Number(inventionModifier[goods]) });
-        }
+      } else if (inventionModifier.hasOwnProperty(goods)) {
+        modifiers.push({ [invention]: Number(inventionModifier[goods]) });
       }
     }
 
