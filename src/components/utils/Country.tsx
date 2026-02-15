@@ -232,28 +232,12 @@ class Country {
   };
 
   GetModifierFromTech = (modifier: string, goods: string = ''): number => {
-    const countryTechs = Object.keys(this.data.technology);
-
-    return countryTechs.reduce((effect, tech) => {
-      const techModifiers = Country.blob.technologies[tech][modifier];
-      if (!techModifiers) return effect;
-
-      if (!goods) {
-        return effect + (Number(techModifiers) || 0);
-      }
-
-      if (Array.isArray(techModifiers)) {
-        return (
-          effect +
-          techModifiers.reduce(
-            (sum, techModifier) => sum + (Number(techModifier[goods]) || 0),
-            0
-          )
-        );
-      }
-
-      return effect + (Number(techModifiers[goods]) || 0);
-    }, 0);
+    return this.GetTechModifiers(modifier, goods).reduce(
+      (value: number, techModifier: Record<string, number>) => {
+        return (value += Number(Object.values(techModifier)));
+      },
+      0
+    );
   };
 
   GetInventionsModifiers = (
@@ -305,28 +289,9 @@ class Country {
     modifier: string,
     goods: string = ''
   ): number => {
-    const countryInventions: Inventions = this.data.active_inventions.key.map(
-      (id: string) => Object.values(Country.blob.inventions)[parseInt(id)]
-    );
-
-    return countryInventions.reduce(
-      (effect: number, invention: Record<string, any>) => {
-        const directModifier = invention[modifier];
-        const effectModifier = invention.effect?.[modifier];
-
-        if (!goods) {
-          return (
-            effect +
-            (Number(directModifier) || 0) +
-            (Number(effectModifier) || 0)
-          );
-        }
-
-        return (
-          effect +
-          (Number(directModifier?.[goods]) || 0) +
-          (Number(effectModifier?.[goods]) || 0)
-        );
+    return this.GetInventionsModifiers(modifier, goods).reduce(
+      (value: number, inventionModifier: Record<string, number>) => {
+        return (value += Number(Object.values(inventionModifier)));
       },
       0
     );
