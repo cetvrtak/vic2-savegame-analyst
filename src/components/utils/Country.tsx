@@ -189,9 +189,9 @@ class Country {
 
   GetRgoEff = (rgoType: string, goodsType: string) => {
     return (
-      this.GetModifier('rgo_output', goodsType) +
-      this.GetModifier(`${rgoType}_rgo_eff`) +
-      this.GetModifier(`${rgoType}_RGO_eff`)
+      this.GetModifierVal('rgo_output', goodsType) +
+      this.GetModifierVal(`${rgoType}_rgo_eff`) +
+      this.GetModifierVal(`${rgoType}_RGO_eff`)
     );
   };
 
@@ -471,7 +471,7 @@ class Country {
     return count / total;
   };
 
-  GetModifier = (modifier: string, goodsType: string = ''): number => {
+  GetModifierVal = (modifier: string, goodsType: string = ''): number => {
     const eventsModifier = this.GetModifierFromEvents(modifier);
     const issuesModifier = this.GetModifierFromIssues(modifier);
     const techModifier = this.GetModifierFromTech(modifier, goodsType);
@@ -594,7 +594,7 @@ class Country {
     }
 
     // throughput = -1 x mobilization_size x mobilization_economic_impact
-    const mobSizeFromModifiers = this.GetModifier('mobilisation_size');
+    const mobSizeFromModifiers = this.GetModifierVal('mobilisation_size');
 
     const isUncivilized = this.data.civilized === 'no';
     const uncivMobSizeModifier =
@@ -607,7 +607,9 @@ class Country {
       return 0;
     }
 
-    const mobilizationImpact = this.GetModifier('mobilisation_economy_impact');
+    const mobilizationImpact = this.GetModifierVal(
+      'mobilisation_economy_impact'
+    );
 
     return -1 * mobilizationSize * mobilizationImpact;
   };
