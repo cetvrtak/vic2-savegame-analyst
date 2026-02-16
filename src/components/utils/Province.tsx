@@ -63,14 +63,20 @@ class Province {
     );
   };
 
-  GetModifierFromEvents = (modifier: string) =>
-    Array.isArray(this.data.modifier)
-      ? this.data.modifier.reduce(
-          (acc, m) =>
-            (acc += +Province.blob.modifiers[m.modifier][modifier] || 0),
-          0
-        )
-      : 0;
+  GetModifierFromEvents = (modifier: string): number => {
+    const provinceModifiers = this.data.modifier;
+    if (!provinceModifiers) return 0;
+
+    const modifiers = Array.isArray(provinceModifiers)
+      ? provinceModifiers
+      : [provinceModifiers];
+
+    const definitions = Province.blob.modifiers;
+
+    return modifiers.reduce((sum, m) => {
+      return sum + Number(definitions[m.modifier]?.[modifier] ?? 0);
+    }, 0);
+  };
 
   GetRgoSizeFromContinent = (): number => {
     const continents: Record<string, any> = Province.blob.continents;
