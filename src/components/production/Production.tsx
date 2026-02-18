@@ -82,12 +82,6 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
     // The number of workers is limited by the maximum number of workers employable by the RGO, calculated using this formula:
 
     // Max Workers = base (40000) * Province Size * ( 1 + Terrain + RGO Size Modifiers )
-    console.log({
-      aristocratsPercentage,
-      rgoOutputEff,
-      terrainRgoEff,
-      infraPct
-    });
     return 1 + aristocratsPercentage + rgoOutputEff + terrainRgoEff + infraPct;
   };
 
@@ -170,9 +164,7 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
             world.IsUnderSiege(province.id)
           );
 
-          console.log({ baseProduction, throughput, outputEfficiency });
           const production = baseProduction * throughput * outputEfficiency;
-          console.log(' :>> ', production);
 
           productionData[ownerTag][goodsType!] += production;
         }
