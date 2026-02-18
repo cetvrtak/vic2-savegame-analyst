@@ -148,25 +148,15 @@ class Country {
   };
 
   GetRgoThroughputEff = (rgoType: string): number => {
-    const effFromWarExhaustion = this.GetRgoThrouputEffFromWarExhaustion();
-
-    const effFromModifiers = this.GetModifierFromEvents('RGO_throughput');
-
-    const effFromIssues = this.GetModifierFromIssues('RGO_throughput');
-    const effFromNV = this.GetModifierFromNationalValue('RGO_throughput');
-
-    const rgoThroughputEffTech =
+    return (
+      this.GetModifierFromEvents('RGO_throughput') +
+      this.GetModifierFromIssues('RGO_throughput') +
+      this.GetModifierFromNationalValue('RGO_throughput') +
+      this.GetRgoThrouputEffFromWarExhaustion() +
       this.GetModifierFromTech(`${rgoType}_rgo_eff`) +
       this.GetModifierFromTech(`${rgoType}_RGO_eff`) +
       this.GetModifierFromInventions(`${rgoType}_rgo_eff`) +
-      this.GetModifierFromInventions(`${rgoType}_RGO_eff`);
-
-    return (
-      effFromModifiers +
-      effFromIssues +
-      effFromNV +
-      effFromWarExhaustion +
-      rgoThroughputEffTech
+      this.GetModifierFromInventions(`${rgoType}_RGO_eff`)
     );
   };
 
@@ -480,21 +470,12 @@ class Country {
   };
 
   GetModifierVal = (modifier: string, goodsType: string = ''): number => {
-    const eventsModifier = this.GetModifierFromEvents(modifier);
-    const issuesModifier = this.GetModifierFromIssues(modifier);
-    const techModifier = this.GetModifierFromTech(modifier, goodsType);
-    const inventionsModifier = this.GetModifierFromInventions(
-      modifier,
-      goodsType
-    );
-    const nvModifier = this.GetModifierFromNationalValue(modifier);
-
     return (
-      eventsModifier +
-      issuesModifier +
-      techModifier +
-      inventionsModifier +
-      nvModifier
+      this.GetModifierFromEvents(modifier) +
+      this.GetModifierFromIssues(modifier) +
+      this.GetModifierFromTech(modifier, goodsType) +
+      this.GetModifierFromInventions(modifier, goodsType) +
+      this.GetModifierFromNationalValue(modifier)
     );
   };
 
@@ -502,18 +483,12 @@ class Country {
     modifier: string,
     goodsType: string = ''
   ): Record<string, number>[] => {
-    const eventModifiers = this.GetEventModifiers(modifier);
-    const issuesModifiers = this.GetIssuesModifiers(modifier);
-    const techModifiers = this.GetTechModifiers(modifier, goodsType);
-    const inventionModifiers = this.GetInventionsModifiers(modifier, goodsType);
-    const nvModifiers = this.GetNationlValueModifiers(modifier);
-
     return [
-      ...eventModifiers,
-      ...issuesModifiers,
-      ...techModifiers,
-      ...inventionModifiers,
-      ...nvModifiers
+      ...this.GetEventModifiers(modifier),
+      ...this.GetIssuesModifiers(modifier),
+      ...this.GetTechModifiers(modifier, goodsType),
+      ...this.GetInventionsModifiers(modifier, goodsType),
+      ...this.GetNationlValueModifiers(modifier)
     ];
   };
 

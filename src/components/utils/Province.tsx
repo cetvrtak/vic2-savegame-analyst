@@ -170,14 +170,11 @@ class Province {
     modifier: string,
     countryFocuses: Record<string, string>
   ): number => {
-    const eventModifiers = this.GetModifierFromEvents(modifier);
-    const focusModifiers = this.GetModifierFromNationalFocus(
-      modifier,
-      countryFocuses
+    return (
+      this.GetModifierFromEvents(modifier) +
+      this.GetModifierFromNationalFocus(modifier, countryFocuses) +
+      this.GetModifierFromCrime(modifier)
     );
-    const crimeModifiers = this.GetModifierFromCrime(modifier);
-
-    return eventModifiers + focusModifiers + crimeModifiers;
   };
 
   GetPop = (popType: string): Pop[] | undefined => {
