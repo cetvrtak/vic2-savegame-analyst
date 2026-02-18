@@ -31,8 +31,9 @@ class Province {
   private AggregateWorkers = (
     workerTypes: string[]
   ): { type: string; size: number }[] => {
+    const pops = Province.blob.pops;
     return workerTypes.map((type) => {
-      const poptype = Province.blob.pops[this.id][type];
+      const poptype = pops[this.id][type];
 
       const size = Array.isArray(poptype)
         ? poptype.reduce(
@@ -160,7 +161,7 @@ class Province {
     }
 
     const crimes: Crimes = Province.blob.crime;
-    const [_, crime] = Object.entries(crimes)[crimeIndex];
+    const crime = Object.values(crimes)[crimeIndex];
 
     return Number(crime[modifier]) || 0;
   };

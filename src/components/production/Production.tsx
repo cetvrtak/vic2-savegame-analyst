@@ -117,56 +117,50 @@ const Production: React.FC<ProductionProps> = ({ saveData }) => {
       const productionData: ProductionData = {};
 
       const world = new World(saveData, data);
-      world.CreateCountries(selectedTags);
 
       for (const tag of selectedTags) {
         productionData[tag] = {};
         for (const good of selectedGoods) {
           productionData[tag][good] = 0;
         }
-      }
 
-      for (const key in saveData) {
-        const provinceData = saveData[key] as ProvinceData;
-        const goodsType = provinceData.rgo?.goods_type || '';
-        const ownerTag = provinceData.owner || '';
+        const owner = world.GetCountry(tag);
+        const enemies: Country[] = Array.from(owner.enemies).map((tag) =>
+          world.GetCountry(tag)
+        );
 
-        if (
-          selectedTags.includes(ownerTag) &&
-          selectedGoods.includes(goodsType)
-        ) {
-          const province = new Province(key, provinceData);
-          const owner = world.GetCountry(ownerTag);
-          //       Output
-          // Production = Base Production * Throughput * Output Efficiency
+        for (const province of Object.values(owner.ownedProvinces)) {
+          const goodsType = province.data.rgo?.goods_type || '';
 
-          const baseProduction = calculateBaseProduction(
-            province,
-            owner,
-            world.rgoWorkers,
-            world.goodsOutput[goodsType]
-          );
+          if (selectedGoods.includes(goodsType)) {
+            //       Output
+            // Production = Base Production * Throughput * Output Efficiency
 
-          const throughput = calculateThroughput(
-            province,
-            owner,
-            world.rgoWorkers
-          );
+            const baseProduction = calculateBaseProduction(
+              province,
+              owner,
+              world.rgoWorkers,
+              world.goodsOutput[goodsType]
+            );
 
-          const enemies: Country[] = Array.from(owner.enemies).map((tag) =>
-            world.GetCountry(tag)
-          );
-          const outputEfficiency = calculateOutputEff(
-            province,
-            owner,
-            world.GetCountry(province.data.controller),
-            enemies,
-            world.IsUnderSiege(province.id)
-          );
+            const throughput = calculateThroughput(
+              province,
+              owner,
+              world.rgoWorkers
+            );
 
-          const production = baseProduction * throughput * outputEfficiency;
+            const outputEfficiency = calculateOutputEff(
+              province,
+              owner,
+              world.GetCountry(province.data.controller),
+              enemies,
+              world.IsUnderSiege(province.id)
+            );
 
-          productionData[ownerTag][goodsType!] += production;
+            const production = baseProduction * throughput * outputEfficiency;
+
+            productionData[owner.tag][goodsType!] += production;
+          }
         }
       }
 

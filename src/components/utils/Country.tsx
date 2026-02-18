@@ -91,8 +91,9 @@ class Country {
     const eventModifiers: string[] = Object.values(this.data.modifier).map(
       (m: any) => m.modifier
     );
+    const definitions = Country.blob.modifiers;
     for (const name of eventModifiers) {
-      const definition = Country.blob.modifiers[name];
+      const definition = definitions[name];
       if (definition.hasOwnProperty(modifier)) {
         const value: string = definition[modifier];
         modifiers.push({ [name]: Number(value) });
@@ -107,14 +108,13 @@ class Country {
     if (!countryModifiers) {
       return 0;
     }
+    const definitions = Country.blob.modifiers;
 
     return countryModifiers.reduce(
       (acc: number, countryModifier: { modifier: string }) => {
         const countryModifierName: string = countryModifier.modifier;
 
-        return (acc += Number(
-          Country.blob.modifiers[countryModifierName][modifier] || 0
-        ));
+        return (acc += Number(definitions[countryModifierName][modifier] || 0));
       },
       0
     );
@@ -233,9 +233,10 @@ class Country {
     goods: string = ''
   ): Record<string, number>[] => {
     let modifiers: Record<string, number>[] = [];
+    const technologies = Country.blob.technologies;
 
     for (const tech of Object.keys(this.data.technology)) {
-      const techDefinition = Country.blob.technologies[tech];
+      const techDefinition = technologies[tech];
       if (!techDefinition.hasOwnProperty(modifier)) {
         continue;
       }
@@ -266,12 +267,11 @@ class Country {
     goods: string = ''
   ): Record<string, number>[] => {
     let modifiers: Record<string, number>[] = [];
+    const inventions = Object.entries(Country.blob.inventions);
 
     for (const id of this.data.active_inventions.key) {
       const index = parseInt(id) - 1;
-      let [invention, effects]: [string, any] = Object.entries(
-        Country.blob.inventions
-      )[index];
+      let [invention, effects]: [string, any] = inventions[index];
 
       // Inventions can have modifiers in a list or inside an `effect` block
       effects = effects.effect || effects;
@@ -453,11 +453,12 @@ class Country {
     let total: number = 0;
 
     const state = this.states[stateId];
+    const poptypes = Country.blob.poptypes;
 
     for (const provId of state.data.provinces.key) {
       const province: Province = this.ownedProvinces[provId];
 
-      for (const popType of Object.keys(Country.blob.poptypes)) {
+      for (const popType of Object.keys(poptypes)) {
         const provincePop: Pop[] | undefined = province.GetPop(popType);
         if (!provincePop) {
           continue;
