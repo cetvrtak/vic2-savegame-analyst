@@ -34,16 +34,9 @@ const App: React.FC = () => {
       {state.world ? (
         <BrowserRouter>
           <AppNav />
-          <Main appState={state} />
+
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Population
-                  provinces={getProvinces(state.world, state.world.player)}
-                />
-              }
-            />
+            <Route path="/" element={<Main appState={state} />} />
 
             <Route
               path="/population"
