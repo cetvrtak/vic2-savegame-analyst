@@ -32,49 +32,47 @@ const App: React.FC = () => {
   return (
     <DataProvider>
       {state.world ? (
-        <>
-          <Header dispatch={dispatch} />
+        <BrowserRouter>
+          <Header />
           <Main appState={state} />
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Population
-                    provinces={getProvinces(state.world, state.world.player)}
-                  />
-                }
-              />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Population
+                  provinces={getProvinces(state.world, state.world.player)}
+                />
+              }
+            />
 
-              <Route
-                path="/population"
-                element={
-                  <Population
-                    provinces={getProvinces(state.world, state.world.player)}
-                  />
-                }
-              />
+            <Route
+              path="/population"
+              element={
+                <Population
+                  provinces={getProvinces(state.world, state.world.player)}
+                />
+              }
+            />
 
-              <Route
-                path="/pop-needs"
-                element={
-                  <PopsNeeds
-                    provinces={getProvinces(state.world, state.world.player)}
-                    plurality={state.world[state.world.player].plurality}
-                    inventions={
-                      state.world[state.world.player].active_inventions.key
-                    }
-                  />
-                }
-              />
+            <Route
+              path="/pops-needs"
+              element={
+                <PopsNeeds
+                  provinces={getProvinces(state.world, state.world.player)}
+                  plurality={state.world[state.world.player].plurality}
+                  inventions={
+                    state.world[state.world.player].active_inventions.key
+                  }
+                />
+              }
+            />
 
-              <Route
-                path="/production"
-                element={<Production saveData={state.world} />}
-              />
-            </Routes>
-          </BrowserRouter>
-        </>
+            <Route
+              path="/production"
+              element={<Production saveData={state.world} />}
+            />
+          </Routes>
+        </BrowserRouter>
       ) : (
         <>
           <ModSelector />

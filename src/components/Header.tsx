@@ -1,14 +1,12 @@
 ﻿import React, { useState } from 'react';
-import { Action } from './actions';
 import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
 import AdjacencyMapper from '../tools/AdjacencyMapper';
 import ToolsMenuItem from './ToolsMenuItem';
 import PortMapper from '../tools/PortMapper';
+import { NavLink } from 'react-router-dom';
 
-const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
-  dispatch,
-}) => {
+const Header: React.FC = () => {
   const [showToolsMenu, setShowToolsMenu] = useState(false);
 
   const handleToggleTools = () => {
@@ -26,29 +24,21 @@ const Header: React.FC<{ dispatch: React.Dispatch<Action> }> = ({
   return (
     <header>
       <div className="tab-selector-container btn-wrapper">
-        <ul
-          className="tab-selector"
-          onClick={(e) =>
-            dispatch({
-              type: 'SET_ACTIVE_TAB',
-              payload: (e.target as HTMLButtonElement).value,
-            })
-          }
-        >
+        <ul className="tab-selector">
           <li className="tab" key="population">
-            <button className="btn tab-btn" value="population">
+            <NavLink to="/population" className="btn tab-btn">
               Population
-            </button>
+            </NavLink>
           </li>
           <li className="tab" key="popsNeeds">
-            <button className="btn tab-btn" value="popsNeeds">
+            <NavLink to="/pops-needs" className="btn tab-btn">
               Pops Needs
-            </button>
+            </NavLink>
           </li>
           <li className="tab" key="production">
-            <button className="btn tab-btn" value="production">
+            <NavLink to="/production" className="btn tab-btn">
               Production
-            </button>
+            </NavLink>
           </li>
         </ul>
 

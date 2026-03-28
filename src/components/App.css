@@ -11,6 +11,14 @@ html {
   font-size: 62.5%;
 }
 
+a {
+  text-decoration: none;
+}
+
+a.active {
+  background: #0e1c53;
+}
+
 #root {
   min-height: 100vh;
   max-width: 1280px;
