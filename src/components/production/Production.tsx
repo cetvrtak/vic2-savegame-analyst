@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useData } from '../DataContext';
-import { ProductionData, ProductionProps, ProvinceData } from './types';
+import { ProductionData, ProductionProps } from './types';
 import World from '../utils/World';
 import Province from '../utils/Province';
 import Country from '../utils/Country';
