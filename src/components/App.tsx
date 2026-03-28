@@ -4,7 +4,7 @@ import { useReducer } from 'react';
 import { reducer } from './reducer';
 import { initialState } from './types';
 import Main from './Main';
-import Header from './Header';
+import AppNav from './AppNav';
 import { DataProvider } from './DataContext';
 import ModSelector from './ModSelector';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -33,7 +33,7 @@ const App: React.FC = () => {
     <DataProvider>
       {state.world ? (
         <BrowserRouter>
-          <Header />
+          <AppNav />
           <Main appState={state} />
           <Routes>
             <Route

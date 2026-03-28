@@ -6,7 +6,7 @@ import ToolsMenuItem from './ToolsMenuItem';
 import PortMapper from '../tools/PortMapper';
 import { NavLink } from 'react-router-dom';
 
-const Header: React.FC = () => {
+const AppNav: React.FC = () => {
   const [showToolsMenu, setShowToolsMenu] = useState(false);
 
   const handleToggleTools = () => {
@@ -89,4 +89,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default AppNav;
