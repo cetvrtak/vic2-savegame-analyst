@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Population from './Population';
 import PopsNeeds from './PopsNeeds';
 import Production from './production/Production';
+import Tools from './Tools';
 
 type World = {
   [key: string]: any;
@@ -34,6 +35,7 @@ const App: React.FC = () => {
       {state.world ? (
         <BrowserRouter>
           <AppNav />
+          <Tools showTools={state.showTools} dispatch={dispatch} />
 
           <Routes>
             <Route path="/" element={<Main appState={state} />} />

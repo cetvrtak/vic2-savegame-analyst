@@ -4,14 +4,14 @@ type ItemProps = {
   title: string;
   icon: string;
   children: ReactElement;
-  menuHovered: boolean;
+  menuHovered: Boolean;
 };
 
 const ToolsMenuItem: React.FC<ItemProps> = ({
   title,
   icon,
   children,
-  menuHovered,
+  menuHovered
 }) => {
   const [expanded, setExpanded] = useState(false);
 
