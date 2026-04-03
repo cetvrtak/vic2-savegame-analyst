@@ -2,7 +2,7 @@
 // from other country properties
 // and game data
 import { Issues } from '../production/types';
-import { Connection, Inventions, Pop, Straits, War } from './types';
+import { Connection, Pop, Straits, War } from './types';
 import Province from './Province';
 import State from './State';
 
