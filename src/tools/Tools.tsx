@@ -1,8 +1,8 @@
 ﻿import { useState } from 'react';
-import AdjacencyMapper from '../tools/AdjacencyMapper';
-import JsonExporter from '../tools/JsonExporter';
-import TerrainMapper from '../tools/TerrainMapper';
-import PortMapper from '../tools/PortMapper';
+import AdjacencyMapper from './AdjacencyMapper';
+import JsonExporter from './JsonExporter';
+import TerrainMapper from './TerrainMapper';
+import PortMapper from './PortMapper';
 import ToolsMenuItem from './ToolsMenuItem';
 import ToolsIcon from './ToolsIcon';
 
