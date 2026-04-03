@@ -120,14 +120,6 @@ progress::-moz-progress-bar {
 }
 
 /* HEADER */
-.tools-icon-container {
-  display: none;
-  margin-left: auto;
-  cursor: pointer;
-}
-.tools-icon {
-  width: 32px;
-}
 .tools-menu {
   display: flex;
   flex-direction: column;
@@ -262,7 +254,6 @@ td {
     width: 100%;
     right: 0;
   }
-  .tools-icon-container,
   .tools-close {
     display: flex;
   }

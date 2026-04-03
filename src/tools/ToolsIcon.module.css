@@ -1,0 +1,21 @@
+.toolsIconContainer {
+  display: none;
+  margin-left: auto;
+  cursor: pointer;
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background-color: #eee;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: inset 1px 1px 2px 1px rgba(0, 75, 151, 0.4);
+}
+.toolsIcon {
+  width: 32px;
+}
+
+@media (max-width: 375px) {
+  .toolsIconContainer {
+    display: flex;
+  }
+}
