@@ -35,7 +35,7 @@ const App: React.FC = () => {
       {state.world ? (
         <BrowserRouter>
           <AppNav />
-          <Tools showTools={state.showTools} dispatch={dispatch} />
+          <Tools />
 
           <Routes>
             <Route path="/" element={<Main appState={state} />} />

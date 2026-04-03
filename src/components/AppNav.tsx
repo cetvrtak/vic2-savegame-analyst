@@ -1,13 +1,7 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const AppNav: React.FC = () => {
-  const [showToolsMenu, setShowToolsMenu] = useState(false);
-
-  const handleToggleTools = () => {
-    setShowToolsMenu((show) => !show);
-  };
-
   return (
     <header>
       <div className="tab-selector-container btn-wrapper">
@@ -28,10 +22,6 @@ const AppNav: React.FC = () => {
             </NavLink>
           </li>
         </ul>
-
-        <div className="tools-icon-container" onClick={handleToggleTools}>
-          <img src="tools.svg" alt="Tools Icon" className="tools-icon" />
-        </div>
       </div>
     </header>
   );

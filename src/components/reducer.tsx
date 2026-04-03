@@ -8,8 +8,6 @@ export const reducer = (state: AppState, action: Action): AppState => {
         ...state,
         world: action.payload
       };
-    case 'TOGGLE_TOOLS':
-      return { ...state, showTools: action.payload };
     case 'SET_LOAD_STATUS':
       return { ...state, loadStatus: action.payload };
     case 'SET_LOAD_PROGRESS':

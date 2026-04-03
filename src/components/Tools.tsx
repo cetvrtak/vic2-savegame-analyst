@@ -1,62 +1,61 @@
-﻿import AdjacencyMapper from '../tools/AdjacencyMapper';
+﻿import { useState } from 'react';
+import AdjacencyMapper from '../tools/AdjacencyMapper';
 import JsonExporter from '../tools/JsonExporter';
 import TerrainMapper from '../tools/TerrainMapper';
 import PortMapper from '../tools/PortMapper';
 import ToolsMenuItem from './ToolsMenuItem';
-import { Action } from './actions';
+import ToolsIcon from './ToolsIcon';
 
-const Tools: React.FC<{
-  showTools: Boolean;
-  dispatch: React.Dispatch<Action>;
-}> = ({ showTools, dispatch }) => {
+const Tools: React.FC = () => {
+  const [showTools, setShowTools] = useState(false);
+
+  const toggleTools = () => {
+    setShowTools((prevShowTools) => !prevShowTools);
+  };
+
   return (
-    <div
-      className={`tools-menu ${showTools ? 'tools-menu-open' : ''}`}
-      onMouseEnter={() => {
-        dispatch({ type: 'TOGGLE_TOOLS', payload: true });
-      }}
-      onMouseLeave={() => {
-        dispatch({ type: 'TOGGLE_TOOLS', payload: false });
-      }}
-    >
+    <>
       <div
-        className="tools-close"
-        onClick={() => {
-          dispatch({ type: 'TOGGLE_TOOLS', payload: !showTools });
-        }}
+        className={`tools-menu ${showTools ? 'tools-menu-open' : ''}`}
+        onMouseEnter={() => setShowTools(true)}
+        onMouseLeave={() => setShowTools(false)}
       >
-        &times;
-      </div>
-      <ToolsMenuItem
-        title="JSON Exporter"
-        icon="json.svg"
-        menuHovered={showTools}
-      >
-        <JsonExporter />
-      </ToolsMenuItem>
-      <ToolsMenuItem
-        title="Terrain Mapper"
-        icon="terrain.svg"
-        menuHovered={showTools}
-      >
-        <TerrainMapper />
-      </ToolsMenuItem>
-      <ToolsMenuItem
-        title="Adjacency Mapper"
-        icon="adjacency.svg"
-        menuHovered={showTools}
-      >
-        <AdjacencyMapper />
-      </ToolsMenuItem>
+        <div className="tools-close" onClick={toggleTools}>
+          &times;
+        </div>
+        <ToolsMenuItem
+          title="JSON Exporter"
+          icon="json.svg"
+          menuHovered={showTools}
+        >
+          <JsonExporter />
+        </ToolsMenuItem>
+        <ToolsMenuItem
+          title="Terrain Mapper"
+          icon="terrain.svg"
+          menuHovered={showTools}
+        >
+          <TerrainMapper />
+        </ToolsMenuItem>
+        <ToolsMenuItem
+          title="Adjacency Mapper"
+          icon="adjacency.svg"
+          menuHovered={showTools}
+        >
+          <AdjacencyMapper />
+        </ToolsMenuItem>
 
-      <ToolsMenuItem
-        title="Port Mapper"
-        icon="port.svg"
-        menuHovered={showTools}
-      >
-        <PortMapper />
-      </ToolsMenuItem>
-    </div>
+        <ToolsMenuItem
+          title="Port Mapper"
+          icon="port.svg"
+          menuHovered={showTools}
+        >
+          <PortMapper />
+        </ToolsMenuItem>
+      </div>
+
+      <ToolsIcon toggleTools={toggleTools} />
+    </>
   );
 };
 
